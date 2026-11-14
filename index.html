@@ -41,7 +41,6 @@
 .train-green.arrived .door{background:#243e50}
 .choices .vehicle-preview{height:40px;display:grid;place-items:center}
 .vehicle-preview i{display:block;position:relative;width:57px;height:22px;border:2px solid #233f57;background:#fff}
-.mini-train{border-radius:5px 95% 6px 5px;box-shadow:inset 0 -5px #167cba}
 .mini-bus{border-radius:5px;background:linear-gradient(#bbe6f4 0 43%,#ffd568 43%)!important}
 .mini-police{border-radius:18px 19px 5px 5px;box-shadow:inset 0 -6px #24374b}
 .mini-police::before{content:"";position:absolute;width:13px;height:5px;border-radius:4px;background:#e03949;left:20px;top:-5px}
@@ -118,7 +117,7 @@
 .train-yellow .windows{left:5%;top:29%;width:61%;height:24%;background:repeating-linear-gradient(90deg,#26485c 0 10%,transparent 10% 15%)}
 .train-yellow .door{top:19%;height:69%;width:10%}
 
-.choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.choices { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 16px; }
 .choices button { min-width: 0; min-height: 96px; padding: 8px 5px; }
 .bus-mint .vehicle { background: #b4e8d2; box-shadow: inset 0 -13px #348675; }
 .bus-berry .vehicle { background: #f5bfd8; box-shadow: inset 0 -13px #b3507f; }
@@ -219,13 +218,6 @@
 </style>
 <main>
 <div class="topbar"><h1 id="title">のりもの しゅっぱつ！</h1><button type="button" id="lang">English</button></div>
-<div class="choices" aria-label="のりものを えらぶ">
-<button type="button" data-kind="train" aria-pressed="true"><span class="vehicle-preview" aria-hidden="true"><i class="mini-train"></i></span><span class="vehicle-name">しんかんせん</span></button>
-<button type="button" data-kind="bus" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/bus-gold.webp" alt=""></span><span class="vehicle-name">バス</span></button>
-<button type="button" id="work-vehicles" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/police.webp" alt=""></span><span id="work-label">はたらく のりもの 🎲</span></button>
-<button type="button" data-kind="plane" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/plane.webp" alt=""></span><span class="vehicle-name">ひこうき</span></button>
-<button type="button" data-kind="helicopter" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/helicopter.webp" alt=""></span><span class="vehicle-name">ヘリコプター</span></button>
-</div>
 <div id="scene" class="scene train train-blue" aria-hidden="true">
 <div class="air-landscape" aria-hidden="true"></div><div class="cloud"></div><div class="land"></div><div class="decor" id="decor"></div><div class="road"></div><div id="stop" class="stop"></div><span id="work-effect" aria-hidden="true"></span>
 <div class="vehicle"><img class="vehicle-art" alt="" hidden><div class="windows"></div><div class="door"></div><i class="wheel"></i><i class="wheel"></i></div>
@@ -234,7 +226,14 @@
 <p class="message" id="message" role="status"></p>
 <button type="button" id="work-action" hidden></button>
 <div class="go-row"><button type="button" class="go" id="go">▶ しゅっぱつ！</button><button type="button" class="horn" id="horn" aria-label="ラッパ">📯</button></div>
-<p class="random-note" id="random-note">🎲 いきさきは ランダム！どこに つくかは おたのしみ</p>
+<div class="choices" aria-label="のりものを えらぶ">
+<button type="button" data-kind="train" aria-pressed="true"><span class="vehicle-preview" aria-hidden="true"><img src="assets/shinkansen.svg" alt=""></span><span class="vehicle-name">しんかんせん</span></button>
+<button type="button" data-kind="bus" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/bus-gold.webp" alt=""></span><span class="vehicle-name">バス</span></button>
+<button type="button" id="work-vehicles" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/police.webp" alt=""></span><span id="work-label">はたらく のりもの</span></button>
+<button type="button" data-kind="plane" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/plane.webp" alt=""></span><span class="vehicle-name">ひこうき</span></button>
+<button type="button" data-kind="helicopter" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/helicopter.webp" alt=""></span><span class="vehicle-name">ヘリコプター</span></button>
+</div>
+<p class="random-note" id="random-note">いきさきは ランダム！どこに つくかは おたのしみ</p>
 <div class="panel"><h2 id="stamps-label">スタンプ</h2><div class="stamps" id="stamps"></div></div>
 <div class="panel"><h2 id="speed-label">はやさ</h2><div class="speeds" id="speeds"><button type="button" data-speed="slow" aria-pressed="false">🐢 <span class="speed-name">ゆっくり</span></button><button type="button" data-speed="normal" aria-pressed="true">🚃 <span class="speed-name">ふつう</span></button><button type="button" data-speed="fast" aria-pressed="false">🚀 <span class="speed-name">はやい</span></button></div></div>
 <div class="sound" aria-label="おとの せってい">
@@ -410,8 +409,8 @@ for (const k of Object.keys(routes)) {
 }
 function saveStamps() { try { localStorage.setItem('norimono-stamps', JSON.stringify(stamps)); } catch {} }
 const T = {
-  ja: { random: '🎲 いきさきは ランダム！どこに つくかは おたのしみ', stamps: 'スタンプ', speed: 'はやさ', horn: 'ラッパ', slow: 'ゆっくり', normal: 'ふつう', fast: 'はやい' },
-  en: { random: '🎲 The destination is a surprise!', stamps: 'Stamps', speed: 'Speed', horn: 'Horn', slow: 'Slow', normal: 'Normal', fast: 'Fast' },
+  ja: { random: 'いきさきは ランダム！どこに つくかは おたのしみ', stamps: 'スタンプ', speed: 'はやさ', horn: 'ラッパ', slow: 'ゆっくり', normal: 'ふつう', fast: 'はやい' },
+  en: { random: 'The destination is a surprise!', stamps: 'Stamps', speed: 'Speed', horn: 'Horn', slow: 'Slow', normal: 'Normal', fast: 'Fast' },
 };
 const horn = document.querySelector('#horn');
 horn.addEventListener('click', () => {
@@ -676,7 +675,7 @@ go.addEventListener('click', () => {
 });
 
 function applyLang() {
-  document.querySelector('#work-label').textContent = lang === 'en' ? 'Work vehicles 🎲' : 'はたらく のりもの 🎲';
+  document.querySelector('#work-label').textContent = lang === 'en' ? 'Work vehicles' : 'はたらく のりもの';
   document.documentElement.lang = lang;
   document.title = L[lang].title;
   document.querySelector('#title').textContent = L[lang].title;

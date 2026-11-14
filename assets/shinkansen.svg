@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 48">
+  <defs>
+    <clipPath id="body">
+      <path d="M6 15Q6 9 15 9h53q15 0 26 12l17 9q6 4 5 8-1 3-8 3H14q-8 0-8-7Z"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#body)">
+    <path fill="#fffdf8" d="M0 0h120v48H0z"/>
+    <path fill="#e5edf2" d="M0 9h120v5H0zM0 36h120v12H0z"/>
+    <path fill="#2675ab" d="M0 29h120v6H0z"/>
+    <path fill="#9bcbdf" d="M0 29h120v1.5H0z"/>
+    <path fill="#25445a" d="M79 15q7 2 14 10l-12-2-7-8z"/>
+    <path fill="#416b80" d="M76 15h4l7 6-5-1z"/>
+    <g fill="#25445a">
+      <rect x="14" y="16" width="9" height="8" rx="2"/>
+      <rect x="27" y="16" width="9" height="8" rx="2"/>
+      <rect x="40" y="16" width="9" height="8" rx="2"/>
+    </g>
+    <rect x="54" y="14" width="11" height="22" rx="2" fill="#fffdf8" stroke="#456071" stroke-width="1.5"/>
+    <rect x="56.5" y="16.5" width="6" height="8" rx="1" fill="#416b80"/>
+    <path d="M102 29l8 3" stroke="#fff4ac" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <path d="M6 15Q6 9 15 9h53q15 0 26 12l17 9q6 4 5 8-1 3-8 3H14q-8 0-8-7Z" fill="none" stroke="#233f57" stroke-width="2.5" stroke-linejoin="round"/>
+</svg>
