@@ -76,6 +76,7 @@
 .horn{min-width:78px;border:0;border-radius:22px;background:#ffb703;color:#4a3200;font-size:1.02rem;box-shadow:0 5px #b97e06}
 .panel{margin:14px 0 0}
 .panel h2{font-size:1rem;margin:0 0 7px}
+.random-note{text-align:center;font-weight:800;margin:12px 0 0}
 .dest{display:flex;flex-wrap:wrap;gap:7px}
 .dest button{min-height:48px;padding:6px 12px;border:2px solid #e9dfcd;border-radius:999px;background:#fff;color:#19354a;font-size:.95rem}
 .dest button.target{background:#fff3bf;border-color:#d9a514}
@@ -113,7 +114,7 @@
 </div>
 <p class="message" id="message" role="status"></p>
 <div class="go-row"><button type="button" class="go" id="go">▶ しゅっぱつ！</button><button type="button" class="horn" id="horn">📯 ラッパ</button></div>
-<div class="panel"><h2 id="dest-label">いきさき</h2><div class="dest" id="dest"></div></div>
+<p class="random-note" id="random-note">🎲 いきさきは ランダム！どこに つくかは おたのしみ</p>
 <div class="panel"><h2 id="stamps-label">スタンプ</h2><div class="stamps" id="stamps"></div></div>
 <div class="panel"><h2 id="speed-label">はやさ</h2><div class="speeds" id="speeds"><button type="button" data-speed="slow" aria-pressed="false">🐢 <span class="speed-name">ゆっくり</span></button><button type="button" data-speed="normal" aria-pressed="true">🚃 <span class="speed-name">ふつう</span></button><button type="button" data-speed="fast" aria-pressed="false">🚀 <span class="speed-name">はやい</span></button></div></div>
 <div class="sound" aria-label="おとの せってい">
@@ -209,7 +210,6 @@ let travelSound;
 let tripDuration = 12;
 const speeds = { slow: 15, normal: 12, fast: 10 };
 let speed = 'normal';
-const dest = { train: 1, bus: 1, police: 1 };
 let stamps = { train: [], bus: [], police: [] };
 let yellowUnlocked = false;
 try {
@@ -222,8 +222,8 @@ for (const k of Object.keys(routes)) {
 }
 function saveStamps() { try { localStorage.setItem('norimono-stamps', JSON.stringify(stamps)); } catch {} }
 const T = {
-  ja: { dest: 'いきさき', stamps: 'スタンプ', speed: 'はやさ', horn: 'ラッパ', slow: 'ゆっくり', normal: 'ふつう', fast: 'はやい' },
-  en: { dest: 'Destination', stamps: 'Stamps', speed: 'Speed', horn: 'Horn', slow: 'Slow', normal: 'Normal', fast: 'Fast' },
+  ja: { random: '🎲 いきさきは ランダム！どこに つくかは おたのしみ', stamps: 'スタンプ', speed: 'はやさ', horn: 'ラッパ', slow: 'ゆっくり', normal: 'ふつう', fast: 'はやい' },
+  en: { random: '🎲 The destination is a surprise!', stamps: 'Stamps', speed: 'Speed', horn: 'Horn', slow: 'Slow', normal: 'Normal', fast: 'Fast' },
 };
 const horn = document.querySelector('#horn');
 horn.addEventListener('click', () => {
@@ -235,12 +235,6 @@ horn.addEventListener('click', () => {
     }).catch(() => {});
   } catch {}
 });
-document.querySelector('#dest').addEventListener('click', e => {
-  const b = e.target.closest('[data-dest]');
-  if (!b || phase === 'moving') return;
-  dest[kind] = Number(b.dataset.dest);
-  render();
-});
 document.querySelector('#speeds').addEventListener('click', e => {
   const b = e.target.closest('[data-speed]');
   if (!b) return;
@@ -248,9 +242,6 @@ document.querySelector('#speeds').addEventListener('click', e => {
   render();
 });
 function renderPanels() {
-  const names = lang === 'en' ? enStops[kind] : routes[kind].stops;
-  document.querySelector('#dest').innerHTML = names.map((name, i) =>
-    '<button type="button" data-dest="' + i + '"' + (i === dest[kind] ? ' class="target"' : '') + (phase === 'moving' ? ' disabled' : '') + '>' + (i === progress[kind] ? '📍 ' : i === dest[kind] ? '🚩 ' : '') + name + '</button>').join('');
   document.querySelector('#stamps').innerHTML = stamps[kind].map(done =>
     '<span class="stamp' + (done ? ' done' : '') + '">' + (done ? '⭐' : '') + '</span>').join('');
   document.querySelectorAll('#speeds [data-speed]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.speed === speed)));
@@ -397,7 +388,6 @@ choices.forEach(button => button.addEventListener('click', () => {
   kind = button.dataset.kind;
   celebration = false;
   phase = 'ready';
-  if (dest[kind] === progress[kind]) dest[kind] = (progress[kind] + 1) % routes[kind].stops.length;
   render();
 
 }));
@@ -414,6 +404,8 @@ go.addEventListener('click', () => {
   render();
   const departureKind = kind;
   const dur = tripDuration;
+  let tripTarget = progress[kind];
+  while (tripTarget === progress[kind]) tripTarget = Math.floor(Math.random() * routes[kind].stops.length);
   if (kind === 'train') {
     crossingTimer = setTimeout(() => {
       scene.classList.add('crossing-on');
@@ -430,14 +422,13 @@ go.addEventListener('click', () => {
     clearTimeout(tunnelOff);
     clearTimeout(crossingTimer);
     scene.classList.remove('in-tunnel', 'crossing-on');
-    const target = dest[kind];
+    const target = tripTarget;
     progress[kind] = target;
     const wasStamped = stamps[kind][target];
     stamps[kind][target] = true;
     saveStamps();
     const cardComplete = stamps[kind].every(Boolean);
     celebration = target === routes[kind].stops.length - 1 || (cardComplete && !wasStamped);
-    dest[kind] = (target + 1) % routes[kind].stops.length;
     phase = 'arrived';
     render();
     stopTravelSound();
@@ -483,7 +474,7 @@ function applyLang() {
   document.querySelector('#volume-label').textContent = L[lang].volume;
   document.querySelector('.sound').setAttribute('aria-label', L[lang].sound);
   langButton.textContent = lang === 'en' ? 'にほんご' : 'English';
-  document.querySelector('#dest-label').textContent = T[lang].dest;
+  document.querySelector('#random-note').textContent = T[lang].random;
   document.querySelector('#stamps-label').textContent = T[lang].stamps;
   document.querySelector('#speed-label').textContent = T[lang].speed;
   horn.textContent = '📯 ' + T[lang].horn;
