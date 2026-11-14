@@ -70,8 +70,9 @@
 .choices button:disabled{cursor:default;opacity:.72}
 .topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
 #lang{min-height:44px;padding:0 14px;border:2px solid #e9dfcd;border-radius:12px;background:#fff;color:#19354a;font-size:.95rem;flex:none}
-.go-row{display:flex;gap:8px}
-.go-row .go{flex:1;width:auto}
+.go-row{display:flex;gap:8px;margin-top:12px}
+.go-row .go{flex:1;width:auto;min-width:0;min-height:92px;padding:10px 8px}
+.go-row .horn{min-width:0;width:clamp(54px,16vw,72px);flex:none}
 .horn{min-width:84px;border:0;border-radius:22px;background:#ffb703;color:#4a3200;font-size:2.1rem;line-height:1;box-shadow:0 5px #b97e06}
 .panel{margin:14px 0 0}
 .panel h2{font-size:1rem;margin:0 0 7px}
@@ -142,6 +143,7 @@
 .scene { container-type: size; }
 .scene:is(.plane,.helicopter) { background: #bce9ff; }
 :is(.plane,.helicopter) :is(.road,.land,.cloud,.decor) { display: none; }
+/* The aircraft stays in place while nearby clouds pass faster than the ground. */
 .air-landscape { display: none; position: absolute; inset: 0; pointer-events: none; }
 :is(.plane,.helicopter) .air-landscape { display: block; }
 .air-landscape::before,.air-landscape::after {
@@ -149,28 +151,36 @@
 }
 .air-landscape::before {
   background:
-    radial-gradient(ellipse 110px 47px at 102px 100%, #9ac8a5 99%, transparent 100%) 0 100% / 260px 28% repeat-x,
-    radial-gradient(ellipse 165px 65px at 145px 100%, #a4cfcb 99%, transparent 100%) 0 100% / 330px 35% repeat-x,
-    linear-gradient(transparent 87%, #bad79a 87%);
+    radial-gradient(ellipse 104px 48px at 108px 100%, #94c69a 99%, transparent 100%) 0 100% / 310px 30% repeat-x,
+    radial-gradient(ellipse 73px 33px at 237px 100%, #a8d29d 99%, transparent 100%) 0 100% / 310px 30% repeat-x,
+    radial-gradient(ellipse 154px 76px at 173px 100%, #a2cdd0 99%, transparent 100%) 0 100% / 380px 42% repeat-x,
+    linear-gradient(transparent 91%, #b9dba5 91%);
 }
 .air-landscape::after {
   background:
-    radial-gradient(ellipse 38px 12px at 58px 29px, #fff 98%, transparent 100%),
-    radial-gradient(ellipse 21px 14px at 51px 22px, #fff 98%, transparent 100%),
-    radial-gradient(ellipse 30px 10px at 180px 66px, #f5fcff 98%, transparent 100%);
-  background-size: 320px 105px;
+    radial-gradient(ellipse 60px 15px at 99px 45px, #fff 98%, transparent 100%),
+    radial-gradient(ellipse 26px 23px at 83px 34px, #fff 98%, transparent 100%),
+    radial-gradient(ellipse 29px 18px at 119px 39px, #fff 98%, transparent 100%),
+    radial-gradient(ellipse 47px 12px at 299px 108px, #f4fbff 98%, transparent 100%),
+    radial-gradient(ellipse 25px 19px at 283px 101px, #f4fbff 98%, transparent 100%);
+  background-size: 400px 132px;
   background-repeat: repeat-x;
-  top: 14%;
+  background-position: 0 0;
+  top: 5%;
 }
-.moving .air-landscape::before { animation: air-hills 24s linear infinite; }
-.moving .air-landscape::after { animation: air-clouds 8s linear infinite; }
-@keyframes air-hills { to { background-position: -260px 100%, -330px 100%, 0 0; } }
-@keyframes air-clouds { to { background-position: -320px 0; } }
+.plane { --air-cloud-time: 3.6s; --air-ground-time: 10s; }
+.helicopter { --air-cloud-time: 5.6s; --air-ground-time: 15s; }
+:is(.plane,.helicopter):is(.moving,.arrived) .air-landscape::before {
+  animation: air-hills var(--air-ground-time) linear infinite;
+}
+:is(.plane,.helicopter):is(.moving,.arrived) .air-landscape::after {
+  animation: air-clouds var(--air-cloud-time) linear infinite;
+}
+.arrived .air-landscape::before,.arrived .air-landscape::after { animation-play-state: paused; }
+@keyframes air-hills { to { background-position: -310px 100%, -310px 100%, -380px 100%, 0 0; } }
+@keyframes air-clouds { to { background-position: -400px 0; } }
 .scene:is(.plane,.helicopter) .vehicle { bottom: 53%; }
 :is(.plane,.helicopter) .vehicle .vehicle-art { max-height: min(38cqh, 160px); }
-@media (prefers-reduced-motion: reduce) {
-  .moving .air-landscape::before,.moving .air-landscape::after { animation: none; }
-}
 
 :is(.fire,.garbage,.excavator,.delivery) .vehicle {
   width:min(61%,360px);height:30%;border-radius:12px 26px 10px 10px;
@@ -223,9 +233,9 @@
 <div class="vehicle"><img class="vehicle-art" alt="" hidden><div class="windows"></div><div class="door"></div><i class="wheel"></i><i class="wheel"></i></div>
 <div class="tunnel" aria-hidden="true"></div><div class="crossing" aria-hidden="true"><i></i><i></i></div>
 </div>
+<div class="go-row"><button type="button" class="go" id="go">▶ しゅっぱつ！</button><button type="button" class="horn" id="horn" aria-label="ラッパ">📯</button></div>
 <p class="message" id="message" role="status"></p>
 <button type="button" id="work-action" hidden></button>
-<div class="go-row"><button type="button" class="go" id="go">▶ しゅっぱつ！</button><button type="button" class="horn" id="horn" aria-label="ラッパ">📯</button></div>
 <div class="choices" aria-label="のりものを えらぶ">
 <button type="button" data-kind="train" aria-pressed="true"><span class="vehicle-preview" aria-hidden="true"><img src="assets/shinkansen.svg" alt=""></span><span class="vehicle-name">しんかんせん</span></button>
 <button type="button" data-kind="bus" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/bus-gold.webp" alt=""></span><span class="vehicle-name">バス</span></button>
@@ -269,8 +279,8 @@ const enStops = {
   delivery: ['Red House', 'Blue House'],
 };
 const L = {
-  ja: { title: 'のりもの しゅっぱつ！', choose: 'のりものを えらぶ', volume: 'おんりょう', sound: 'おとの せってい', on: '🔊 おとオン', off: '🔇 おとオフ', go: '▶ しゅっぱつ！', going: 'はしってるよ' },
-  en: { title: 'Vehicles, Go!', choose: 'Choose a vehicle', volume: 'Volume', sound: 'Sound settings', on: '🔊 Sound on', off: '🔇 Sound off', go: '▶ Go!', going: 'On the way…' },
+  ja: { title: 'のりもの しゅっぱつ！', choose: 'のりものを えらぶ', volume: 'おんりょう', sound: 'おとの せってい', on: '🔊 おとオン', off: '🔇 おとオフ', go: '▶ しゅっぱつ！', going: 'はしってるよ', flying: 'とんでるよ' },
+  en: { title: 'Vehicles, Go!', choose: 'Choose a vehicle', volume: 'Volume', sound: 'Sound settings', on: '🔊 Sound on', off: '🔇 Sound off', go: '▶ Go!', going: 'On the way…', flying: 'Flying…' },
 };
 let lang = 'ja';
 try { if (localStorage.getItem('norimono-lang') === 'en') lang = 'en'; } catch {}
@@ -353,7 +363,7 @@ const trainVariants = [
   { id: 'blue', name: 'あおい しんかんせん', en: 'Blue Shinkansen' },
   { id: 'red', name: 'あかい しんかんせん', en: 'Red Shinkansen' },
   { id: 'green', name: 'みどりの しんかんせん', en: 'Green Shinkansen' },
-  { id: 'yellow', name: 'ドクターイエロー', en: 'Doctor Yellow' },
+  { id: 'yellow', name: 'きいろい しんかんせん', en: 'Yellow Shinkansen' },
 ];
 const artVariants = {
   bus: ['bus-gold', 'bus-mint', 'bus-berry'],
@@ -573,13 +583,15 @@ function render() {
   go.disabled = phase === 'moving';
   workVehicles.disabled = go.disabled;
   workVehicles.setAttribute('aria-pressed', String(workSelected));
-  go.textContent = go.disabled ? L[lang].going : L[lang].go;
+  const flying = kind === 'plane' || kind === 'helicopter';
+  const movement = flying ? L[lang].flying : L[lang].going;
+  go.textContent = go.disabled ? movement : L[lang].go;
   if (phase === 'moving') {
-    message.textContent = lang === 'en' ? vehicleName + ' is on its way!' : vehicleName + 'が はしってるよ！';
+    message.textContent = lang === 'en' ? vehicleName + (flying ? ' is flying!' : ' is on its way!') : vehicleName + 'が ' + movement + '！';
   } else if (phase === 'arrived') {
     message.textContent = celebration
       ? (lang === 'en' ? '🎉 You made it to ' + stopText + '! Great ride!' : '🎉 ' + stopText + 'に とうちゃく！おつかれさま！')
-      : (lang === 'en' ? 'Arrived at ' + stopText + '! Great ride!' + (kind === 'police' || action ? '' : ' The doors opened.') : stopText + 'に とうちゃく！おつかれさま！' + (kind === 'police' || action ? '' : ' ドアが あいたよ'));
+      : (lang === 'en' ? 'Arrived at ' + stopText + '! Great ride!' + (kind === 'police' || flying || action ? '' : ' The doors opened.') : stopText + 'に とうちゃく！おつかれさま！' + (kind === 'police' || flying || action ? '' : ' ドアが あいたよ'));
   } else {
     message.textContent = workSelected
       ? (lang === 'en' ? 'Which work vehicle will go?' : 'どの のりものが でるかな？')
@@ -623,8 +635,9 @@ go.addEventListener('click', () => {
   render();
   const departureKind = kind;
   const dur = tripDuration;
-  let tripTarget = progress[kind];
-  while (tripTarget === progress[kind]) tripTarget = Math.floor(Math.random() * routes[kind].stops.length);
+  const tripRoute = routes[departureKind];
+  let tripTarget = progress[departureKind];
+  while (tripTarget === progress[departureKind]) tripTarget = Math.floor(Math.random() * tripRoute.stops.length);
   if (kind === 'train') {
     crossingTimer = setTimeout(() => {
       scene.classList.add('crossing-on');
@@ -635,18 +648,19 @@ go.addEventListener('click', () => {
   arrival = setTimeout(() => {
     clearTimeout(crossingTimer);
     scene.classList.remove('crossing-on');
+    kind = departureKind;
     const target = tripTarget;
-    progress[kind] = target;
-    const wasStamped = stamps[kind][target];
-    stamps[kind][target] = true;
+    progress[departureKind] = target;
+    const wasStamped = stamps[departureKind][target];
+    stamps[departureKind][target] = true;
     saveStamps();
-    const cardComplete = stamps[kind].every(Boolean);
-    celebration = target === routes[kind].stops.length - 1 || (cardComplete && !wasStamped);
+    const cardComplete = stamps[departureKind].every(Boolean);
+    celebration = target === tripRoute.stops.length - 1 || (cardComplete && !wasStamped);
     phase = 'arrived';
     render();
     stopTravelSound();
     let unlockedNow = false;
-    if (kind === 'train' && cardComplete && !yellowUnlocked) {
+    if (departureKind === 'train' && cardComplete && !yellowUnlocked) {
       yellowUnlocked = true;
       unlockedNow = true;
       try { localStorage.setItem('norimono-yellow', '1'); } catch {}
@@ -656,10 +670,10 @@ go.addEventListener('click', () => {
       playSound(fanfare);
     } else {
       playSound(doorChime);
-      if (kind !== 'train') playSound(arrivalSound);
+      if (departureKind !== 'train') playSound(arrivalSound);
     }
-    announceStop(routes[kind].stops[target]);
-    if (unlockedNow) message.textContent += ' ' + (lang === 'en' ? '🎉 Doctor Yellow is unlocked!' : '🎉 ドクターイエローが つかえるように なったよ！');
+    announceStop(tripRoute.stops[target]);
+    if (unlockedNow) message.textContent += ' ' + (lang === 'en' ? '🎉 Yellow Shinkansen is unlocked!' : '🎉 きいろい しんかんせんが つかえるように なったよ！');
     else if (cardComplete && !wasStamped) message.textContent += ' ' + (lang === 'en' ? '🎉 You collected all the stamps!' : '🎉 スタンプが そろったよ！');
   }, tripDuration * 1000);
   const trip = arrival;
