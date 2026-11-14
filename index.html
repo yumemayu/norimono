@@ -5,7 +5,7 @@
 <meta name="theme-color" content="#f9f4e7">
 <title>のりもの しゅっぱつ！</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f9f4e7;color:#19354a;font-family:Nunito,"Hiragino Maru Gothic ProN","Yu Gothic",sans-serif}main{width:min(100%,720px);margin:auto;padding:20px clamp(14px,4vw,32px)}h1{font-size:clamp(1.55rem,5vw,2.5rem);margin:0 0 14px;font-weight:900}button{font:inherit;font-weight:800;cursor:pointer;touch-action:manipulation}button:focus-visible{outline:3px solid #122c82;outline-offset:3px}.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.choices button{min-height:61px;background:#fff;border:2px solid #e9dfcd;border-radius:15px;color:#19354a;font-size:clamp(.84rem,3.4vw,1.12rem)}.choices span{display:block;font-size:1.4rem}.choices [aria-pressed=true]{background:#e4f4ff;border-color:#176f9d}.scene{height:clamp(205px,48vw,350px);position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(#a7e0ff 0 68%,#a9d78f 68%);isolation:isolate}.land{position:absolute;inset:35% 0 26%;background:radial-gradient(ellipse 37% 120% at 20% 105%,#80bd87 78%,transparent 79%),radial-gradient(ellipse 42% 115% at 80% 100%,#95cd8f 79%,transparent 80%);background-size:420px 100%}.cloud{position:absolute;top:17%;left:14%;width:56px;height:14px;border-radius:30px;background:#fff;box-shadow:18px -9px 0 1px #fff,250px 8px 0 1px #fff,266px 0 0 1px #fff}.stop{position:absolute;top:9%;right:5%;background:#fff;border:2px solid #285c73;border-radius:8px;padding:5px 9px;font-weight:800}.road{position:absolute;inset:72% 0 0;background:#506776}.road::after{content:"";position:absolute;top:42%;width:100%;height:4px;background:repeating-linear-gradient(90deg,#ffecaa 0 28px,transparent 28px 53px)}.train .road{background:repeating-linear-gradient(90deg,#78624f 0 12px,#c4b899 12px 31px);bottom:auto;height:13%;border-block:4px solid #52636c}.train .road::after{display:none}.vehicle{position:absolute;width:min(75%,450px);height:32%;left:50%;bottom:24%;transform:translateX(-50%);background:#fff;border-radius:15px 86% 22px 15px / 15px 81% 15px 15px;border:3px solid #233f57;box-shadow:inset 0 -12px #1779bf}.windows{position:absolute;top:26%;left:8%;width:60%;height:30%;background:repeating-linear-gradient(90deg,#254962 0 16%,transparent 16% 21%);border-radius:4px}.door{position:absolute;left:27%;top:16%;width:13%;height:75%;border:2px solid #456071;background:#f9feff;border-radius:4px;overflow:hidden}.door::after{content:"";position:absolute;inset:12% 22% 42%;background:#2b4d63;border-radius:2px}.arrived .door{background:#243e50;box-shadow:inset 7px 0 #afc6cf,inset -7px 0 #afc6cf}.arrived .door::after{display:none}.wheel{display:none;position:absolute;bottom:-15%;width:15%;aspect-ratio:1;background:#233447;border:4px solid #233447;border-radius:50%;box-shadow:inset 0 0 0 4px #a8b7c3}.wheel:first-of-type{left:12%}.wheel:last-of-type{right:12%}.bus .vehicle{width:min(59%,355px);height:39%;border-radius:13px;background:#ffd568;box-shadow:inset 0 -13px #e38b35}.bus .door{left:77%;width:17%}.bus .wheel,.police .wheel{display:block}.police .vehicle{width:min(52%,310px);height:21%;border-radius:26px 26px 12px 12px;box-shadow:inset 0 -15px #24374b}.police .vehicle::before{content:"";position:absolute;z-index:-1;bottom:88%;left:23%;width:53%;height:78%;background:#37546a;border:4px solid white;border-radius:30px 35px 0 0}.police .vehicle::after{content:"";position:absolute;bottom:165%;left:43%;width:16%;height:18%;border-radius:10px 10px 0 0;background:#e03949}.police .windows,.police .door{display:none}.moving .land,.moving .road::after{animation:scroll 1.25s linear infinite}.moving.train .road{animation:rails .25s linear infinite}.moving .vehicle{animation:bob .36s ease-in-out infinite alternate}.moving .stop{visibility:hidden}.moving.police .vehicle::after{animation:blink .66s linear 3}@keyframes scroll{to{background-position:-420px 0}}@keyframes rails{to{background-position:-31px 0}}@keyframes bob{to{transform:translate(-50%,-2px)}}@keyframes blink{50%{background:#ff9a96}}.message{text-align:center;font-size:clamp(1.05rem,4.4vw,1.4rem);font-weight:800;margin:11px 0;min-height:1.6em}.go{width:100%;min-height:76px;border:0;border-radius:22px;background:#126c50;color:#fff;font-size:clamp(1.4rem,6vw,2rem);box-shadow:0 5px #084733}.go:disabled{background:#dcebe1;color:#315b4d;box-shadow:none;cursor:default}@media(prefers-reduced-motion:reduce){*,*::after{animation:none!important}}
+*{box-sizing:border-box}body{margin:0;background:#f9f4e7;color:#19354a;font-family:Nunito,"Hiragino Maru Gothic ProN","Yu Gothic",sans-serif}main{width:min(100%,720px);margin:auto;padding:20px clamp(14px,4vw,32px)}h1{font-size:clamp(1.55rem,5vw,2.5rem);margin:0 0 14px;font-weight:900}button{font:inherit;font-weight:800;cursor:pointer;touch-action:manipulation}button:focus-visible{outline:3px solid #122c82;outline-offset:3px}.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.choices button{min-height:61px;background:#fff;border:2px solid #e9dfcd;border-radius:15px;color:#19354a;font-size:clamp(.84rem,3.4vw,1.12rem)}.choices span{display:block;font-size:1.4rem}.choices [aria-pressed=true]{background:#e4f4ff;border-color:#176f9d}.scene{height:clamp(205px,48vw,350px);position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(var(--sky1,#a7e0ff) 0 68%,var(--ground,#a9d78f) 68%);isolation:isolate}.land{position:absolute;inset:35% 0 26%;background:radial-gradient(ellipse 37% 120% at 20% 105%,#80bd87 78%,transparent 79%),radial-gradient(ellipse 42% 115% at 80% 100%,#95cd8f 79%,transparent 80%);background-size:420px 100%}.cloud{position:absolute;top:17%;left:14%;width:56px;height:14px;border-radius:30px;background:#fff;box-shadow:18px -9px 0 1px #fff,250px 8px 0 1px #fff,266px 0 0 1px #fff}.stop{position:absolute;top:9%;right:5%;background:#fff;border:2px solid #285c73;border-radius:8px;padding:5px 9px;font-weight:800}.road{position:absolute;inset:72% 0 0;background:#506776}.road::after{content:"";position:absolute;top:42%;width:100%;height:4px;background:repeating-linear-gradient(90deg,#ffecaa 0 28px,transparent 28px 53px)}.train .road{background:repeating-linear-gradient(90deg,#78624f 0 12px,#c4b899 12px 31px);bottom:auto;height:13%;border-block:4px solid #52636c}.train .road::after{display:none}.vehicle{position:absolute;width:min(75%,450px);height:32%;left:50%;bottom:24%;transform:translateX(-50%);background:#fff;border-radius:15px 86% 22px 15px / 15px 81% 15px 15px;border:3px solid #233f57;box-shadow:inset 0 -12px #1779bf}.windows{position:absolute;top:26%;left:8%;width:60%;height:30%;background:repeating-linear-gradient(90deg,#254962 0 16%,transparent 16% 21%);border-radius:4px}.door{position:absolute;left:27%;top:16%;width:13%;height:75%;border:2px solid #456071;background:#f9feff;border-radius:4px;overflow:hidden}.door::after{content:"";position:absolute;inset:12% 22% 42%;background:#2b4d63;border-radius:2px}.arrived .door{background:#243e50;box-shadow:inset 7px 0 #afc6cf,inset -7px 0 #afc6cf}.arrived .door::after{display:none}.wheel{display:none;position:absolute;bottom:-15%;width:15%;aspect-ratio:1;background:#233447;border:4px solid #233447;border-radius:50%;box-shadow:inset 0 0 0 4px #a8b7c3}.wheel:first-of-type{left:12%}.wheel:last-of-type{right:12%}.bus .vehicle{width:min(59%,355px);height:39%;border-radius:13px;background:#ffd568;box-shadow:inset 0 -13px #e38b35}.bus .door{left:77%;width:17%}.bus .wheel,.police .wheel{display:block}.police .vehicle{width:min(52%,310px);height:21%;border-radius:26px 26px 12px 12px;box-shadow:inset 0 -15px #24374b}.police .vehicle::before{content:"";position:absolute;z-index:-1;bottom:88%;left:23%;width:53%;height:78%;background:#37546a;border:4px solid white;border-radius:30px 35px 0 0}.police .vehicle::after{content:"";position:absolute;bottom:165%;left:43%;width:16%;height:18%;border-radius:10px 10px 0 0;background:#e03949}.police .windows,.police .door{display:none}.moving .land,.moving .road::after{animation:scroll 1.25s linear infinite}.moving.train .road{animation:rails .25s linear infinite}.moving .vehicle{animation:bob .36s ease-in-out infinite alternate}.moving .stop{visibility:hidden}.moving.police .vehicle::after{animation:blink .66s linear 3}@keyframes scroll{to{background-position:-420px 0}}@keyframes rails{to{background-position:-31px 0}}@keyframes bob{to{transform:translate(-50%,-2px)}}@keyframes blink{50%{background:#ff9a96}}.decor{position:absolute;inset:0;pointer-events:none}.decor span{position:absolute;font-size:clamp(26px,6vw,44px)}.decor span:nth-child(1){top:7%;left:5%}.decor span:nth-child(2){top:15%;left:42%}.decor span:nth-child(3){top:20%;right:7%}.confetti{position:absolute;top:-4%;width:10px;height:14px;border-radius:2px;pointer-events:none;animation-name:fall;animation-timing-function:linear;animation-fill-mode:forwards}@keyframes fall{to{transform:translateY(400px) rotate(560deg)}}.message{text-align:center;font-size:clamp(1.05rem,4.4vw,1.4rem);font-weight:800;margin:11px 0;min-height:1.6em}.go{width:100%;min-height:76px;border:0;border-radius:22px;background:#126c50;color:#fff;font-size:clamp(1.4rem,6vw,2rem);box-shadow:0 5px #084733}.go:disabled{background:#dcebe1;color:#315b4d;box-shadow:none;cursor:default}@media(prefers-reduced-motion:reduce){*,*::after{animation:none!important}}
 .sound{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 16px;margin:20px 0 0}.sound button{min-height:44px;padding:0 13px;border:2px solid #e9dfcd;border-radius:12px;background:#fff;color:#19354a}.sound label{display:flex;align-items:center;gap:8px}.sound input{width:clamp(82px,26vw,150px);height:44px;accent-color:#126c50}.sound output{font-variant-numeric:tabular-nums;min-width:3em}
 .train-blue .vehicle,.train-red .vehicle{
   background:none;border:0;box-shadow:none;border-radius:0;
@@ -62,7 +62,7 @@
 <button type="button" data-kind="police" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><i class="mini-police"></i></span>パトカー</button>
 </div>
 <div id="scene" class="scene train train-blue" aria-hidden="true">
-<div class="cloud"></div><div class="land"></div><div class="road"></div><div id="stop" class="stop"></div>
+<div class="cloud"></div><div class="land"></div><div class="decor" id="decor"></div><div class="road"></div><div id="stop" class="stop"></div>
 <div class="vehicle"><div class="windows"></div><div class="door"></div><i class="wheel"></i><i class="wheel"></i></div>
 </div>
 <p class="message" id="message" role="status"></p>
@@ -79,7 +79,26 @@ const routes = {
   bus: { name: 'バス', stops: ['こうえんまえ', 'パンやさんまえ', 'どうぶつえんまえ', 'としょかんまえ', 'みなとまえ'] },
   police: { name: 'パトカー', stops: ['こうばん', 'まちの ひろば', 'こうえん'] },
 };
+const scenery = {
+  'はな えき': { sky: '#ffd9ec', ground: '#a9d78f', deco: ['🌸', '🌷', '🌸'] },
+  'にじ えき': { sky: '#aee7ff', ground: '#a9d78f', deco: ['🌈', '☁️', '🌈'] },
+  'ほし えき': { sky: '#7d7fd6', ground: '#7fae7a', deco: ['⭐', '🌟', '⭐'] },
+  'うみ えき': { sky: '#a7e0ff', ground: '#4db2e8', deco: ['🌊', '🐚', '⛵'] },
+  'もり えき': { sky: '#bfe8c9', ground: '#6db56d', deco: ['🌲', '🌳', '🍄'] },
+  'ゆき えき': { sky: '#e8f4ff', ground: '#ffffff', deco: ['❄️', '⛄', '❄️'] },
+  'つき えき': { sky: '#2c3e70', ground: '#5d7a5d', deco: ['🌙', '⭐', '✨'] },
+  'こうえんまえ': { sky: '#a7e0ff', ground: '#a9d78f', deco: ['🌳', '🛝', '🌷'] },
+  'パンやさんまえ': { sky: '#ffe9c9', ground: '#c9a876', deco: ['🥐', '🍞', '🥖'] },
+  'どうぶつえんまえ': { sky: '#ffe9a8', ground: '#a9d78f', deco: ['🦁', '🐘', '🦒'] },
+  'としょかんまえ': { sky: '#d9e6ff', ground: '#a9d78f', deco: ['📚', '📖', '✏️'] },
+  'みなとまえ': { sky: '#a7e0ff', ground: '#4db2e8', deco: ['⚓', '🚢', '🌊'] },
+  'こうばん': { sky: '#a7e0ff', ground: '#b9b9b9', deco: ['🚓', '🏢', '🚨'] },
+  'まちの ひろば': { sky: '#a7e0ff', ground: '#a9d78f', deco: ['⛲', '🕊️', '🎈'] },
+  'こうえん': { sky: '#a7e0ff', ground: '#a9d78f', deco: ['🌳', '🦆', '🌷'] },
+};
 const scene = document.querySelector('#scene');
+const decor = document.querySelector('#decor');
+let celebration = false;
 const stopLabel = document.querySelector('#stop');
 const message = document.querySelector('#message');
 const go = document.querySelector('#go');
@@ -102,6 +121,20 @@ const departureSounds = {
   police: [[420, 760, 0, .32], [760, 420, .32, .32]],
 };
 const arrivalSound = [[660, 660, 0, .14], [523, 523, .17, .20]];
+const fanfare = [[523, 523, 0, .16], [659, 659, .16, .16], [784, 784, .32, .16], [1047, 1047, .48, .36]];
+function celebrate() {
+  const colors = ['#ff6b81', '#ffd166', '#4db2e8', '#7bc96f', '#c792ea'];
+  for (let i = 0; i < 26; i++) {
+    const piece = document.createElement('i');
+    piece.className = 'confetti';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.background = colors[i % colors.length];
+    piece.style.animationDuration = (2.2 + Math.random() * 1.4) + 's';
+    piece.style.animationDelay = (Math.random() * .5) + 's';
+    scene.appendChild(piece);
+    setTimeout(() => piece.remove(), 4600);
+  }
+}
 let audio;
 let master;
 let muted = false;
@@ -116,15 +149,26 @@ function stopAnnouncement() {
 }
 
 const arrivalVoices = {
-  train: { rate: .88, pitch: 1.1, say: stop => 'ご乗車ありがとうございます。' + stop.replace(' えき', '駅') + 'です。' },
-  bus: { rate: .95, pitch: .87, say: stop => stop + 'です。お忘れ物のないように。' },
-  police: { rate: 1.03, pitch: 1.28, say: stop => 'パトカー、' + stop + 'に 到着しました！' },
+  train: {
+    rate: .88, pitch: 1.1,
+    say: (stop, isFinal) => isFinal
+      ? 'しゅうてん、' + stop.replace(' えき', '駅') + 'です。ご乗車、ありがとうございました。'
+      : 'ご乗車ありがとうございます。' + stop.replace(' えき', '駅') + 'です。',
+  },
+  bus: {
+    rate: .95, pitch: .87,
+    say: (stop, isFinal) => (isFinal ? 'しゅうてん、' : '') + stop + 'です。お忘れ物のないように。',
+  },
+  police: {
+    rate: 1.03, pitch: 1.28,
+    say: (stop, isFinal) => 'パトカー、' + stop + 'に 到着しました！' + (isFinal ? 'おつかれさま！' : ''),
+  },
 };
 
-function announceArrival(vehicle, stop) {
+function announceArrival(vehicle, stop, isFinal = false) {
   if (!speech || !window.SpeechSynthesisUtterance || muted || Number(volume.value) === 0) return;
   const style = arrivalVoices[vehicle];
-  const line = new SpeechSynthesisUtterance(style.say(stop));
+  const line = new SpeechSynthesisUtterance(style.say(stop, isFinal));
   line.lang = 'ja-JP';
   const voices = speech.getVoices().filter(voice => voice.lang.startsWith('ja'));
   const voiceIndex = Object.keys(arrivalVoices).indexOf(vehicle);
@@ -243,13 +287,19 @@ function render() {
   const stop = route.stops[progress[kind]];
   const trainStyle = kind === 'train' ? 'train-' + (trainVariant?.id || 'blue') : '';
   scene.className = ['scene', kind, phase, trainStyle].filter(Boolean).join(' ');
+  const view = scenery[stop];
+  if (view) {
+    scene.style.setProperty('--sky1', view.sky);
+    scene.style.setProperty('--ground', view.ground);
+    decor.innerHTML = view.deco.map(emoji => '<span>' + emoji + '</span>').join('');
+  }
   stopLabel.textContent = stop;
   go.disabled = phase === 'moving';
   go.textContent = go.disabled ? 'はしってるよ' : '▶ しゅっぱつ！';
   if (phase === 'moving') {
     message.textContent = (kind === 'train' ? trainVariant.name : route.name) + 'が はしってるよ！';
   } else if (phase === 'arrived') {
-    message.textContent = stop + 'に とうちゃく！' + (kind === 'police' ? '' : ' ドアが あいたよ');
+    message.textContent = celebration ? '🎉 ' + stop + 'に とうちゃく！おつかれさま！' : stop + 'に とうちゃく！' + (kind === 'police' ? '' : ' ドアが あいたよ');
   } else {
     message.textContent = stop + 'から しゅっぱつ！';
   }
@@ -262,6 +312,7 @@ choices.forEach(button => button.addEventListener('click', () => {
   stopTravelSound();
   stopAnnouncement();
   kind = button.dataset.kind;
+  celebration = false;
   phase = 'ready';
   render();
   if (speech && window.SpeechSynthesisUtterance && !muted && Number(volume.value) > 0) {
@@ -276,6 +327,7 @@ choices.forEach(button => button.addEventListener('click', () => {
 go.addEventListener('click', () => {
   if (phase === 'moving') return;
   stopAnnouncement();
+  celebration = false;
   if (kind === 'train') {
     const variants = trainVariants.filter(variant => variant !== trainVariant);
     trainVariant = variants[Math.floor(Math.random() * variants.length)];
@@ -285,11 +337,20 @@ go.addEventListener('click', () => {
   const departureKind = kind;
   arrival = setTimeout(() => {
     progress[kind] = (progress[kind] + 1) % routes[kind].stops.length;
+    celebration = progress[kind] === routes[kind].stops.length - 1;
     phase = 'arrived';
     render();
     stopTravelSound();
-    if (kind !== 'train') playSound(arrivalSound);
-    announceArrival(kind, routes[kind].stops[progress[kind]]);
+    const arrivedKind = kind;
+    const arrivedStop = routes[kind].stops[progress[kind]];
+    if (celebration) {
+      celebrate();
+      playSound(fanfare);
+      setTimeout(() => announceArrival(arrivedKind, arrivedStop, true), 500);
+    } else {
+      if (kind !== 'train') playSound(arrivalSound);
+      announceArrival(arrivedKind, arrivedStop);
+    }
   }, tripDuration * 1000);
   const trip = arrival;
   try {
