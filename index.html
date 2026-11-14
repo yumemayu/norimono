@@ -157,23 +157,23 @@
 .choices .vehicle-preview { height: 49px; margin-bottom: 3px; }
 .vehicle-preview img { width: min(100%, 92px); height: 49px; object-fit: contain; }
 .vehicle-art[hidden] { display: none; }
-:is(.plane,.police,.delivery,.helicopter) .vehicle {
+:is(.plane,.police,.delivery,.helicopter,.bus) .vehicle {
   width: min(76%, 480px);
   height: auto;
   background: none;
   border: 0;
   box-shadow: none;
 }
-:is(.plane,.police,.delivery,.helicopter) .vehicle > :not(.vehicle-art),
-:is(.plane,.police,.delivery,.helicopter) .vehicle::before,
-:is(.plane,.police,.delivery,.helicopter) .vehicle::after { display: none; }
+:is(.plane,.police,.delivery,.helicopter,.bus) .vehicle > :not(.vehicle-art),
+:is(.plane,.police,.delivery,.helicopter,.bus) .vehicle::before,
+:is(.plane,.police,.delivery,.helicopter,.bus) .vehicle::after { display: none; }
 .vehicle-art { display: block; width: 100%; max-height: clamp(88px, 30vw, 196px); object-fit: contain; }
 </style>
 <main>
 <div class="topbar"><h1 id="title">のりもの しゅっぱつ！</h1><button type="button" id="lang">English</button></div>
 <div class="choices" aria-label="のりものを えらぶ">
 <button type="button" data-kind="train" aria-pressed="true"><span class="vehicle-preview" aria-hidden="true"><i class="mini-train"></i></span><span class="vehicle-name">しんかんせん</span></button>
-<button type="button" data-kind="bus" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><i class="mini-bus"></i></span><span class="vehicle-name">バス</span></button>
+<button type="button" data-kind="bus" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/bus-gold.webp" alt=""></span><span class="vehicle-name">バス</span></button>
 <button type="button" id="work-vehicles" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/police.webp" alt=""></span><span id="work-label">はたらく のりもの 🎲</span></button>
 <button type="button" data-kind="plane" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/plane.webp" alt=""></span><span class="vehicle-name">ひこうき</span></button>
 <button type="button" data-kind="helicopter" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/helicopter.webp" alt=""></span><span class="vehicle-name">ヘリコプター</span></button>
@@ -501,7 +501,7 @@ function render() {
   const route = routes[kind];
   const stop = route.stops[progress[kind]];
   const trainStyle = kind === 'train' ? 'train-' + (trainVariant?.id || 'blue') : '';
-  const artPath = vehicleArtPaths[kind];
+  const artPath = kind === 'bus' ? 'assets/bus-' + busColor + '.webp' : vehicleArtPaths[kind];
   vehicleArt.hidden = !artPath;
   if (artPath && vehicleArt.getAttribute('src') !== artPath) vehicleArt.src = artPath;
   scene.className = ['scene', kind, phase, trainStyle, kind === 'bus' ? 'bus-' + busColor : ''].filter(Boolean).join(' ');
