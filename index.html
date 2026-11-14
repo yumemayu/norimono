@@ -124,6 +124,35 @@
 .plane .vehicle::after { content: ""; position: absolute; left: 35%; top: 52%; width: 34%; height: 106%; background: #679cde; clip-path: polygon(40% 0,100% 0,48% 100%,0 100%); }
 .moving.plane .vehicle { bottom: 53%; transition: bottom 1.2s; }
 @media (prefers-reduced-motion: reduce) { .moving.plane .vehicle { transition: none; } }
+
+:is(.fire,.garbage,.excavator,.delivery) .vehicle {
+  width:min(61%,360px);height:30%;border-radius:12px 26px 10px 10px;
+  background:linear-gradient(90deg,var(--work-paint) 0 70%,#f8fafb 70%);
+  box-shadow:inset 0 -8px var(--work-trim);
+}
+:is(.fire,.garbage,.excavator,.delivery) .wheel{display:block}
+:is(.fire,.garbage,.excavator,.delivery) .door{display:none}
+:is(.fire,.garbage,.excavator,.delivery) .windows{left:75%;width:16%;background:#37546a}
+.fire{--work-paint:#e33c50;--work-trim:#9a2740}
+.garbage{--work-paint:#62b587;--work-trim:#357a59}
+.excavator{--work-paint:#ffca54;--work-trim:#a56c20}
+.delivery{--work-paint:#80b5f3;--work-trim:#467caf}
+.fire .vehicle::before,.excavator .vehicle::before{
+  content:"";position:absolute;transform-origin:10% 50%;bottom:90%;left:12%;
+  width:55%;height:13%;border:2px solid #425267;border-radius:5px;transition:transform .35s ease;
+}
+.fire .vehicle::before{background:repeating-linear-gradient(90deg,#edf0f3 0 8px,#727f8d 8px 11px)}
+.excavator .vehicle::before{background:#ffca54;transform:rotate(-18deg)}
+.fire.work-active .vehicle::before{transform:rotate(-32deg)}
+.excavator.work-active .vehicle::before{transform:rotate(17deg)}
+#work-effect{display:none;position:absolute;bottom:43%;left:70%;font-size:clamp(24px,6vw,48px);z-index:2}
+:is(.garbage,.excavator,.delivery).work-active #work-effect{
+  display:block;animation:work-pop .65s ease-out both
+}
+.garbage.work-active #work-effect{animation-direction:reverse}
+@keyframes work-pop{from{transform:translate(-24px,15px) scale(.5)}to{transform:translate(15px,-12px) scale(1)}}
+#work-action:not([hidden]){width:100%;min-height:48px;margin:0 0 12px;border:2px solid #176f9d;border-radius:14px;background:#e4f4ff;color:#19354a}
+@media(prefers-reduced-motion:reduce){.vehicle::before{transition:none!important}}
 </style>
 <main>
 <div class="topbar"><h1 id="title">のりもの しゅっぱつ！</h1><button type="button" id="lang">English</button></div>
@@ -134,11 +163,12 @@
 <button type="button" data-kind="plane" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true">✈️</span><span class="vehicle-name">ひこうき</span></button>
 </div>
 <div id="scene" class="scene train train-blue" aria-hidden="true">
-<div class="cloud"></div><div class="land"></div><div class="decor" id="decor"></div><div class="road"></div><div id="stop" class="stop"></div>
+<div class="cloud"></div><div class="land"></div><div class="decor" id="decor"></div><div class="road"></div><div id="stop" class="stop"></div><span id="work-effect" aria-hidden="true"></span>
 <div class="vehicle"><div class="windows"></div><div class="door"></div><i class="wheel"></i><i class="wheel"></i></div>
 <div class="tunnel"></div><div class="crossing" aria-hidden="true"><i></i><i></i></div>
 </div>
 <p class="message" id="message" role="status"></p>
+<button type="button" id="work-action" hidden></button>
 <div class="go-row"><button type="button" class="go" id="go">▶ しゅっぱつ！</button><button type="button" class="horn" id="horn" aria-label="ラッパ">📯</button></div>
 <p class="random-note" id="random-note">🎲 いきさきは ランダム！どこに つくかは おたのしみ</p>
 <div class="panel"><h2 id="stamps-label">スタンプ</h2><div class="stamps" id="stamps"></div></div>
@@ -156,14 +186,22 @@ const routes = {
   police: { name: 'パトカー', stops: ['こうばん', 'まちの ひろば', 'こうえん'] },
   ambulance: { name: 'きゅうきゅうしゃ', stops: ['まちの びょういん', 'こども びょういん', 'うみべの びょういん'] },
   plane: { name: 'ひこうき', stops: ['にじ くうこう', 'うみ くうこう', 'やま くうこう'] },
+  fire: { name: 'しょうぼうしゃ', stops: ['まちの しょうぼうしょ', 'ひがし しょうぼうしょ'] },
+  garbage: { name: 'ごみしゅうしゅうしゃ', stops: ['まちの ごみステーション', 'こうえんの ごみステーション'] },
+  excavator: { name: 'ショベルカー', stops: ['まちの こうじげんば', 'やまの こうじげんば'] },
+  delivery: { name: 'たくはいトラック', stops: ['あかい おうち', 'あおい おうち'] },
 };
-const enNames = { train: 'Shinkansen', bus: 'Bus', police: 'Police Car', ambulance: 'Ambulance' };
+const enNames = { train: 'Shinkansen', bus: 'Bus', police: 'Police Car', fire: 'Fire Engine', garbage: 'Garbage Truck', excavator: 'Excavator', delivery: 'Delivery Truck', ambulance: 'Ambulance' };
 const enStops = {
   train: ['Flower Station', 'Rainbow Station', 'Star Station', 'Sea Station', 'Forest Station', 'Snow Station', 'Moon Station'],
   bus: ['Park', 'Bakery', 'Zoo', 'Library', 'Harbor'],
   police: ['Police Box', 'Town Plaza', 'Park'],
   ambulance: ['Town Hospital', 'Children’s Hospital', 'Seaside Hospital'],
   plane: ['Rainbow Airport', 'Sea Airport', 'Mountain Airport'],
+  fire: ['Town Fire Station', 'East Fire Station'],
+  garbage: ['Town Collection Point', 'Park Collection Point'],
+  excavator: ['Town Construction Site', 'Mountain Construction Site'],
+  delivery: ['Red House', 'Blue House'],
 };
 const L = {
   ja: { title: 'のりもの しゅっぱつ！', choose: 'のりものを えらぶ', volume: 'おんりょう', sound: 'おとの せってい', on: '🔊 おとオン', off: '🔇 おとオフ', go: '▶ しゅっぱつ！', going: 'はしってるよ' },
@@ -194,6 +232,14 @@ const scenery = {
   'にじ くうこう': { sky: '#bde7ff', ground: '#a9d78f', deco: ['☁️', '☁️', '🏔️'] },
   'うみ くうこう': { sky: '#bde7ff', ground: '#a9d78f', deco: ['☁️', '☁️', '🏔️'] },
   'やま くうこう': { sky: '#bde7ff', ground: '#a9d78f', deco: ['☁️', '☁️', '🏔️'] },
+  'まちの しょうぼうしょ': { sky: '#bde7ff', ground: '#a9d78f', deco: ['🚒', '🌳', '☁️'] },
+  'ひがし しょうぼうしょ': { sky: '#bde7ff', ground: '#a9d78f', deco: ['🚒', '🌳', '☁️'] },
+  'まちの ごみステーション': { sky: '#bde7ff', ground: '#a9d78f', deco: ['🚛', '🌳', '☁️'] },
+  'こうえんの ごみステーション': { sky: '#bde7ff', ground: '#a9d78f', deco: ['🚛', '🌳', '☁️'] },
+  'まちの こうじげんば': { sky: '#bde7ff', ground: '#a9d78f', deco: ['🚧', '🌳', '☁️'] },
+  'やまの こうじげんば': { sky: '#bde7ff', ground: '#a9d78f', deco: ['🚧', '🌳', '☁️'] },
+  'あかい おうち': { sky: '#bde7ff', ground: '#a9d78f', deco: ['📦', '🌳', '☁️'] },
+  'あおい おうち': { sky: '#bde7ff', ground: '#a9d78f', deco: ['📦', '🌳', '☁️'] },
 };
 const scene = document.querySelector('#scene');
 const decor = document.querySelector('#decor');
@@ -203,7 +249,23 @@ const message = document.querySelector('#message');
 const go = document.querySelector('#go');
 const choices = document.querySelectorAll('[data-kind]');
 const workVehicles = document.querySelector('#work-vehicles');
-const workKinds = ['police', 'ambulance'];
+const workActions = {
+  fire: { ja: 'はしごを のばす', en: 'Raise ladder', icon: '🪜' },
+  garbage: { ja: 'ごみを あつめる', en: 'Collect trash', icon: '🗑️' },
+  excavator: { ja: 'つちを すくう', en: 'Scoop soil', icon: '🟤' },
+  delivery: { ja: 'にもつを とどける', en: 'Deliver package', icon: '📦' },
+};
+const workKinds = ['police', 'ambulance', ...Object.keys(workActions)];
+const workAction = document.querySelector('#work-action');
+const workEffect = document.querySelector('#work-effect');
+workAction.addEventListener('click', () => {
+  const action = workActions[kind];
+  if (phase !== 'arrived' || !action) return;
+  workEffect.textContent = action.icon;
+  scene.classList.remove('work-active');
+  void scene.offsetWidth;
+  scene.classList.add('work-active');
+});
 let workSelected = false;
 workVehicles.addEventListener('click', () => {
   if (phase === 'moving' || workSelected) return;
@@ -317,7 +379,7 @@ function stopTravelSound() {
 
 function playTravelSound(vehicle) {
   stopTravelSound();
-  const bus = vehicle === 'bus' || vehicle === 'ambulance';
+  const bus = vehicle === 'bus' || workKinds.includes(vehicle);
   const now = audio.currentTime;
   const end = now + tripDuration;
   const pf = 12 / tripDuration;
@@ -417,6 +479,9 @@ function render() {
   const stop = route.stops[progress[kind]];
   const trainStyle = kind === 'train' ? 'train-' + (trainVariant?.id || 'blue') : '';
   scene.className = ['scene', kind, phase, trainStyle, kind === 'bus' ? 'bus-' + busColor : ''].filter(Boolean).join(' ');
+  const action = workActions[kind];
+  workAction.hidden = phase !== 'arrived' || !action;
+  if (action) workAction.textContent = action[lang];
   const view = scenery[stop];
   if (view) {
     scene.style.setProperty('--sky1', view.sky);
@@ -437,7 +502,7 @@ function render() {
   } else if (phase === 'arrived') {
     message.textContent = celebration
       ? (lang === 'en' ? '🎉 You made it to ' + stopText + '! Great ride!' : '🎉 ' + stopText + 'に とうちゃく！おつかれさま！')
-      : (lang === 'en' ? 'Arrived at ' + stopText + '! Great ride!' + (kind === 'police' ? '' : ' The doors opened.') : stopText + 'に とうちゃく！おつかれさま！' + (kind === 'police' ? '' : ' ドアが あいたよ'));
+      : (lang === 'en' ? 'Arrived at ' + stopText + '! Great ride!' + (kind === 'police' || action ? '' : ' The doors opened.') : stopText + 'に とうちゃく！おつかれさま！' + (kind === 'police' || action ? '' : ' ドアが あいたよ'));
   } else {
     message.textContent = workSelected
       ? (lang === 'en' ? 'Which work vehicle will go?' : 'どの のりものが でるかな？')
