@@ -6,6 +6,7 @@
 <title>のりもの しゅっぱつ！</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f9f4e7;color:#19354a;font-family:Nunito,"Hiragino Maru Gothic ProN","Yu Gothic",sans-serif}main{width:min(100%,720px);margin:auto;padding:20px clamp(14px,4vw,32px)}h1{font-size:clamp(1.55rem,5vw,2.5rem);margin:0 0 14px;font-weight:900}button{font:inherit;font-weight:800;cursor:pointer;touch-action:manipulation}button:focus-visible{outline:3px solid #122c82;outline-offset:3px}.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.choices button{min-height:61px;background:#fff;border:2px solid #e9dfcd;border-radius:15px;color:#19354a;font-size:clamp(.84rem,3.4vw,1.12rem)}.choices span{display:block;font-size:1.4rem}.choices [aria-pressed=true]{background:#e4f4ff;border-color:#176f9d}.scene{height:clamp(205px,48vw,350px);position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(#a7e0ff 0 68%,#a9d78f 68%);isolation:isolate}.land{position:absolute;inset:35% 0 26%;background:radial-gradient(ellipse 37% 120% at 20% 105%,#80bd87 78%,transparent 79%),radial-gradient(ellipse 42% 115% at 80% 100%,#95cd8f 79%,transparent 80%);background-size:420px 100%}.cloud{position:absolute;top:17%;left:14%;width:56px;height:14px;border-radius:30px;background:#fff;box-shadow:18px -9px 0 1px #fff,250px 8px 0 1px #fff,266px 0 0 1px #fff}.stop{position:absolute;top:9%;right:5%;background:#fff;border:2px solid #285c73;border-radius:8px;padding:5px 9px;font-weight:800}.road{position:absolute;inset:72% 0 0;background:#506776}.road::after{content:"";position:absolute;top:42%;width:100%;height:4px;background:repeating-linear-gradient(90deg,#ffecaa 0 28px,transparent 28px 53px)}.train .road{background:repeating-linear-gradient(90deg,#78624f 0 12px,#c4b899 12px 31px);bottom:auto;height:13%;border-block:4px solid #52636c}.train .road::after{display:none}.vehicle{position:absolute;width:min(75%,450px);height:32%;left:50%;bottom:24%;transform:translateX(-50%);background:#fff;border-radius:15px 86% 22px 15px / 15px 81% 15px 15px;border:3px solid #233f57;box-shadow:inset 0 -12px #1779bf}.windows{position:absolute;top:26%;left:8%;width:60%;height:30%;background:repeating-linear-gradient(90deg,#254962 0 16%,transparent 16% 21%);border-radius:4px}.door{position:absolute;left:27%;top:16%;width:13%;height:75%;border:2px solid #456071;background:#f9feff;border-radius:4px;overflow:hidden}.door::after{content:"";position:absolute;inset:12% 22% 42%;background:#2b4d63;border-radius:2px}.arrived .door{background:#243e50;box-shadow:inset 7px 0 #afc6cf,inset -7px 0 #afc6cf}.arrived .door::after{display:none}.wheel{display:none;position:absolute;bottom:-15%;width:15%;aspect-ratio:1;background:#233447;border:4px solid #233447;border-radius:50%;box-shadow:inset 0 0 0 4px #a8b7c3}.wheel:first-of-type{left:12%}.wheel:last-of-type{right:12%}.bus .vehicle{width:min(59%,355px);height:39%;border-radius:13px;background:#ffd568;box-shadow:inset 0 -13px #e38b35}.bus .door{left:77%;width:17%}.bus .wheel,.police .wheel{display:block}.police .vehicle{width:min(52%,310px);height:21%;border-radius:26px 26px 12px 12px;box-shadow:inset 0 -15px #24374b}.police .vehicle::before{content:"";position:absolute;z-index:-1;bottom:88%;left:23%;width:53%;height:78%;background:#37546a;border:4px solid white;border-radius:30px 35px 0 0}.police .vehicle::after{content:"";position:absolute;bottom:165%;left:43%;width:16%;height:18%;border-radius:10px 10px 0 0;background:#e03949}.police .windows,.police .door{display:none}.moving .land,.moving .road::after{animation:scroll 1.25s linear infinite}.moving.train .road{animation:rails .25s linear infinite}.moving .vehicle{animation:bob .36s ease-in-out infinite alternate}.moving .stop{visibility:hidden}.moving.police .vehicle::after{animation:blink .66s linear 3}@keyframes scroll{to{background-position:-420px 0}}@keyframes rails{to{background-position:-31px 0}}@keyframes bob{to{transform:translate(-50%,-2px)}}@keyframes blink{50%{background:#ff9a96}}.message{text-align:center;font-size:clamp(1.05rem,4.4vw,1.4rem);font-weight:800;margin:11px 0;min-height:1.6em}.go{width:100%;min-height:76px;border:0;border-radius:22px;background:#126c50;color:#fff;font-size:clamp(1.4rem,6vw,2rem);box-shadow:0 5px #084733}.go:disabled{background:#dcebe1;color:#315b4d;box-shadow:none;cursor:default}@media(prefers-reduced-motion:reduce){*,*::after{animation:none!important}}
+.sound{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 16px;margin:20px 0 0}.sound button{min-height:44px;padding:0 13px;border:2px solid #e9dfcd;border-radius:12px;background:#fff;color:#19354a}.sound label{display:flex;align-items:center;gap:8px}.sound input{width:clamp(82px,26vw,150px);height:44px;accent-color:#126c50}.sound output{font-variant-numeric:tabular-nums;min-width:3em}
 </style>
 <main>
 <h1>のりもの しゅっぱつ！</h1>
@@ -20,6 +21,11 @@
 </div>
 <p class="message" id="message" role="status"></p>
 <button type="button" class="go" id="go">▶ しゅっぱつ！</button>
+<div class="sound" aria-label="おとの せってい">
+<button type="button" id="mute" aria-label="おとを けす" aria-pressed="false">🔊 おとオン</button>
+<label for="volume">おんりょう <input id="volume" type="range" min="0" max="100" value="40"></label>
+<output id="volume-value" for="volume">40%</output>
+</div>
 </main>
 <script>
 const routes = {
@@ -36,6 +42,66 @@ const progress = { train: 0, bus: 0, police: 0 };
 let kind = 'train';
 let phase = 'ready';
 let arrival;
+
+const mute = document.querySelector('#mute');
+const volume = document.querySelector('#volume');
+const volumeValue = document.querySelector('#volume-value');
+const departureSounds = {
+  train: [[784, 784, 0, .18], [988, 988, .21, .22]],
+  bus: [[285, 285, 0, .16, 'triangle'], [285, 285, .21, .24, 'triangle']],
+  police: [[420, 760, 0, .32], [760, 420, .32, .32]],
+};
+const arrivalSound = [[660, 660, 0, .14], [523, 523, .17, .20]];
+let audio;
+let master;
+let muted = false;
+
+function updateVolume() {
+  volumeValue.textContent = volume.value + '%';
+  mute.textContent = muted ? '🔇 おとオフ' : '🔊 おとオン';
+  mute.setAttribute('aria-pressed', String(muted));
+  if (master) master.gain.setTargetAtTime(muted ? 0 : Number(volume.value) / 100 * .3, audio.currentTime, .015);
+}
+
+volume.addEventListener('input', updateVolume);
+mute.addEventListener('click', () => {
+  muted = !muted;
+  updateVolume();
+});
+
+function prepareAudio() {
+  const Audio = window.AudioContext || window.webkitAudioContext;
+  if (!Audio) return;
+  if (!audio) {
+    audio = new Audio();
+    master = audio.createGain();
+    master.gain.value = 0;
+    master.connect(audio.destination);
+    updateVolume();
+  }
+  return audio.resume();
+}
+
+function playSound(notes) {
+  if (audio?.state !== 'running' || muted || Number(volume.value) === 0) return;
+  const now = audio.currentTime;
+  for (const [from, to, offset, duration, type = 'sine'] of notes) {
+    const start = now + offset;
+    const end = start + duration;
+    const tone = audio.createOscillator();
+    const envelope = audio.createGain();
+    tone.type = type;
+    tone.frequency.setValueAtTime(from, start);
+    tone.frequency.linearRampToValueAtTime(to, end);
+    envelope.gain.setValueAtTime(0, start);
+    envelope.gain.linearRampToValueAtTime(.65, start + .025);
+    envelope.gain.linearRampToValueAtTime(0, end);
+    tone.connect(envelope);
+    envelope.connect(master);
+    tone.start(start);
+    tone.stop(end);
+  }
+}
 
 function render() {
   const route = routes[kind];
@@ -66,11 +132,21 @@ go.addEventListener('click', () => {
   if (phase === 'moving') return;
   phase = 'moving';
   render();
+  const departureKind = kind;
   arrival = setTimeout(() => {
     progress[kind] = (progress[kind] + 1) % routes[kind].stops.length;
     phase = 'arrived';
     render();
+    playSound(arrivalSound);
   }, 2600);
+  const trip = arrival;
+  try {
+    prepareAudio()?.then(() => {
+      if (phase === 'moving' && arrival === trip) playSound(departureSounds[departureKind]);
+    }).catch(() => {});
+  } catch {
+    // Driving still works if the browser cannot initialize audio.
+  }
 });
 
 render();
