@@ -48,10 +48,25 @@
 .mini-bus::after,.mini-police::after{content:"";position:absolute;left:7px;bottom:-6px;width:8px;height:8px;background:#233447;border-radius:50%;box-shadow:31px 0 #233447}
 .arrived ~ .go{animation:ready-pulse .65s 2 alternate}
 @keyframes ready-pulse{to{box-shadow:0 5px #084733,0 0 0 6px #a9d78f}}
-@media(orientation:landscape) and (min-width:700px){
-  main{max-width:1000px;display:grid;grid-template-columns:minmax(240px,1fr) minmax(360px,1.6fr);gap:12px 20px;align-content:start}
+@media (min-width: 680px) {
+  main { width: min(100%, 1060px); }
+  main > .scene { height: clamp(280px, 43vh, 460px); }
+}
+@media (min-width: 1050px), (orientation: landscape) and (min-width: 700px){
+  main{max-width:1380px;display:grid;grid-template-columns:minmax(230px,320px) minmax(0,1fr);gap:12px 20px;align-content:start}
   main > *{grid-column:1}
-  main > .scene{grid-column:2;grid-row:1 / span 5;height:clamp(220px,74dvh,420px)}
+  main > .scene{grid-column:2;grid-row:1 / span 5;height:clamp(250px,70dvh,540px)}
+}
+
+.tap-sparkle {
+  position: fixed;
+  z-index: 5;
+  pointer-events: none;
+  color: #e99b17;
+  text-shadow: 0 0 3px white, 0 0 4px white;
+  font-size: 26px;
+  line-height: 1;
+  transform: translate(-50%, -50%);
 }
 </style>
 <main>
@@ -365,5 +380,25 @@ go.addEventListener('click', () => {
 });
 
 render();
+</script>
+<script>
+const playArea = document.querySelector('#field, #cats, #scene');
+const reduceTapMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+playArea?.addEventListener('pointerdown', event => {
+  if (event.button !== 0) return;
+  const sparkle = document.createElement('span');
+  sparkle.className = 'tap-sparkle';
+  sparkle.setAttribute('aria-hidden', 'true');
+  sparkle.textContent = '✦';
+  sparkle.style.left = event.clientX + 'px';
+  sparkle.style.top = event.clientY + 'px';
+  document.body.append(sparkle);
+  const animation = sparkle.animate(reduceTapMotion.matches
+    ? [{ opacity: 1 }, { opacity: 0 }]
+    : [{ opacity: 1, transform: 'translate(-50%, -50%) scale(.65)' },
+      { opacity: 0, transform: 'translate(-50%, -105%) scale(1.4)' }],
+    { duration: reduceTapMotion.matches ? 180 : 430, easing: 'ease-out' });
+  animation.onfinish = () => sparkle.remove();
+});
 </script>
 </html>
