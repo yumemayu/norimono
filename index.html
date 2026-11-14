@@ -5,7 +5,16 @@
 <meta name="theme-color" content="#f9f4e7">
 <title>のりもの しゅっぱつ！</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f9f4e7;color:#19354a;font-family:Nunito,"Hiragino Maru Gothic ProN","Yu Gothic",sans-serif}main{width:min(100%,720px);margin:auto;padding:20px clamp(14px,4vw,32px)}h1{font-size:clamp(1.55rem,5vw,2.5rem);margin:0 0 14px;font-weight:900}button{font:inherit;font-weight:800;cursor:pointer;touch-action:manipulation}button:focus-visible{outline:3px solid #122c82;outline-offset:3px}.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.choices button{min-height:61px;background:#fff;border:2px solid #e9dfcd;border-radius:15px;color:#19354a;font-size:clamp(.84rem,3.4vw,1.12rem)}.choices span{display:block;font-size:1.4rem}.choices [aria-pressed=true]{background:#e4f4ff;border-color:#176f9d}.scene{height:clamp(205px,48vw,350px);position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(var(--sky1,#a7e0ff) 0 68%,var(--ground,#a9d78f) 68%);isolation:isolate}.land{position:absolute;inset:35% 0 26%;background:radial-gradient(ellipse 37% 120% at 20% 105%,#80bd87 78%,transparent 79%),radial-gradient(ellipse 42% 115% at 80% 100%,#95cd8f 79%,transparent 80%);background-size:420px 100%}.cloud{position:absolute;top:17%;left:14%;width:56px;height:14px;border-radius:30px;background:#fff;box-shadow:18px -9px 0 1px #fff,250px 8px 0 1px #fff,266px 0 0 1px #fff}.stop{position:absolute;top:9%;right:5%;background:#fff;border:2px solid #285c73;border-radius:8px;padding:5px 9px;font-weight:800}.road{position:absolute;inset:72% 0 0;background:#506776}.road::after{content:"";position:absolute;top:42%;width:100%;height:4px;background:repeating-linear-gradient(90deg,#ffecaa 0 28px,transparent 28px 53px)}.train .road{background:repeating-linear-gradient(90deg,#78624f 0 12px,#c4b899 12px 31px);bottom:auto;height:13%;border-block:4px solid #52636c}.train .road::after{display:none}.vehicle{position:absolute;width:min(75%,450px);height:32%;left:50%;bottom:24%;transform:translateX(-50%);background:#fff;border-radius:15px 86% 22px 15px / 15px 81% 15px 15px;border:3px solid #233f57;box-shadow:inset 0 -12px #1779bf}.windows{position:absolute;top:26%;left:8%;width:60%;height:30%;background:repeating-linear-gradient(90deg,#254962 0 16%,transparent 16% 21%);border-radius:4px}.door{position:absolute;left:27%;top:16%;width:13%;height:75%;border:2px solid #456071;background:#f9feff;border-radius:4px;overflow:hidden}.door::after{content:"";position:absolute;inset:12% 22% 42%;background:#2b4d63;border-radius:2px}.arrived .door{background:#243e50;box-shadow:inset 7px 0 #afc6cf,inset -7px 0 #afc6cf}.arrived .door::after{display:none}.wheel{display:none;position:absolute;bottom:-15%;width:15%;aspect-ratio:1;background:#233447;border:4px solid #233447;border-radius:50%;box-shadow:inset 0 0 0 4px #a8b7c3}.wheel:first-of-type{left:12%}.wheel:last-of-type{right:12%}.bus .vehicle{width:min(59%,355px);height:39%;border-radius:13px;background:#ffd568;box-shadow:inset 0 -13px #e38b35}.bus .door{left:77%;width:17%}.bus .wheel,.police .wheel{display:block}.police .vehicle{width:min(52%,310px);height:21%;border-radius:26px 26px 12px 12px;box-shadow:inset 0 -15px #24374b}.police .vehicle::before{content:"";position:absolute;z-index:-1;bottom:88%;left:23%;width:53%;height:78%;background:#37546a;border:4px solid white;border-radius:30px 35px 0 0}.police .vehicle::after{content:"";position:absolute;bottom:165%;left:43%;width:16%;height:18%;border-radius:10px 10px 0 0;background:#e03949}.police .windows,.police .door{display:none}.moving .land,.moving .road::after{animation:scroll 1.25s linear infinite}.moving.train .road{animation:rails .25s linear infinite}.moving .stop{visibility:hidden}.moving.police .vehicle::after{animation:blink .66s linear 3}@keyframes scroll{to{background-position:-420px 0}}@keyframes rails{to{background-position:-31px 0}}@keyframes blink{50%{background:#ff9a96}}.decor{position:absolute;inset:0;pointer-events:none}.decor span{position:absolute;font-size:clamp(26px,6vw,44px)}.decor span:nth-child(1){top:7%;left:5%}.decor span:nth-child(2){top:15%;left:42%}.decor span:nth-child(3){top:20%;right:7%}.confetti{position:absolute;top:-4%;width:10px;height:14px;border-radius:2px;pointer-events:none;animation-name:fall;animation-timing-function:linear;animation-fill-mode:forwards}@keyframes fall{to{transform:translateY(400px) rotate(560deg)}}.message{text-align:center;font-size:clamp(1.05rem,4.4vw,1.4rem);font-weight:800;margin:11px 0;min-height:1.6em}.go{width:100%;min-height:76px;border:0;border-radius:22px;background:#126c50;color:#fff;font-size:clamp(1.4rem,6vw,2rem);box-shadow:0 5px #084733}.go:disabled{background:#dcebe1;color:#315b4d;box-shadow:none;cursor:default}@media(prefers-reduced-motion:reduce){*,*::after{animation:none!important}}
+*{box-sizing:border-box}body{margin:0;background:#f9f4e7;color:#19354a;font-family:Nunito,"Hiragino Maru Gothic ProN","Yu Gothic",sans-serif}main{width:min(100%,720px);margin:auto;padding:20px clamp(14px,4vw,32px)}h1{font-size:clamp(1.55rem,5vw,2.5rem);margin:0 0 14px;font-weight:900}button{font:inherit;font-weight:800;cursor:pointer;touch-action:manipulation}button:focus-visible{outline:3px solid #122c82;outline-offset:3px}.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.choices button{min-height:61px;background:#fff;border:2px solid #e9dfcd;border-radius:15px;color:#19354a;font-size:clamp(.84rem,3.4vw,1.12rem)}.choices span{display:block;font-size:1.4rem}.choices [aria-pressed=true]{background:#e4f4ff;border-color:#176f9d}.scene{height:clamp(205px,48vw,350px);position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(var(--sky1,#a7e0ff) 0 68%,var(--ground,#a9d78f) 68%);isolation:isolate}.land{position:absolute;inset:35% 0 26%;background:radial-gradient(ellipse 37% 120% at 20% 105%,#80bd87 78%,transparent 79%),radial-gradient(ellipse 42% 115% at 80% 100%,#95cd8f 79%,transparent 80%);background-size:420px 100%}.cloud{position:absolute;top:17%;left:14%;width:56px;height:14px;border-radius:30px;background:#fff;box-shadow:18px -9px 0 1px #fff,250px 8px 0 1px #fff,266px 0 0 1px #fff}.stop{position:absolute;top:9%;right:5%;background:#fff;border:2px solid #285c73;border-radius:8px;padding:5px 9px;font-weight:800}.road{position:absolute;inset:72% 0 0;background:#506776}.road::after{content:"";position:absolute;top:42%;width:100%;height:4px;background:repeating-linear-gradient(90deg,#ffecaa 0 28px,transparent 28px 53px)}.train .road{background:repeating-linear-gradient(90deg,#78624f 0 12px,#c4b899 12px 31px);bottom:auto;height:13%;border-block:4px solid #52636c}.train .road::after{display:none}.vehicle{position:absolute;width:min(75%,450px);height:32%;left:50%;bottom:24%;transform:translateX(-50%);background:#fff;border-radius:15px 86% 22px 15px / 15px 81% 15px 15px;border:3px solid #233f57;box-shadow:inset 0 -12px #1779bf}.windows{position:absolute;top:26%;left:8%;width:60%;height:30%;background:repeating-linear-gradient(90deg,#254962 0 16%,transparent 16% 21%);border-radius:4px}.door{position:absolute;left:27%;top:16%;width:13%;height:75%;border:2px solid #456071;background:#f9feff;border-radius:4px;overflow:hidden}.door::after{content:"";position:absolute;inset:12% 22% 42%;background:#2b4d63;border-radius:2px}.arrived .door{background:#243e50;box-shadow:inset 7px 0 #afc6cf,inset -7px 0 #afc6cf}.arrived .door::after{display:none}.wheel{display:none;position:absolute;bottom:-15%;width:15%;aspect-ratio:1;background:#233447;border:4px solid #233447;border-radius:50%;box-shadow:inset 0 0 0 4px #a8b7c3}.wheel:first-of-type{left:12%}.wheel:last-of-type{right:12%}.bus .vehicle{width:min(59%,355px);height:39%;border-radius:13px;background:#ffd568;box-shadow:inset 0 -13px #e38b35}.bus .door{left:77%;width:17%}.bus .wheel,.police .wheel{display:block}.police .vehicle{width:min(52%,310px);height:21%;border-radius:26px 26px 12px 12px;box-shadow:inset 0 -15px #24374b}.police .vehicle::before{content:"";position:absolute;z-index:-1;bottom:88%;left:23%;width:53%;height:78%;background:#37546a;border:4px solid white;border-radius:30px 35px 0 0}.police .vehicle::after{content:"";position:absolute;bottom:165%;left:43%;width:16%;height:18%;border-radius:10px 10px 0 0;background:#e03949}.police .windows,.police .door{display:none}.moving .land,.moving .road::after{animation:scroll 1.25s linear infinite}.moving.train .road{animation:rails .25s linear infinite}.moving .stop{visibility:hidden}.moving.police .vehicle::after{animation:blink .66s linear 3}@keyframes scroll{to{background-position:-420px 0}}@keyframes rails{to{background-position:-31px 0}}@keyframes blink{50%{background:#ff9a96}}.decor{position:absolute;inset:0;pointer-events:none}.decor svg{position:absolute;width:clamp(38px,9vw,70px);height:auto}
+.decor svg:nth-child(1){left:5%}
+.decor svg:nth-child(2){left:37%}
+.decor svg:nth-child(3){right:11%}
+.decor .sky-detail{top:9%}
+.decor .sky-detail:nth-child(2){top:17%}
+.decor .ground-detail{bottom:29%}
+.decor .ground-detail:nth-child(2){bottom:33%}
+.decor .shore-detail{bottom:34%}
+.confetti{position:absolute;top:-4%;width:10px;height:14px;border-radius:2px;pointer-events:none;animation-name:fall;animation-timing-function:linear;animation-fill-mode:forwards}@keyframes fall{to{transform:translateY(400px) rotate(560deg)}}.message{text-align:center;font-size:clamp(1.05rem,4.4vw,1.4rem);font-weight:800;margin:11px 0;min-height:1.6em}.go{width:100%;min-height:76px;border:0;border-radius:22px;background:#126c50;color:#fff;font-size:clamp(1.4rem,6vw,2rem);box-shadow:0 5px #084733}.go:disabled{background:#dcebe1;color:#315b4d;box-shadow:none;cursor:default}@media(prefers-reduced-motion:reduce){*,*::after{animation:none!important}}
 .sound{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 16px;margin:20px 0 0}.sound button{min-height:44px;padding:0 13px;border:2px solid #e9dfcd;border-radius:12px;background:#fff;color:#19354a}.sound label{display:flex;align-items:center;gap:8px}.sound input{width:clamp(82px,26vw,150px);height:44px;accent-color:#126c50}.sound output{font-variant-numeric:tabular-nums;min-width:3em}
 .train-blue .vehicle,.train-red .vehicle{
   background:none;border:0;box-shadow:none;border-radius:0;
@@ -70,8 +79,10 @@
 .choices button:disabled{cursor:default;opacity:.72}
 .topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
 #lang{min-height:44px;padding:0 14px;border:2px solid #e9dfcd;border-radius:12px;background:#fff;color:#19354a;font-size:.95rem;flex:none}
-.go-row{display:flex;gap:8px;margin-top:12px}
-.go-row .go{flex:1;width:auto;min-width:0;min-height:92px;padding:10px 8px}
+.go-row{display:flex;gap:clamp(8px,1.5vw,14px);margin-top:12px}
+.go-row .go{display:flex;align-items:center;justify-content:center;gap:clamp(8px,2vw,14px);flex:1;width:auto;min-width:0;min-height:92px;padding:10px 8px}
+.go-icon{display:grid;place-items:center;flex:none;width:clamp(34px,9vw,46px);aspect-ratio:1;border-radius:50%;background:#fff1b8;color:#126c50;font:900 1.6rem/1 system-ui,sans-serif}
+.go:disabled .go-icon{display:none}
 .go-row .horn{min-width:0;width:clamp(54px,16vw,72px);flex:none}
 .horn{min-width:84px;border:0;border-radius:22px;background:#ffb703;color:#4a3200;font-size:2.1rem;line-height:1;box-shadow:0 5px #b97e06}
 .panel{margin:14px 0 0}
@@ -86,31 +97,18 @@
 .speeds{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .speeds button{min-height:52px;background:#fff;border:2px solid #e9dfcd;border-radius:15px;color:#19354a;font-size:1rem}
 .speeds [aria-pressed=true]{background:#e4f4ff;border-color:#176f9d}
-.tunnel{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;
-  background:radial-gradient(ellipse at 50% 64%,transparent 12%,#302b4080 56%,#22263aeb 100%);}
-.tunnel::before,.tunnel::after{content:"";position:absolute;inset:0;opacity:0}
-.tunnel::before{
-  background:repeating-linear-gradient(90deg,transparent 0 65px,#ffe5a6 65px 83px,transparent 83px 124px) 0 17% / 248px 5px repeat-x;
+.tunnel{
+  position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;
+  background:
+    linear-gradient(180deg,#434a60 0 8%,transparent 8%),
+    linear-gradient(180deg,#32394c 0 72%,#303740 72% 85%,#252b37 85%);
 }
-.tunnel::after{
-  background:radial-gradient(ellipse 25% 71% at 92% 52%,#fff3ce 0 35%,#fff4cc50 64%,transparent 100%);
+.train.moving .vehicle{z-index:2}
+.train.moving .tunnel{animation:tunnel-shade var(--trip-time,12s) ease-in-out both}
+@keyframes tunnel-shade{
+  0%,35%,76%,100%{opacity:0}
+  44%,66%{opacity:.94}
 }
-.train.moving .tunnel{animation:tunnel-shade var(--trip-time,12s) linear both}
-.train.moving .tunnel::before{animation:tunnel-lamps var(--trip-time,12s) linear both}
-.train.moving .tunnel::after{animation:tunnel-exit var(--trip-time,12s) ease-in-out both}
-@keyframes tunnel-shade{0%,36%,76%,100%{opacity:0}44%,66%{opacity:1}}
-@keyframes tunnel-lamps{
-  0%,40%{opacity:0;background-position:0 17%}
-  47%,63%{opacity:.9}
-  72%,100%{opacity:0;background-position:-744px 17%}
-}
-@keyframes tunnel-exit{0%,62%,78%,100%{opacity:0}72%{opacity:.9}}
-
-.crossing{position:absolute;z-index:4;right:7%;bottom:31%;display:flex;gap:7px;opacity:0;transition:opacity .3s;pointer-events:none}
-.scene.crossing-on .crossing{opacity:1}
-.crossing i{width:17px;height:17px;border-radius:50%;background:#ff3b30;border:3px solid #fff;box-shadow:0 0 0 2px #233f57;animation:blink-lamp .5s steps(1) infinite alternate}
-.crossing i:last-child{animation-delay:.25s}
-@keyframes blink-lamp{from{opacity:1}to{opacity:.25}}
 .arrived ~ .go-row .go{animation:ready-pulse .65s 2 alternate}
 .train-yellow .vehicle{width:min(83%,485px);background:none;border:0;box-shadow:none;border-radius:0}
 .train-yellow .vehicle::before{content:"";position:absolute;inset:0;filter:drop-shadow(0 2px 0 #233f57);clip-path:polygon(0 18%,3% 9%,66% 9%,75% 15%,82% 28%,89% 49%,97% 66%,100% 79%,99% 91%,95% 98%,2% 98%,0 90%);background:linear-gradient(#ffe14d 0 52%,#fff 52% 64%,#2050a0 64% 76%,#f5c81e 76%)}
@@ -230,23 +228,28 @@
 :is(.plane,.police,.delivery,.helicopter,.bus) .vehicle::before,
 :is(.plane,.police,.delivery,.helicopter,.bus) .vehicle::after { display: none; }
 .vehicle-art { display: block; width: 100%; max-height: clamp(88px, 30vw, 196px); object-fit: contain; }
+#air-vehicles .vehicle-preview{display:flex;justify-content:center;gap:4px}
+#air-vehicles .vehicle-preview img{width:min(47%,72px)}
+
+.feedback { margin-top: 24px; text-align: center; }
+.feedback a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 6px 16px; color: inherit; text-underline-offset: 3px; }
+.feedback a:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 6px; }
 </style>
 <main>
 <div class="topbar"><h1 id="title">のりもの しゅっぱつ！</h1><button type="button" id="lang">English</button></div>
 <div id="scene" class="scene train train-blue" aria-hidden="true">
-<div class="air-landscape" aria-hidden="true"></div><div class="cloud"></div><div class="land"></div><div class="decor" id="decor"></div><div class="road"></div><div id="stop" class="stop"></div><span id="work-effect" aria-hidden="true"></span>
+<div class="air-landscape" aria-hidden="true"></div><div class="cloud"></div><div class="land"></div><div class="decor" id="decor" aria-hidden="true"></div><div class="road"></div><div id="stop" class="stop"></div><span id="work-effect" aria-hidden="true"></span>
 <div class="vehicle"><img class="vehicle-art" alt="" hidden><div class="windows"></div><div class="door"></div><i class="wheel"></i><i class="wheel"></i></div>
-<div class="tunnel" aria-hidden="true"></div><div class="crossing" aria-hidden="true"><i></i><i></i></div>
+<div class="tunnel" aria-hidden="true"></div>
 </div>
-<div class="go-row"><button type="button" class="go" id="go">▶ しゅっぱつ！</button><button type="button" class="horn" id="horn" aria-label="ラッパ">📯</button></div>
+<div class="go-row"><button type="button" class="go" id="go"><span class="go-icon" aria-hidden="true">→</span><span id="go-label">しゅっぱつ！</span></button><button type="button" class="horn" id="horn" aria-label="ラッパ">📯</button></div>
 <p class="message" id="message" role="status"></p>
 <button type="button" id="work-action" hidden></button>
 <div class="choices" aria-label="のりものを えらぶ">
 <button type="button" data-kind="train" aria-pressed="true"><span class="vehicle-preview" aria-hidden="true"><img src="assets/shinkansen.svg" alt=""></span><span class="vehicle-name">しんかんせん</span></button>
 <button type="button" data-kind="bus" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/bus-gold.webp" alt=""></span><span class="vehicle-name">バス</span></button>
 <button type="button" id="work-vehicles" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/police.webp" alt=""></span><span id="work-label">はたらく のりもの</span></button>
-<button type="button" data-kind="plane" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/plane.webp" alt=""></span><span class="vehicle-name">ひこうき</span></button>
-<button type="button" data-kind="helicopter" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/helicopter.webp" alt=""></span><span class="vehicle-name">ヘリコプター</span></button>
+<button type="button" id="air-vehicles" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/plane.webp" alt=""><img src="assets/helicopter.webp" alt=""></span><span id="air-label">そらとぶ のりもの</span></button>
 </div>
 <p class="random-note" id="random-note">いきさきは ランダム！どこに つくかは おたのしみ</p>
 <div class="panel"><h2 id="stamps-label">スタンプ</h2><div class="stamps" id="stamps"></div></div>
@@ -256,6 +259,7 @@
 <label for="volume"><span id="volume-label">おんりょう</span> <input id="volume" type="range" min="0" max="100" value="40"></label>
 <output id="volume-value" for="volume">40%</output>
 </div>
+<footer class="feedback"><a id="feedback-link" href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer">ご要望を送る</a></footer>
 </main>
 <script>
 const routes = {
@@ -284,46 +288,48 @@ const enStops = {
   delivery: ['Red House', 'Blue House'],
 };
 const L = {
-  ja: { title: 'のりもの しゅっぱつ！', choose: 'のりものを えらぶ', volume: 'おんりょう', sound: 'おとの せってい', on: '🔊 おとオン', off: '🔇 おとオフ', go: '▶ しゅっぱつ！', going: 'はしってるよ', flying: 'とんでるよ' },
-  en: { title: 'Vehicles, Go!', choose: 'Choose a vehicle', volume: 'Volume', sound: 'Sound settings', on: '🔊 Sound on', off: '🔇 Sound off', go: '▶ Go!', going: 'On the way…', flying: 'Flying…' },
+  ja: { title: 'のりもの しゅっぱつ！', choose: 'のりものを えらぶ', volume: 'おんりょう', sound: 'おとの せってい', on: '🔊 おとオン', off: '🔇 おとオフ', go: 'しゅっぱつ！', going: 'はしってるよ', flying: 'とんでるよ' },
+  en: { title: 'Vehicles, Go!', choose: 'Choose a vehicle', volume: 'Volume', sound: 'Sound settings', on: '🔊 Sound on', off: '🔇 Sound off', go: 'Go!', going: 'On the way…', flying: 'Flying…' },
 };
 let lang = 'ja';
 try { if (localStorage.getItem('norimono-lang') === 'en') lang = 'en'; } catch {}
 const langButton = document.querySelector('#lang');
 const scenery = {
-  'まちの ヘリポート': { sky: '#a7e0ff', ground: '#9ecb93', deco: ['🏙️', '☁️', '🌳'] },
-  'やまの ヘリポート': { sky: '#bde7ff', ground: '#8db881', deco: ['🏔️', '☁️', '🌲'] },
-  'うみべの ヘリポート': { sky: '#c5ecff', ground: '#8ec5eb', deco: ['🌊', '☁️', '⛵'] },
-  'はな えき': { sky: '#ffd9ec', ground: '#a9d78f', deco: ['🌸', '🌷', '🌸'] },
-  'にじ えき': { sky: '#aee7ff', ground: '#a9d78f', deco: ['🌈', '☁️', '🌈'] },
-  'ほし えき': { sky: '#7d7fd6', ground: '#7fae7a', deco: ['⭐', '🌟', '⭐'] },
-  'うみ えき': { sky: '#a7e0ff', ground: '#4db2e8', deco: ['🌊', '🐚', '⛵'] },
-  'もり えき': { sky: '#bfe8c9', ground: '#6db56d', deco: ['🌲', '🌳', '🍄'] },
-  'ゆき えき': { sky: '#e8f4ff', ground: '#ffffff', deco: ['❄️', '⛄', '❄️'] },
-  'つき えき': { sky: '#2c3e70', ground: '#5d7a5d', deco: ['🌙', '⭐', '✨'] },
-  'こうえんまえ': { sky: '#a7e0ff', ground: '#a9d78f', deco: ['🌳', '🛝', '🌷'] },
-  'パンやさんまえ': { sky: '#ffe9c9', ground: '#c9a876', deco: ['🥐', '🍞', '🥖'] },
-  'どうぶつえんまえ': { sky: '#ffe9a8', ground: '#a9d78f', deco: ['🦁', '🐘', '🦒'] },
-  'としょかんまえ': { sky: '#d9e6ff', ground: '#a9d78f', deco: ['📚', '📖', '✏️'] },
-  'みなとまえ': { sky: '#a7e0ff', ground: '#4db2e8', deco: ['⚓', '🚢', '🌊'] },
-  'こうばん': { sky: '#a7e0ff', ground: '#b9b9b9', deco: ['🚓', '🏢', '🚨'] },
-  'まちの ひろば': { sky: '#a7e0ff', ground: '#a9d78f', deco: ['⛲', '🕊️', '🎈'] },
-  'こうえん': { sky: '#a7e0ff', ground: '#a9d78f', deco: ['🌳', '🦆', '🌷'] },
-  'まちの びょういん': { sky: '#bde7ff', ground: '#a9d78f', deco: ['🏥', '🌳', '☁️'] },
-  'こども びょういん': { sky: '#bde7ff', ground: '#a9d78f', deco: ['🏥', '🌳', '☁️'] },
-  'うみべの びょういん': { sky: '#bde7ff', ground: '#a9d78f', deco: ['🏥', '🌳', '☁️'] },
-  'にじ くうこう': { sky: '#bde7ff', ground: '#a9d78f', deco: ['☁️', '☁️', '🏔️'] },
-  'うみ くうこう': { sky: '#bde7ff', ground: '#a9d78f', deco: ['☁️', '☁️', '🏔️'] },
-  'やま くうこう': { sky: '#bde7ff', ground: '#a9d78f', deco: ['☁️', '☁️', '🏔️'] },
-  'まちの しょうぼうしょ': { sky: '#bde7ff', ground: '#a9d78f', deco: ['🚒', '🌳', '☁️'] },
-  'ひがし しょうぼうしょ': { sky: '#bde7ff', ground: '#a9d78f', deco: ['🚒', '🌳', '☁️'] },
-  'まちの ごみステーション': { sky: '#bde7ff', ground: '#a9d78f', deco: ['🚛', '🌳', '☁️'] },
-  'こうえんの ごみステーション': { sky: '#bde7ff', ground: '#a9d78f', deco: ['🚛', '🌳', '☁️'] },
-  'まちの こうじげんば': { sky: '#bde7ff', ground: '#a9d78f', deco: ['🚧', '🌳', '☁️'] },
-  'やまの こうじげんば': { sky: '#bde7ff', ground: '#a9d78f', deco: ['🚧', '🌳', '☁️'] },
-  'あかい おうち': { sky: '#bde7ff', ground: '#a9d78f', deco: ['📦', '🌳', '☁️'] },
-  'あおい おうち': { sky: '#bde7ff', ground: '#a9d78f', deco: ['📦', '🌳', '☁️'] },
+  'まちの ヘリポート': { sky: '#a7e0ff', ground: '#9ecb93', deco: ['town', 'cloud', 'tree'] },
+  'やまの ヘリポート': { sky: '#bde7ff', ground: '#8db881', deco: ['mountain', 'cloud', 'pine'] },
+  'うみべの ヘリポート': { sky: '#c5ecff', ground: '#8ec5eb', deco: ['waves', 'cloud', 'boat'] },
+  'はな えき': { sky: '#ffd9ec', ground: '#a9d78f', deco: ['blossom', 'flowers', 'blossom'] },
+  'にじ えき': { sky: '#aee7ff', ground: '#a9d78f', deco: ['rainbow', 'cloud', 'rainbow'] },
+  'ほし えき': { sky: '#7d7fd6', ground: '#7fae7a', deco: ['star', 'spark', 'star'] },
+  'うみ えき': { sky: '#a7e0ff', ground: '#4db2e8', deco: ['waves', 'waves', 'boat'] },
+  'もり えき': { sky: '#bfe8c9', ground: '#6db56d', deco: ['pine', 'tree', 'mushroom'] },
+  'ゆき えき': { sky: '#e8f4ff', ground: '#ffffff', deco: ['snow', 'snowman', 'snow'] },
+  'つき えき': { sky: '#2c3e70', ground: '#5d7a5d', deco: ['moon', 'star', 'spark'] },
+  'こうえんまえ': { sky: '#a7e0ff', ground: '#a9d78f', deco: ['tree', 'slide', 'flowers'] },
+  'パンやさんまえ': { sky: '#ffe9c9', ground: '#c9a876', deco: ['bakery', 'tree', 'flowers'] },
+  'どうぶつえんまえ': { sky: '#ffe9a8', ground: '#a9d78f', deco: ['zoo', 'tree', 'pine'] },
+  'としょかんまえ': { sky: '#d9e6ff', ground: '#a9d78f', deco: ['library', 'tree', 'flowers'] },
+  'みなとまえ': { sky: '#a7e0ff', ground: '#4db2e8', deco: ['pier', 'boat', 'waves'] },
+  'こうばん': { sky: '#a7e0ff', ground: '#b9b9b9', deco: ['police', 'town', 'tree'] },
+  'まちの ひろば': { sky: '#a7e0ff', ground: '#a9d78f', deco: ['fountain', 'cloud', 'balloon'] },
+  'こうえん': { sky: '#a7e0ff', ground: '#a9d78f', deco: ['tree', 'pond', 'flowers'] },
+  'まちの びょういん': { sky: '#bde7ff', ground: '#a9d78f', deco: ['hospital', 'tree', 'cloud'] },
+  'こども びょういん': { sky: '#bde7ff', ground: '#a9d78f', deco: ['hospital', 'tree', 'cloud'] },
+  'うみべの びょういん': { sky: '#bde7ff', ground: '#a9d78f', deco: ['hospital', 'tree', 'cloud'] },
+  'にじ くうこう': { sky: '#bde7ff', ground: '#a9d78f', deco: ['cloud', 'cloud', 'mountain'] },
+  'うみ くうこう': { sky: '#bde7ff', ground: '#a9d78f', deco: ['cloud', 'cloud', 'mountain'] },
+  'やま くうこう': { sky: '#bde7ff', ground: '#a9d78f', deco: ['cloud', 'cloud', 'mountain'] },
+  'まちの しょうぼうしょ': { sky: '#bde7ff', ground: '#a9d78f', deco: ['fire', 'tree', 'cloud'] },
+  'ひがし しょうぼうしょ': { sky: '#bde7ff', ground: '#a9d78f', deco: ['fire', 'tree', 'cloud'] },
+  'まちの ごみステーション': { sky: '#bde7ff', ground: '#a9d78f', deco: ['bins', 'tree', 'cloud'] },
+  'こうえんの ごみステーション': { sky: '#bde7ff', ground: '#a9d78f', deco: ['bins', 'tree', 'cloud'] },
+  'まちの こうじげんば': { sky: '#bde7ff', ground: '#a9d78f', deco: ['cone', 'tree', 'cloud'] },
+  'やまの こうじげんば': { sky: '#bde7ff', ground: '#a9d78f', deco: ['cone', 'tree', 'cloud'] },
+  'あかい おうち': { sky: '#bde7ff', ground: '#a9d78f', deco: ['house', 'tree', 'cloud'] },
+  'あおい おうち': { sky: '#bde7ff', ground: '#a9d78f', deco: ['house', 'tree', 'cloud'] },
 };
+const skyDetails = new Set(['cloud', 'rainbow', 'star', 'spark', 'snow', 'moon', 'balloon']);
+const shoreDetails = new Set(['boat', 'waves', 'pier']);
 const scene = document.querySelector('#scene');
 const vehicleArt = scene.querySelector('.vehicle-art');
 const vehicleArtPaths = { plane: 'assets/plane.webp', police: 'assets/police.webp' };
@@ -332,6 +338,7 @@ let celebration = false;
 const stopLabel = document.querySelector('#stop');
 const message = document.querySelector('#message');
 const go = document.querySelector('#go');
+const goLabel = document.querySelector('#go-label');
 const choices = document.querySelectorAll('[data-kind]');
 const workVehicles = document.querySelector('#work-vehicles');
 const workActions = {
@@ -351,11 +358,23 @@ workAction.addEventListener('click', () => {
   void scene.offsetWidth;
   scene.classList.add('work-active');
 });
+const airVehicles = document.querySelector('#air-vehicles');
+const airKinds = ['plane', 'helicopter'];
+let airSelected = false;
 let workSelected = false;
+airVehicles.addEventListener('click', () => {
+  if (phase === 'moving' || airSelected) return;
+  airSelected = true;
+  workSelected = false;
+  kind = airKinds[0];
+  celebration = false;
+  phase = 'ready';
+  render();
+});
 workVehicles.addEventListener('click', () => {
   if (phase === 'moving' || workSelected) return;
-  window.speechSynthesis?.cancel();
   workSelected = true;
+  airSelected = false;
   kind = workKinds[0];
   celebration = false;
   phase = 'ready';
@@ -378,7 +397,6 @@ const artVariants = {
 const currentArt = Object.fromEntries(Object.entries(artVariants).map(([vehicle, variants]) => [vehicle, variants[0]]));
 let trainVariant;
 let arrival;
-let crossingTimer;
 
 const mute = document.querySelector('#mute');
 const volume = document.querySelector('#volume');
@@ -390,7 +408,6 @@ const departureSirens = [
 ];
 const arrivalSound = [[660, 660, 0, .14], [523, 523, .17, .20]];
 const doorChime = [[880, 880, 0, .16], [660, 660, .18, .26]];
-const crossingBell = [[1319, 1319, 0, .09], [1047, 1047, .22, .09], [1319, 1319, .44, .09], [1047, 1047, .66, .09], [1319, 1319, .88, .09], [1047, 1047, 1.1, .09]];
 const fanfare = [[523, 523, 0, .16], [659, 659, .16, .16], [784, 784, .32, .16], [1047, 1047, .48, .36]];
 function celebrate() {
   const colors = ['#ff6b81', '#ffd166', '#4db2e8', '#7bc96f', '#c792ea'];
@@ -448,18 +465,6 @@ function renderPanels() {
     '<span class="stamp' + (done ? ' done' : '') + '">' + (done ? '⭐' : '') + '</span>').join('');
   document.querySelectorAll('#speeds [data-speed]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.speed === speed)));
 }
-function announceStop(stop) {
-  if (muted || Number(volume.value) === 0 || !window.speechSynthesis || !window.SpeechSynthesisUtterance) return;
-  const english = lang === 'en';
-  const name = english ? enStops[kind][progress[kind]] : stop.replace(' えき', '駅').replace(' くうこう', '空港');
-  const line = new SpeechSynthesisUtterance(english ? 'Arrived at ' + name + '.' : name + 'に とうちゃくしました。');
-  line.lang = english ? 'en-US' : 'ja-JP';
-  line.rate = .9;
-  line.volume = Number(volume.value) / 100;
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(line);
-}
-
 function stopTravelSound() {
   if (!travelSound) return;
   travelSound.disconnect();
@@ -516,7 +521,6 @@ function playTravelSound(vehicle) {
 }
 
 function updateVolume() {
-  if (muted || Number(volume.value) === 0) window.speechSynthesis?.cancel();
   volumeValue.textContent = volume.value + '%';
   mute.textContent = muted ? L[lang].off : L[lang].on;
   mute.setAttribute('aria-pressed', String(muted));
@@ -578,7 +582,13 @@ function render() {
   if (view) {
     scene.style.setProperty('--sky1', view.sky);
     scene.style.setProperty('--ground', view.ground);
-    decor.innerHTML = view.deco.map(emoji => '<span>' + emoji + '</span>').join('');
+  }
+  if (decor.dataset.stop !== stop) {
+    decor.innerHTML = view?.deco.map(detail => {
+      const placement = skyDetails.has(detail) ? 'sky' : shoreDetails.has(detail) ? 'shore' : 'ground';
+      return `<svg class="${placement}-detail" viewBox="0 0 64 52"><use href="assets/scenery.svg#${detail}"></use></svg>`;
+    }).join('') ?? '';
+    decor.dataset.stop = stop;
   }
   const stopText = lang === 'en' ? enStops[kind][progress[kind]] : stop;
   const vehicleName = kind === 'train'
@@ -587,10 +597,12 @@ function render() {
   stopLabel.textContent = stopText;
   go.disabled = phase === 'moving';
   workVehicles.disabled = go.disabled;
+  airVehicles.disabled = go.disabled;
+  airVehicles.setAttribute('aria-pressed', String(airSelected));
   workVehicles.setAttribute('aria-pressed', String(workSelected));
   const flying = kind === 'plane' || kind === 'helicopter';
   const movement = flying ? L[lang].flying : L[lang].going;
-  go.textContent = go.disabled ? movement : L[lang].go;
+  goLabel.textContent = go.disabled ? movement : L[lang].go;
   if (phase === 'moving') {
     message.textContent = lang === 'en' ? vehicleName + (flying ? ' is flying!' : ' is on its way!') : vehicleName + 'が ' + movement + '！';
   } else if (phase === 'arrived') {
@@ -598,7 +610,7 @@ function render() {
       ? (lang === 'en' ? '🎉 You made it to ' + stopText + '! Great ride!' : '🎉 ' + stopText + 'に とうちゃく！おつかれさま！')
       : (lang === 'en' ? 'Arrived at ' + stopText + '! Great ride!' + (kind === 'police' || flying || action ? '' : ' The doors opened.') : stopText + 'に とうちゃく！おつかれさま！' + (kind === 'police' || flying || action ? '' : ' ドアが あいたよ'));
   } else {
-    message.textContent = workSelected
+    message.textContent = workSelected || airSelected
       ? (lang === 'en' ? 'Which work vehicle will go?' : 'どの のりものが でるかな？')
       : lang === 'en' ? 'Leaving from ' + stopText + '!' : stopText + 'から しゅっぱつ！';
   }
@@ -614,7 +626,7 @@ choices.forEach(button => button.addEventListener('click', () => {
   stopTravelSound();
   kind = button.dataset.kind;
   workSelected = false;
-  window.speechSynthesis?.cancel();
+  airSelected = false;
   celebration = false;
   phase = 'ready';
   render();
@@ -623,11 +635,11 @@ choices.forEach(button => button.addEventListener('click', () => {
 
 go.addEventListener('click', () => {
   if (phase === 'moving') return;
-  window.speechSynthesis?.cancel();
   celebration = false;
   tripDuration = speeds[speed];
   scene.style.setProperty('--trip-time', tripDuration + 's');
   if (workSelected) kind = workKinds[Math.floor(Math.random() * workKinds.length)];
+  if (airSelected) kind = airKinds[Math.floor(Math.random() * airKinds.length)];
   if (kind === 'train') {
     const variants = trainVariants.filter(variant => variant !== trainVariant && (variant.id !== 'yellow' || yellowUnlocked));
     trainVariant = variants[Math.floor(Math.random() * variants.length)];
@@ -639,20 +651,10 @@ go.addEventListener('click', () => {
   phase = 'moving';
   render();
   const departureKind = kind;
-  const dur = tripDuration;
   const tripRoute = routes[departureKind];
   let tripTarget = progress[departureKind];
   while (tripTarget === progress[departureKind]) tripTarget = Math.floor(Math.random() * tripRoute.stops.length);
-  if (kind === 'train') {
-    crossingTimer = setTimeout(() => {
-      scene.classList.add('crossing-on');
-      playSound(crossingBell);
-      setTimeout(() => scene.classList.remove('crossing-on'), 2100);
-    }, dur * 150);
-  }
   arrival = setTimeout(() => {
-    clearTimeout(crossingTimer);
-    scene.classList.remove('crossing-on');
     kind = departureKind;
     const target = tripTarget;
     progress[departureKind] = target;
@@ -677,7 +679,6 @@ go.addEventListener('click', () => {
       playSound(doorChime);
       if (departureKind !== 'train') playSound(arrivalSound);
     }
-    announceStop(tripRoute.stops[target]);
     if (unlockedNow) message.textContent += ' ' + (lang === 'en' ? '🎉 Yellow Shinkansen is unlocked!' : '🎉 きいろい しんかんせんが つかえるように なったよ！');
     else if (cardComplete && !wasStamped) message.textContent += ' ' + (lang === 'en' ? '🎉 You collected all the stamps!' : '🎉 スタンプが そろったよ！');
   }, tripDuration * 1000);
@@ -694,6 +695,8 @@ go.addEventListener('click', () => {
 });
 
 function applyLang() {
+  document.querySelector('#feedback-link').textContent = lang === 'en' ? 'Send feedback' : 'ご要望を送る';
+  document.querySelector('#air-label').textContent = lang === 'en' ? 'Flying vehicles' : 'そらとぶ のりもの';
   document.querySelector('#work-label').textContent = lang === 'en' ? 'Work vehicles' : 'はたらく のりもの';
   document.documentElement.lang = lang;
   document.title = L[lang].title;
