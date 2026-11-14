@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f9f4e7">
+<title>のりもの しゅっぱつ！</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f9f4e7;color:#19354a;font-family:Nunito,"Hiragino Maru Gothic ProN","Yu Gothic",sans-serif}main{width:min(100%,720px);margin:auto;padding:20px clamp(14px,4vw,32px)}h1{font-size:clamp(1.55rem,5vw,2.5rem);margin:0 0 14px;font-weight:900}button{font:inherit;font-weight:800;cursor:pointer;touch-action:manipulation}button:focus-visible{outline:3px solid #122c82;outline-offset:3px}.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.choices button{min-height:61px;background:#fff;border:2px solid #e9dfcd;border-radius:15px;color:#19354a;font-size:clamp(.84rem,3.4vw,1.12rem)}.choices span{display:block;font-size:1.4rem}.choices [aria-pressed=true]{background:#e4f4ff;border-color:#176f9d}.scene{height:clamp(205px,48vw,350px);position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(#a7e0ff 0 68%,#a9d78f 68%);isolation:isolate}.land{position:absolute;inset:35% 0 26%;background:radial-gradient(ellipse 37% 120% at 20% 105%,#80bd87 78%,transparent 79%),radial-gradient(ellipse 42% 115% at 80% 100%,#95cd8f 79%,transparent 80%);background-size:420px 100%}.cloud{position:absolute;top:17%;left:14%;width:56px;height:14px;border-radius:30px;background:#fff;box-shadow:18px -9px 0 1px #fff,250px 8px 0 1px #fff,266px 0 0 1px #fff}.stop{position:absolute;top:9%;right:5%;background:#fff;border:2px solid #285c73;border-radius:8px;padding:5px 9px;font-weight:800}.road{position:absolute;inset:72% 0 0;background:#506776}.road::after{content:"";position:absolute;top:42%;width:100%;height:4px;background:repeating-linear-gradient(90deg,#ffecaa 0 28px,transparent 28px 53px)}.train .road{background:repeating-linear-gradient(90deg,#78624f 0 12px,#c4b899 12px 31px);bottom:auto;height:13%;border-block:4px solid #52636c}.train .road::after{display:none}.vehicle{position:absolute;width:min(75%,450px);height:32%;left:50%;bottom:24%;transform:translateX(-50%);background:#fff;border-radius:15px 86% 22px 15px / 15px 81% 15px 15px;border:3px solid #233f57;box-shadow:inset 0 -12px #1779bf}.windows{position:absolute;top:26%;left:8%;width:60%;height:30%;background:repeating-linear-gradient(90deg,#254962 0 16%,transparent 16% 21%);border-radius:4px}.door{position:absolute;left:27%;top:16%;width:13%;height:75%;border:2px solid #456071;background:#f9feff;border-radius:4px;overflow:hidden}.door::after{content:"";position:absolute;inset:12% 22% 42%;background:#2b4d63;border-radius:2px}.arrived .door{background:#243e50;box-shadow:inset 7px 0 #afc6cf,inset -7px 0 #afc6cf}.arrived .door::after{display:none}.wheel{display:none;position:absolute;bottom:-15%;width:15%;aspect-ratio:1;background:#233447;border:4px solid #233447;border-radius:50%;box-shadow:inset 0 0 0 4px #a8b7c3}.wheel:first-of-type{left:12%}.wheel:last-of-type{right:12%}.bus .vehicle{width:min(59%,355px);height:39%;border-radius:13px;background:#ffd568;box-shadow:inset 0 -13px #e38b35}.bus .door{left:77%;width:17%}.bus .wheel,.police .wheel{display:block}.police .vehicle{width:min(52%,310px);height:21%;border-radius:26px 26px 12px 12px;box-shadow:inset 0 -15px #24374b}.police .vehicle::before{content:"";position:absolute;z-index:-1;bottom:88%;left:23%;width:53%;height:78%;background:#37546a;border:4px solid white;border-radius:30px 35px 0 0}.police .vehicle::after{content:"";position:absolute;bottom:165%;left:43%;width:16%;height:18%;border-radius:10px 10px 0 0;background:#e03949}.police .windows,.police .door{display:none}.moving .land,.moving .road::after{animation:scroll 1.25s linear infinite}.moving.train .road{animation:rails .25s linear infinite}.moving .vehicle{animation:bob .36s ease-in-out infinite alternate}.moving .stop{visibility:hidden}.moving.police .vehicle::after{animation:blink .66s linear 3}@keyframes scroll{to{background-position:-420px 0}}@keyframes rails{to{background-position:-31px 0}}@keyframes bob{to{transform:translate(-50%,-2px)}}@keyframes blink{50%{background:#ff9a96}}.message{text-align:center;font-size:clamp(1.05rem,4.4vw,1.4rem);font-weight:800;margin:11px 0;min-height:1.6em}.go{width:100%;min-height:76px;border:0;border-radius:22px;background:#126c50;color:#fff;font-size:clamp(1.4rem,6vw,2rem);box-shadow:0 5px #084733}.go:disabled{background:#dcebe1;color:#315b4d;box-shadow:none;cursor:default}@media(prefers-reduced-motion:reduce){*,*::after{animation:none!important}}
+</style>
+<main>
+<h1>のりもの しゅっぱつ！</h1>
+<div class="choices" aria-label="のりものを えらぶ">
+<button type="button" data-kind="train" aria-pressed="true"><span aria-hidden="true">🚄</span>しんかんせん</button>
+<button type="button" data-kind="bus" aria-pressed="false"><span aria-hidden="true">🚌</span>バス</button>
+<button type="button" data-kind="police" aria-pressed="false"><span aria-hidden="true">🚓</span>パトカー</button>
+</div>
+<div id="scene" class="scene train" aria-hidden="true">
+<div class="cloud"></div><div class="land"></div><div class="road"></div><div id="stop" class="stop"></div>
+<div class="vehicle"><div class="windows"></div><div class="door"></div><i class="wheel"></i><i class="wheel"></i></div>
+</div>
+<p class="message" id="message" role="status"></p>
+<button type="button" class="go" id="go">▶ しゅっぱつ！</button>
+</main>
+<script>
+const routes = {
+  train: { name: 'しんかんせん', stops: ['はな えき', 'にじ えき', 'ほし えき'] },
+  bus: { name: 'バス', stops: ['こうえんまえ', 'パンやさんまえ', 'どうぶつえんまえ'] },
+  police: { name: 'パトカー', stops: ['こうばん', 'まちの ひろば', 'こうえん'] },
+};
+const scene = document.querySelector('#scene');
+const stopLabel = document.querySelector('#stop');
+const message = document.querySelector('#message');
+const go = document.querySelector('#go');
+const choices = document.querySelectorAll('[data-kind]');
+const progress = { train: 0, bus: 0, police: 0 };
+let kind = 'train';
+let phase = 'ready';
+let arrival;
+
+function render() {
+  const route = routes[kind];
+  const stop = route.stops[progress[kind]];
+  scene.className = ['scene', kind, phase].join(' ');
+  stopLabel.textContent = stop;
+  go.disabled = phase === 'moving';
+  go.textContent = go.disabled ? 'はしってるよ' : '▶ しゅっぱつ！';
+  if (phase === 'moving') {
+    message.textContent = route.name + 'が はしってるよ！';
+  } else if (phase === 'arrived') {
+    message.textContent = stop + 'に とうちゃく！' + (kind === 'police' ? '' : ' ドアが あいたよ');
+  } else {
+    message.textContent = stop + 'から しゅっぱつ！';
+  }
+  choices.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.kind === kind)));
+}
+
+choices.forEach(button => button.addEventListener('click', () => {
+  if (kind === button.dataset.kind) return;
+  clearTimeout(arrival);
+  kind = button.dataset.kind;
+  phase = 'ready';
+  render();
+}));
+
+go.addEventListener('click', () => {
+  if (phase === 'moving') return;
+  phase = 'moving';
+  render();
+  arrival = setTimeout(() => {
+    progress[kind] = (progress[kind] + 1) % routes[kind].stops.length;
+    phase = 'arrived';
+    render();
+  }, 2600);
+});
+
+render();
+</script>
+</html>
