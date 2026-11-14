@@ -122,8 +122,8 @@
 .plane .door { display: none; }
 .plane .vehicle::before { content: ""; position: absolute; left: 1%; bottom: 85%; width: 19%; height: 105%; background: #679cde; clip-path: polygon(0 0,40% 0,100% 100%,25% 100%); }
 .plane .vehicle::after { content: ""; position: absolute; left: 35%; top: 52%; width: 34%; height: 106%; background: #679cde; clip-path: polygon(40% 0,100% 0,48% 100%,0 100%); }
-.moving.plane .vehicle { bottom: 53%; transition: bottom 1.2s; }
-@media (prefers-reduced-motion: reduce) { .moving.plane .vehicle { transition: none; } }
+.moving:is(.plane,.helicopter) .vehicle { bottom: 53%; transition: bottom 1.2s; }
+@media (prefers-reduced-motion: reduce) { .moving:is(.plane,.helicopter) .vehicle { transition: none; } }
 
 :is(.fire,.garbage,.excavator,.delivery) .vehicle {
   width:min(61%,360px);height:30%;border-radius:12px 26px 10px 10px;
@@ -157,16 +157,16 @@
 .choices .vehicle-preview { height: 49px; margin-bottom: 3px; }
 .vehicle-preview img { width: min(100%, 92px); height: 49px; object-fit: contain; }
 .vehicle-art[hidden] { display: none; }
-:is(.plane,.police) .vehicle {
+:is(.plane,.police,.delivery,.helicopter) .vehicle {
   width: min(76%, 480px);
   height: auto;
   background: none;
   border: 0;
   box-shadow: none;
 }
-:is(.plane,.police) .vehicle > :not(.vehicle-art),
-:is(.plane,.police) .vehicle::before,
-:is(.plane,.police) .vehicle::after { display: none; }
+:is(.plane,.police,.delivery,.helicopter) .vehicle > :not(.vehicle-art),
+:is(.plane,.police,.delivery,.helicopter) .vehicle::before,
+:is(.plane,.police,.delivery,.helicopter) .vehicle::after { display: none; }
 .vehicle-art { display: block; width: 100%; max-height: clamp(88px, 30vw, 196px); object-fit: contain; }
 </style>
 <main>
@@ -176,6 +176,7 @@
 <button type="button" data-kind="bus" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><i class="mini-bus"></i></span><span class="vehicle-name">バス</span></button>
 <button type="button" id="work-vehicles" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/police.webp" alt=""></span><span id="work-label">はたらく のりもの 🎲</span></button>
 <button type="button" data-kind="plane" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/plane.webp" alt=""></span><span class="vehicle-name">ひこうき</span></button>
+<button type="button" data-kind="helicopter" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/helicopter.webp" alt=""></span><span class="vehicle-name">ヘリコプター</span></button>
 </div>
 <div id="scene" class="scene train train-blue" aria-hidden="true">
 <div class="cloud"></div><div class="land"></div><div class="decor" id="decor"></div><div class="road"></div><div id="stop" class="stop"></div><span id="work-effect" aria-hidden="true"></span>
@@ -200,18 +201,20 @@ const routes = {
   bus: { name: 'バス', stops: ['こうえんまえ', 'パンやさんまえ', 'どうぶつえんまえ', 'としょかんまえ', 'みなとまえ'] },
   police: { name: 'パトカー', stops: ['こうばん', 'まちの ひろば', 'こうえん'] },
   ambulance: { name: 'きゅうきゅうしゃ', stops: ['まちの びょういん', 'こども びょういん', 'うみべの びょういん'] },
+  helicopter: { name: 'ヘリコプター', stops: ['まちの ヘリポート', 'やまの ヘリポート', 'うみべの ヘリポート'] },
   plane: { name: 'ひこうき', stops: ['にじ くうこう', 'うみ くうこう', 'やま くうこう'] },
   fire: { name: 'しょうぼうしゃ', stops: ['まちの しょうぼうしょ', 'ひがし しょうぼうしょ'] },
   garbage: { name: 'ごみしゅうしゅうしゃ', stops: ['まちの ごみステーション', 'こうえんの ごみステーション'] },
   excavator: { name: 'ショベルカー', stops: ['まちの こうじげんば', 'やまの こうじげんば'] },
   delivery: { name: 'たくはいトラック', stops: ['あかい おうち', 'あおい おうち'] },
 };
-const enNames = { train: 'Shinkansen', bus: 'Bus', police: 'Police Car', fire: 'Fire Engine', garbage: 'Garbage Truck', excavator: 'Excavator', delivery: 'Delivery Truck', ambulance: 'Ambulance' };
+const enNames = { helicopter: 'Helicopter', plane: 'Airplane', train: 'Shinkansen', bus: 'Bus', police: 'Police Car', fire: 'Fire Engine', garbage: 'Garbage Truck', excavator: 'Excavator', delivery: 'Delivery Truck', ambulance: 'Ambulance' };
 const enStops = {
   train: ['Flower Station', 'Rainbow Station', 'Star Station', 'Sea Station', 'Forest Station', 'Snow Station', 'Moon Station'],
   bus: ['Park', 'Bakery', 'Zoo', 'Library', 'Harbor'],
   police: ['Police Box', 'Town Plaza', 'Park'],
   ambulance: ['Town Hospital', 'Children’s Hospital', 'Seaside Hospital'],
+  helicopter: ['City Heliport', 'Mountain Heliport', 'Seaside Heliport'],
   plane: ['Rainbow Airport', 'Sea Airport', 'Mountain Airport'],
   fire: ['Town Fire Station', 'East Fire Station'],
   garbage: ['Town Collection Point', 'Park Collection Point'],
@@ -226,6 +229,9 @@ let lang = 'ja';
 try { if (localStorage.getItem('norimono-lang') === 'en') lang = 'en'; } catch {}
 const langButton = document.querySelector('#lang');
 const scenery = {
+  'まちの ヘリポート': { sky: '#a7e0ff', ground: '#9ecb93', deco: ['🏙️', '☁️', '🌳'] },
+  'やまの ヘリポート': { sky: '#bde7ff', ground: '#8db881', deco: ['🏔️', '☁️', '🌲'] },
+  'うみべの ヘリポート': { sky: '#c5ecff', ground: '#8ec5eb', deco: ['🌊', '☁️', '⛵'] },
   'はな えき': { sky: '#ffd9ec', ground: '#a9d78f', deco: ['🌸', '🌷', '🌸'] },
   'にじ えき': { sky: '#aee7ff', ground: '#a9d78f', deco: ['🌈', '☁️', '🌈'] },
   'ほし えき': { sky: '#7d7fd6', ground: '#7fae7a', deco: ['⭐', '🌟', '⭐'] },
@@ -258,7 +264,7 @@ const scenery = {
 };
 const scene = document.querySelector('#scene');
 const vehicleArt = scene.querySelector('.vehicle-art');
-const vehicleArtPaths = { plane: 'assets/plane.webp', police: 'assets/police.webp' };
+const vehicleArtPaths = { delivery: 'assets/delivery.webp', helicopter: 'assets/helicopter.webp', plane: 'assets/plane.webp', police: 'assets/police.webp' };
 const decor = document.querySelector('#decor');
 let celebration = false;
 const stopLabel = document.querySelector('#stop');
@@ -360,7 +366,7 @@ horn.addEventListener('click', () => {
   try {
     prepareAudio()?.then(() => {
       if (kind === 'train') playSound([[392, 392, 0, .45, 'triangle'], [494, 494, 0, .45, 'triangle']]);
-      else if (kind === 'bus' || kind === 'plane') playSound([[415, 415, 0, .15, 'triangle'], [415, 415, .22, .15, 'triangle']]);
+      else if (kind === 'bus' || kind === 'plane' || kind === 'helicopter') playSound([[415, 415, 0, .15, 'triangle'], [415, 415, .22, .15, 'triangle']]);
       else playSound([[700, 1250, 0, .32, 'sawtooth'], [1250, 700, .34, .32, 'sawtooth']]);
     }).catch(() => {});
   } catch {}
