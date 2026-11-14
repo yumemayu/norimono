@@ -176,7 +176,12 @@
 :is(.plane,.helicopter):is(.moving,.arrived) .air-landscape::after {
   animation: air-clouds var(--air-cloud-time) linear infinite;
 }
-.arrived .air-landscape::before,.arrived .air-landscape::after { animation-play-state: paused; }
+:is(.plane,.helicopter).arrived .air-landscape::before,
+:is(.plane,.helicopter).arrived .air-landscape::after { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  :is(.plane,.helicopter) .air-landscape::before,
+  :is(.plane,.helicopter) .air-landscape::after { animation: none !important; }
+}
 @keyframes air-hills { to { background-position: -310px 100%, -310px 100%, -380px 100%, 0 0; } }
 @keyframes air-clouds { to { background-position: -400px 0; } }
 .scene:is(.plane,.helicopter) .vehicle { bottom: 53%; }
