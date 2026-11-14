@@ -69,13 +69,15 @@
   transform: translate(-50%, -50%);
 }
 .choices button:disabled{cursor:default;opacity:.72}
+.topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+#lang{min-height:44px;padding:0 14px;border:2px solid #e9dfcd;border-radius:12px;background:#fff;color:#19354a;font-size:.95rem;flex:none}
 </style>
 <main>
-<h1>のりもの しゅっぱつ！</h1>
+<div class="topbar"><h1 id="title">のりもの しゅっぱつ！</h1><button type="button" id="lang">English</button></div>
 <div class="choices" aria-label="のりものを えらぶ">
-<button type="button" data-kind="train" aria-pressed="true"><span class="vehicle-preview" aria-hidden="true"><i class="mini-train"></i></span>しんかんせん</button>
-<button type="button" data-kind="bus" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><i class="mini-bus"></i></span>バス</button>
-<button type="button" data-kind="police" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><i class="mini-police"></i></span>パトカー</button>
+<button type="button" data-kind="train" aria-pressed="true"><span class="vehicle-preview" aria-hidden="true"><i class="mini-train"></i></span><span class="vehicle-name">しんかんせん</span></button>
+<button type="button" data-kind="bus" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><i class="mini-bus"></i></span><span class="vehicle-name">バス</span></button>
+<button type="button" data-kind="police" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><i class="mini-police"></i></span><span class="vehicle-name">パトカー</span></button>
 </div>
 <div id="scene" class="scene train train-blue" aria-hidden="true">
 <div class="cloud"></div><div class="land"></div><div class="decor" id="decor"></div><div class="road"></div><div id="stop" class="stop"></div>
@@ -85,7 +87,7 @@
 <button type="button" class="go" id="go">▶ しゅっぱつ！</button>
 <div class="sound" aria-label="おとの せってい">
 <button type="button" id="mute" aria-label="おとを けす" aria-pressed="false">🔊 おとオン</button>
-<label for="volume">おんりょう <input id="volume" type="range" min="0" max="100" value="40"></label>
+<label for="volume"><span id="volume-label">おんりょう</span> <input id="volume" type="range" min="0" max="100" value="40"></label>
 <output id="volume-value" for="volume">40%</output>
 </div>
 </main>
@@ -95,6 +97,19 @@ const routes = {
   bus: { name: 'バス', stops: ['こうえんまえ', 'パンやさんまえ', 'どうぶつえんまえ', 'としょかんまえ', 'みなとまえ'] },
   police: { name: 'パトカー', stops: ['こうばん', 'まちの ひろば', 'こうえん'] },
 };
+const enNames = { train: 'Shinkansen', bus: 'Bus', police: 'Police Car' };
+const enStops = {
+  train: ['Flower Station', 'Rainbow Station', 'Star Station', 'Sea Station', 'Forest Station', 'Snow Station', 'Moon Station'],
+  bus: ['Park', 'Bakery', 'Zoo', 'Library', 'Harbor'],
+  police: ['Police Box', 'Town Plaza', 'Park'],
+};
+const L = {
+  ja: { title: 'のりもの しゅっぱつ！', choose: 'のりものを えらぶ', volume: 'おんりょう', sound: 'おとの せってい', on: '🔊 おとオン', off: '🔇 おとオフ', go: '▶ しゅっぱつ！', going: 'はしってるよ' },
+  en: { title: 'Vehicles, Go!', choose: 'Choose a vehicle', volume: 'Volume', sound: 'Sound settings', on: '🔊 Sound on', off: '🔇 Sound off', go: '▶ Go!', going: 'On the way…' },
+};
+let lang = 'ja';
+try { if (localStorage.getItem('norimono-lang') === 'en') lang = 'en'; } catch {}
+const langButton = document.querySelector('#lang');
 const scenery = {
   'はな えき': { sky: '#ffd9ec', ground: '#a9d78f', deco: ['🌸', '🌷', '🌸'] },
   'にじ えき': { sky: '#aee7ff', ground: '#a9d78f', deco: ['🌈', '☁️', '🌈'] },
@@ -123,9 +138,9 @@ const progress = { train: 0, bus: 0, police: 0 };
 let kind = 'train';
 let phase = 'ready';
 const trainVariants = [
-  { id: 'blue', name: 'あおい しんかんせん' },
-  { id: 'red', name: 'こまち' },
-  { id: 'green', name: 'はやぶさ' },
+  { id: 'blue', name: 'あおい しんかんせん', en: 'Blue Shinkansen' },
+  { id: 'red', name: 'こまち', en: 'Komachi' },
+  { id: 'green', name: 'はやぶさ', en: 'Hayabusa' },
 ];
 let trainVariant;
 let arrival;
@@ -155,7 +170,7 @@ let audio;
 let master;
 let muted = false;
 let travelSound;
-const tripDuration = 2.6;
+const tripDuration = 12;
 function stopTravelSound() {
   if (!travelSound) return;
   travelSound.disconnect();
@@ -212,7 +227,7 @@ function playTravelSound(vehicle) {
 
 function updateVolume() {
   volumeValue.textContent = volume.value + '%';
-  mute.textContent = muted ? '🔇 おとオフ' : '🔊 おとオン';
+  mute.textContent = muted ? L[lang].off : L[lang].on;
   mute.setAttribute('aria-pressed', String(muted));
   if (master) master.gain.setTargetAtTime(muted ? 0 : Number(volume.value) / 100 * .3, audio.currentTime, .015);
 }
@@ -268,15 +283,21 @@ function render() {
     scene.style.setProperty('--ground', view.ground);
     decor.innerHTML = view.deco.map(emoji => '<span>' + emoji + '</span>').join('');
   }
-  stopLabel.textContent = stop;
+  const stopText = lang === 'en' ? enStops[kind][progress[kind]] : stop;
+  const vehicleName = kind === 'train'
+    ? (trainVariant ? (lang === 'en' ? trainVariant.en : trainVariant.name) : (lang === 'en' ? enNames.train : route.name))
+    : (lang === 'en' ? enNames[kind] : route.name);
+  stopLabel.textContent = stopText;
   go.disabled = phase === 'moving';
-  go.textContent = go.disabled ? 'はしってるよ' : '▶ しゅっぱつ！';
+  go.textContent = go.disabled ? L[lang].going : L[lang].go;
   if (phase === 'moving') {
-    message.textContent = (kind === 'train' ? trainVariant.name : route.name) + 'が はしってるよ！';
+    message.textContent = lang === 'en' ? vehicleName + ' is on its way!' : vehicleName + 'が はしってるよ！';
   } else if (phase === 'arrived') {
-    message.textContent = celebration ? '🎉 ' + stop + 'に とうちゃく！おつかれさま！' : stop + 'に とうちゃく！' + (kind === 'police' ? '' : ' ドアが あいたよ');
+    message.textContent = celebration
+      ? (lang === 'en' ? '🎉 You made it to ' + stopText + '! Great ride!' : '🎉 ' + stopText + 'に とうちゃく！おつかれさま！')
+      : (lang === 'en' ? 'Arrived at ' + stopText + '!' + (kind === 'police' ? '' : ' The doors opened.') : stopText + 'に とうちゃく！' + (kind === 'police' ? '' : ' ドアが あいたよ'));
   } else {
-    message.textContent = stop + 'から しゅっぱつ！';
+    message.textContent = lang === 'en' ? 'Leaving from ' + stopText + '!' : stopText + 'から しゅっぱつ！';
   }
   choices.forEach(button => {
     button.disabled = go.disabled;
@@ -329,7 +350,26 @@ go.addEventListener('click', () => {
   }
 });
 
-render();
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.title = L[lang].title;
+  document.querySelector('#title').textContent = L[lang].title;
+  document.querySelector('.choices').setAttribute('aria-label', L[lang].choose);
+  choices.forEach(button => {
+    button.querySelector('.vehicle-name').textContent = lang === 'en' ? enNames[button.dataset.kind] : routes[button.dataset.kind].name;
+  });
+  document.querySelector('#volume-label').textContent = L[lang].volume;
+  document.querySelector('.sound').setAttribute('aria-label', L[lang].sound);
+  langButton.textContent = lang === 'en' ? 'にほんご' : 'English';
+  updateVolume();
+  render();
+}
+langButton.addEventListener('click', () => {
+  lang = lang === 'en' ? 'ja' : 'en';
+  try { localStorage.setItem('norimono-lang', lang); } catch {}
+  applyLang();
+});
+applyLang();
 </script>
 <script>
 const playArea = document.querySelector('#field, #cats, #scene');
