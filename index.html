@@ -124,21 +124,14 @@
 .plane .vehicle::after { content: ""; position: absolute; left: 35%; top: 52%; width: 34%; height: 106%; background: #679cde; clip-path: polygon(40% 0,100% 0,48% 100%,0 100%); }
 .moving.plane .vehicle { bottom: 53%; transition: bottom 1.2s; }
 @media (prefers-reduced-motion: reduce) { .moving.plane .vehicle { transition: none; } }
-.work-choices[hidden]{display:none}
-.work-choices{grid-template-columns:repeat(2,minmax(0,1fr))}
-#work-vehicles[aria-expanded="true"]{background:#e4f4ff;border-color:#176f9d}
 </style>
 <main>
 <div class="topbar"><h1 id="title">のりもの しゅっぱつ！</h1><button type="button" id="lang">English</button></div>
 <div class="choices" aria-label="のりものを えらぶ">
 <button type="button" data-kind="train" aria-pressed="true"><span class="vehicle-preview" aria-hidden="true"><i class="mini-train"></i></span><span class="vehicle-name">しんかんせん</span></button>
 <button type="button" data-kind="bus" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><i class="mini-bus"></i></span><span class="vehicle-name">バス</span></button>
-<button type="button" id="work-vehicles" aria-expanded="false" aria-controls="work-choices"><span class="vehicle-preview" aria-hidden="true"><i class="mini-police"></i></span><span id="work-label">はたらく のりもの</span></button>
+<button type="button" id="work-vehicles" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><i class="mini-police"></i></span><span id="work-label">はたらく のりもの 🎲</span></button>
 <button type="button" data-kind="plane" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true">✈️</span><span class="vehicle-name">ひこうき</span></button>
-</div>
-<div class="choices work-choices" id="work-choices" role="group" aria-labelledby="work-label" hidden>
-<button type="button" data-kind="police" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><i class="mini-police"></i></span><span class="vehicle-name">パトカー</span></button>
-<button type="button" data-kind="ambulance" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true">🚑</span><span class="vehicle-name">きゅうきゅうしゃ</span></button>
 </div>
 <div id="scene" class="scene train train-blue" aria-hidden="true">
 <div class="cloud"></div><div class="land"></div><div class="decor" id="decor"></div><div class="road"></div><div id="stop" class="stop"></div>
@@ -210,11 +203,16 @@ const message = document.querySelector('#message');
 const go = document.querySelector('#go');
 const choices = document.querySelectorAll('[data-kind]');
 const workVehicles = document.querySelector('#work-vehicles');
-const workChoices = document.querySelector('#work-choices');
+const workKinds = ['police', 'ambulance'];
+let workSelected = false;
 workVehicles.addEventListener('click', () => {
-  if (phase === 'moving') return;
-  workChoices.hidden = !workChoices.hidden;
-  workVehicles.setAttribute('aria-expanded', String(!workChoices.hidden));
+  if (phase === 'moving' || workSelected) return;
+  window.speechSynthesis?.cancel();
+  workSelected = true;
+  kind = workKinds[0];
+  celebration = false;
+  phase = 'ready';
+  render();
 });
 const progress = Object.fromEntries(Object.keys(routes).map(vehicle => [vehicle, 0]));
 let kind = 'train';
@@ -432,6 +430,7 @@ function render() {
   stopLabel.textContent = stopText;
   go.disabled = phase === 'moving';
   workVehicles.disabled = go.disabled;
+  workVehicles.setAttribute('aria-pressed', String(workSelected));
   go.textContent = go.disabled ? L[lang].going : L[lang].go;
   if (phase === 'moving') {
     message.textContent = lang === 'en' ? vehicleName + ' is on its way!' : vehicleName + 'が はしってるよ！';
@@ -440,7 +439,9 @@ function render() {
       ? (lang === 'en' ? '🎉 You made it to ' + stopText + '! Great ride!' : '🎉 ' + stopText + 'に とうちゃく！おつかれさま！')
       : (lang === 'en' ? 'Arrived at ' + stopText + '! Great ride!' + (kind === 'police' ? '' : ' The doors opened.') : stopText + 'に とうちゃく！おつかれさま！' + (kind === 'police' ? '' : ' ドアが あいたよ'));
   } else {
-    message.textContent = lang === 'en' ? 'Leaving from ' + stopText + '!' : stopText + 'から しゅっぱつ！';
+    message.textContent = workSelected
+      ? (lang === 'en' ? 'Which work vehicle will go?' : 'どの のりものが でるかな？')
+      : lang === 'en' ? 'Leaving from ' + stopText + '!' : stopText + 'から しゅっぱつ！';
   }
   choices.forEach(button => {
     button.disabled = go.disabled;
@@ -453,10 +454,7 @@ choices.forEach(button => button.addEventListener('click', () => {
   if (phase === 'moving' || kind === button.dataset.kind) return;
   stopTravelSound();
   kind = button.dataset.kind;
-  if (kind !== 'police' && kind !== 'ambulance') {
-    workChoices.hidden = true;
-    workVehicles.setAttribute('aria-expanded', 'false');
-  }
+  workSelected = false;
   window.speechSynthesis?.cancel();
   celebration = false;
   phase = 'ready';
@@ -469,6 +467,7 @@ go.addEventListener('click', () => {
   window.speechSynthesis?.cancel();
   celebration = false;
   tripDuration = speeds[speed];
+  if (workSelected) kind = workKinds[Math.floor(Math.random() * workKinds.length)];
   if (kind === 'train') {
     const variants = trainVariants.filter(variant => variant !== trainVariant && (variant.id !== 'yellow' || yellowUnlocked));
     trainVariant = variants[Math.floor(Math.random() * variants.length)];
@@ -539,7 +538,7 @@ go.addEventListener('click', () => {
 });
 
 function applyLang() {
-  document.querySelector('#work-label').textContent = lang === 'en' ? 'Work vehicles' : 'はたらく のりもの';
+  document.querySelector('#work-label').textContent = lang === 'en' ? 'Work vehicles 🎲' : 'はたらく のりもの 🎲';
   document.documentElement.lang = lang;
   document.title = L[lang].title;
   document.querySelector('#title').textContent = L[lang].title;
