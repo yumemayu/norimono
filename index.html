@@ -122,8 +122,11 @@
 .plane .door { display: none; }
 .plane .vehicle::before { content: ""; position: absolute; left: 1%; bottom: 85%; width: 19%; height: 105%; background: #679cde; clip-path: polygon(0 0,40% 0,100% 100%,25% 100%); }
 .plane .vehicle::after { content: ""; position: absolute; left: 35%; top: 52%; width: 34%; height: 106%; background: #679cde; clip-path: polygon(40% 0,100% 0,48% 100%,0 100%); }
-.moving:is(.plane,.helicopter) .vehicle { bottom: 53%; transition: bottom 1.2s; }
-@media (prefers-reduced-motion: reduce) { .moving:is(.plane,.helicopter) .vehicle { transition: none; } }
+.scene:is(.plane,.helicopter) .vehicle { transition: bottom 1.2s ease; }
+.moving:is(.plane,.helicopter) .vehicle { bottom: 66%; }
+.moving:is(.plane,.helicopter) .vehicle-art { max-height: min(31cqh, 160px); }
+.scene { container-type: size; }
+@media (prefers-reduced-motion: reduce) { .scene:is(.plane,.helicopter) .vehicle { transition: none; } }
 
 :is(.fire,.garbage,.excavator,.delivery) .vehicle {
   width:min(61%,360px);height:30%;border-radius:12px 26px 10px 10px;
@@ -264,7 +267,7 @@ const scenery = {
 };
 const scene = document.querySelector('#scene');
 const vehicleArt = scene.querySelector('.vehicle-art');
-const vehicleArtPaths = { delivery: 'assets/delivery.webp', helicopter: 'assets/helicopter.webp', plane: 'assets/plane.webp', police: 'assets/police.webp' };
+const vehicleArtPaths = { plane: 'assets/plane.webp', police: 'assets/police.webp' };
 const decor = document.querySelector('#decor');
 let celebration = false;
 const stopLabel = document.querySelector('#stop');
@@ -308,8 +311,12 @@ const trainVariants = [
   { id: 'green', name: 'みどりの しんかんせん', en: 'Green Shinkansen' },
   { id: 'yellow', name: 'ドクターイエロー', en: 'Doctor Yellow' },
 ];
-const busColors = ['gold', 'mint', 'berry'];
-let busColor = busColors[0];
+const artVariants = {
+  bus: ['bus-gold', 'bus-mint', 'bus-berry'],
+  helicopter: ['helicopter', 'helicopter-mint'],
+  delivery: ['delivery', 'delivery-blue'],
+};
+const currentArt = Object.fromEntries(Object.entries(artVariants).map(([vehicle, variants]) => [vehicle, variants[0]]));
 let trainVariant;
 let arrival;
 let tunnelOn, tunnelOff, crossingTimer;
@@ -501,10 +508,10 @@ function render() {
   const route = routes[kind];
   const stop = route.stops[progress[kind]];
   const trainStyle = kind === 'train' ? 'train-' + (trainVariant?.id || 'blue') : '';
-  const artPath = kind === 'bus' ? 'assets/bus-' + busColor + '.webp' : vehicleArtPaths[kind];
+  const artPath = currentArt[kind] ? 'assets/' + currentArt[kind] + '.webp' : vehicleArtPaths[kind];
   vehicleArt.hidden = !artPath;
   if (artPath && vehicleArt.getAttribute('src') !== artPath) vehicleArt.src = artPath;
-  scene.className = ['scene', kind, phase, trainStyle, kind === 'bus' ? 'bus-' + busColor : ''].filter(Boolean).join(' ');
+  scene.className = ['scene', kind, phase, trainStyle].filter(Boolean).join(' ');
   const action = workActions[kind];
   workAction.hidden = phase !== 'arrived' || !action;
   if (action) workAction.textContent = action[lang];
@@ -563,9 +570,9 @@ go.addEventListener('click', () => {
     const variants = trainVariants.filter(variant => variant !== trainVariant && (variant.id !== 'yellow' || yellowUnlocked));
     trainVariant = variants[Math.floor(Math.random() * variants.length)];
   }
-  if (kind === 'bus') {
-    const colors = busColors.filter(color => color !== busColor);
-    busColor = colors[Math.floor(Math.random() * colors.length)];
+  if (artVariants[kind]) {
+    const variants = artVariants[kind].filter(art => art !== currentArt[kind]);
+    currentArt[kind] = variants[Math.floor(Math.random() * variants.length)];
   }
   phase = 'moving';
   render();
