@@ -73,7 +73,7 @@
 #lang{min-height:44px;padding:0 14px;border:2px solid #e9dfcd;border-radius:12px;background:#fff;color:#19354a;font-size:.95rem;flex:none}
 .go-row{display:flex;gap:8px}
 .go-row .go{flex:1;width:auto}
-.horn{min-width:78px;border:0;border-radius:22px;background:#ffb703;color:#4a3200;font-size:1.02rem;box-shadow:0 5px #b97e06}
+.horn{min-width:84px;border:0;border-radius:22px;background:#ffb703;color:#4a3200;font-size:2.1rem;line-height:1;box-shadow:0 5px #b97e06}
 .panel{margin:14px 0 0}
 .panel h2{font-size:1rem;margin:0 0 7px}
 .random-note{text-align:center;font-weight:800;margin:12px 0 0}
@@ -113,7 +113,7 @@
 <div class="tunnel"></div><div class="crossing" aria-hidden="true"><i></i><i></i></div>
 </div>
 <p class="message" id="message" role="status"></p>
-<div class="go-row"><button type="button" class="go" id="go">▶ しゅっぱつ！</button><button type="button" class="horn" id="horn">📯 ラッパ</button></div>
+<div class="go-row"><button type="button" class="go" id="go">▶ しゅっぱつ！</button><button type="button" class="horn" id="horn" aria-label="ラッパ">📯</button></div>
 <p class="random-note" id="random-note">🎲 いきさきは ランダム！どこに つくかは おたのしみ</p>
 <div class="panel"><h2 id="stamps-label">スタンプ</h2><div class="stamps" id="stamps"></div></div>
 <div class="panel"><h2 id="speed-label">はやさ</h2><div class="speeds" id="speeds"><button type="button" data-speed="slow" aria-pressed="false">🐢 <span class="speed-name">ゆっくり</span></button><button type="button" data-speed="normal" aria-pressed="true">🚃 <span class="speed-name">ふつう</span></button><button type="button" data-speed="fast" aria-pressed="false">🚀 <span class="speed-name">はやい</span></button></div></div>
@@ -477,7 +477,6 @@ function applyLang() {
   document.querySelector('#random-note').textContent = T[lang].random;
   document.querySelector('#stamps-label').textContent = T[lang].stamps;
   document.querySelector('#speed-label').textContent = T[lang].speed;
-  horn.textContent = '📯 ' + T[lang].horn;
   document.querySelectorAll('#speeds [data-speed]').forEach(b => { b.querySelector('.speed-name').textContent = T[lang][b.dataset.speed]; });
   updateVolume();
   render();
