@@ -71,6 +71,33 @@
 .choices button:disabled{cursor:default;opacity:.72}
 .topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
 #lang{min-height:44px;padding:0 14px;border:2px solid #e9dfcd;border-radius:12px;background:#fff;color:#19354a;font-size:.95rem;flex:none}
+.go-row{display:flex;gap:8px}
+.go-row .go{flex:1;width:auto}
+.horn{min-width:78px;border:0;border-radius:22px;background:#ffb703;color:#4a3200;font-size:1.02rem;box-shadow:0 5px #b97e06}
+.panel{margin:14px 0 0}
+.panel h2{font-size:1rem;margin:0 0 7px}
+.dest{display:flex;flex-wrap:wrap;gap:7px}
+.dest button{min-height:48px;padding:6px 12px;border:2px solid #e9dfcd;border-radius:999px;background:#fff;color:#19354a;font-size:.95rem}
+.dest button.target{background:#fff3bf;border-color:#d9a514}
+.stamps{display:flex;gap:7px;flex-wrap:wrap}
+.stamp{width:38px;height:38px;border:2px dashed #cbbfa5;border-radius:50%;display:grid;place-items:center;font-size:1.05rem;background:#fff}
+.stamp.done{border-style:solid;border-color:#d9a514;background:#fff3bf}
+.speeds{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.speeds button{min-height:52px;background:#fff;border:2px solid #e9dfcd;border-radius:15px;color:#19354a;font-size:1rem}
+.speeds [aria-pressed=true]{background:#e4f4ff;border-color:#176f9d}
+.tunnel{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;transition:opacity .45s;background:radial-gradient(circle 70px at 50% 64%,rgba(255,240,180,.9),rgba(13,16,28,.98) 72%)}
+.scene.in-tunnel .tunnel{opacity:1}
+.crossing{position:absolute;z-index:4;right:7%;bottom:31%;display:flex;gap:7px;opacity:0;transition:opacity .3s;pointer-events:none}
+.scene.crossing-on .crossing{opacity:1}
+.crossing i{width:17px;height:17px;border-radius:50%;background:#ff3b30;border:3px solid #fff;box-shadow:0 0 0 2px #233f57;animation:blink-lamp .5s steps(1) infinite alternate}
+.crossing i:last-child{animation-delay:.25s}
+@keyframes blink-lamp{from{opacity:1}to{opacity:.25}}
+.arrived ~ .go-row .go{animation:ready-pulse .65s 2 alternate}
+.train-yellow .vehicle{width:min(83%,485px);background:none;border:0;box-shadow:none;border-radius:0}
+.train-yellow .vehicle::before{content:"";position:absolute;inset:0;filter:drop-shadow(0 2px 0 #233f57);clip-path:polygon(0 18%,3% 9%,66% 9%,75% 15%,82% 28%,89% 49%,97% 66%,100% 79%,99% 91%,95% 98%,2% 98%,0 90%);background:linear-gradient(#ffe14d 0 52%,#fff 52% 64%,#2050a0 64% 76%,#f5c81e 76%)}
+.train-yellow .vehicle::after{content:"";position:absolute;top:20%;left:69%;width:17%;height:32%;background:linear-gradient(155deg,#426879,#163044 60%);clip-path:polygon(0 0,34% 5%,70% 48%,100% 100%,25% 71%)}
+.train-yellow .windows{left:5%;top:29%;width:61%;height:24%;background:repeating-linear-gradient(90deg,#26485c 0 10%,transparent 10% 15%)}
+.train-yellow .door{top:19%;height:69%;width:10%}
 </style>
 <main>
 <div class="topbar"><h1 id="title">のりもの しゅっぱつ！</h1><button type="button" id="lang">English</button></div>
@@ -82,9 +109,13 @@
 <div id="scene" class="scene train train-blue" aria-hidden="true">
 <div class="cloud"></div><div class="land"></div><div class="decor" id="decor"></div><div class="road"></div><div id="stop" class="stop"></div>
 <div class="vehicle"><div class="windows"></div><div class="door"></div><i class="wheel"></i><i class="wheel"></i></div>
+<div class="tunnel"></div><div class="crossing" aria-hidden="true"><i></i><i></i></div>
 </div>
 <p class="message" id="message" role="status"></p>
-<button type="button" class="go" id="go">▶ しゅっぱつ！</button>
+<div class="go-row"><button type="button" class="go" id="go">▶ しゅっぱつ！</button><button type="button" class="horn" id="horn">📯 ラッパ</button></div>
+<div class="panel"><h2 id="dest-label">いきさき</h2><div class="dest" id="dest"></div></div>
+<div class="panel"><h2 id="stamps-label">スタンプ</h2><div class="stamps" id="stamps"></div></div>
+<div class="panel"><h2 id="speed-label">はやさ</h2><div class="speeds" id="speeds"><button type="button" data-speed="slow" aria-pressed="false">🐢 <span class="speed-name">ゆっくり</span></button><button type="button" data-speed="normal" aria-pressed="true">🚃 <span class="speed-name">ふつう</span></button><button type="button" data-speed="fast" aria-pressed="false">🚀 <span class="speed-name">はやい</span></button></div></div>
 <div class="sound" aria-label="おとの せってい">
 <button type="button" id="mute" aria-label="おとを けす" aria-pressed="false">🔊 おとオン</button>
 <label for="volume"><span id="volume-label">おんりょう</span> <input id="volume" type="range" min="0" max="100" value="40"></label>
@@ -141,9 +172,11 @@ const trainVariants = [
   { id: 'blue', name: 'あおい しんかんせん', en: 'Blue Shinkansen' },
   { id: 'red', name: 'こまち', en: 'Komachi' },
   { id: 'green', name: 'はやぶさ', en: 'Hayabusa' },
+  { id: 'yellow', name: 'ドクターイエロー', en: 'Doctor Yellow' },
 ];
 let trainVariant;
 let arrival;
+let tunnelOn, tunnelOff, crossingTimer;
 
 const mute = document.querySelector('#mute');
 const volume = document.querySelector('#volume');
@@ -152,6 +185,9 @@ const departureSounds = {
   police: [[420, 760, 0, .32], [760, 420, .32, .32]],
 };
 const arrivalSound = [[660, 660, 0, .14], [523, 523, .17, .20]];
+const doorChime = [[880, 880, 0, .16], [660, 660, .18, .26]];
+const departureMelody = [[523, 523, 0, .16], [659, 659, .16, .16], [784, 784, .32, .16], [1047, 1047, .48, .34]];
+const crossingBell = [[1319, 1319, 0, .09], [1047, 1047, .22, .09], [1319, 1319, .44, .09], [1047, 1047, .66, .09], [1319, 1319, .88, .09], [1047, 1047, 1.1, .09]];
 const fanfare = [[523, 523, 0, .16], [659, 659, .16, .16], [784, 784, .32, .16], [1047, 1047, .48, .36]];
 function celebrate() {
   const colors = ['#ff6b81', '#ffd166', '#4db2e8', '#7bc96f', '#c792ea'];
@@ -170,7 +206,55 @@ let audio;
 let master;
 let muted = false;
 let travelSound;
-const tripDuration = 12;
+let tripDuration = 12;
+const speeds = { slow: 15, normal: 12, fast: 10 };
+let speed = 'normal';
+const dest = { train: 1, bus: 1, police: 1 };
+let stamps = { train: [], bus: [], police: [] };
+let yellowUnlocked = false;
+try {
+  const saved = JSON.parse(localStorage.getItem('norimono-stamps') || 'null');
+  if (saved) stamps = saved;
+  yellowUnlocked = localStorage.getItem('norimono-yellow') === '1';
+} catch {}
+for (const k of Object.keys(routes)) {
+  if (!Array.isArray(stamps[k]) || stamps[k].length !== routes[k].stops.length) stamps[k] = routes[k].stops.map(() => false);
+}
+function saveStamps() { try { localStorage.setItem('norimono-stamps', JSON.stringify(stamps)); } catch {} }
+const T = {
+  ja: { dest: 'いきさき', stamps: 'スタンプ', speed: 'はやさ', horn: 'ラッパ', slow: 'ゆっくり', normal: 'ふつう', fast: 'はやい' },
+  en: { dest: 'Destination', stamps: 'Stamps', speed: 'Speed', horn: 'Horn', slow: 'Slow', normal: 'Normal', fast: 'Fast' },
+};
+const horn = document.querySelector('#horn');
+horn.addEventListener('click', () => {
+  try {
+    prepareAudio()?.then(() => {
+      if (kind === 'train') playSound([[392, 392, 0, .45, 'triangle'], [494, 494, 0, .45, 'triangle']]);
+      else if (kind === 'bus') playSound([[415, 415, 0, .15, 'triangle'], [415, 415, .22, .15, 'triangle']]);
+      else playSound([[700, 1250, 0, .32, 'sawtooth'], [1250, 700, .34, .32, 'sawtooth']]);
+    }).catch(() => {});
+  } catch {}
+});
+document.querySelector('#dest').addEventListener('click', e => {
+  const b = e.target.closest('[data-dest]');
+  if (!b || phase === 'moving') return;
+  dest[kind] = Number(b.dataset.dest);
+  render();
+});
+document.querySelector('#speeds').addEventListener('click', e => {
+  const b = e.target.closest('[data-speed]');
+  if (!b) return;
+  speed = b.dataset.speed;
+  render();
+});
+function renderPanels() {
+  const names = lang === 'en' ? enStops[kind] : routes[kind].stops;
+  document.querySelector('#dest').innerHTML = names.map((name, i) =>
+    '<button type="button" data-dest="' + i + '"' + (i === dest[kind] ? ' class="target"' : '') + (phase === 'moving' ? ' disabled' : '') + '>' + (i === progress[kind] ? '📍 ' : i === dest[kind] ? '🚩 ' : '') + name + '</button>').join('');
+  document.querySelector('#stamps').innerHTML = stamps[kind].map(done =>
+    '<span class="stamp' + (done ? ' done' : '') + '">' + (done ? '⭐' : '') + '</span>').join('');
+  document.querySelectorAll('#speeds [data-speed]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.speed === speed)));
+}
 function stopTravelSound() {
   if (!travelSound) return;
   travelSound.disconnect();
@@ -182,6 +266,7 @@ function playTravelSound(vehicle) {
   const bus = vehicle === 'bus';
   const now = audio.currentTime;
   const end = now + tripDuration;
+  const pf = 12 / tripDuration;
   const mix = audio.createGain();
   travelSound = mix;
   mix.gain.setValueAtTime(0, now);
@@ -203,13 +288,13 @@ function playTravelSound(vehicle) {
   noise.buffer = samples;
   const filter = audio.createBiquadFilter();
   filter.type = 'lowpass';
-  filter.frequency.setValueAtTime(bus ? 190 : 460, now);
-  filter.frequency.linearRampToValueAtTime(bus ? 470 : 1300, end - .45);
+  filter.frequency.setValueAtTime((bus ? 190 : 460) * pf, now);
+  filter.frequency.linearRampToValueAtTime((bus ? 470 : 1300) * pf, end - .45);
   noise.connect(filter);
   filter.connect(mix);
   noise.start(now);
 
-  const harmonics = bus ? [[43, 94, .32], [86, 188, .10]] : [[96, 410, .16], [192, 820, .045]];
+  const harmonics = (bus ? [[43, 94, .32], [86, 188, .10]] : [[96, 410, .16], [192, 820, .045]]).map(([l, h, lv]) => [l * pf, h * pf, lv]);
   for (const [low, high, level] of harmonics) {
     const tone = audio.createOscillator();
     const gain = audio.createGain();
@@ -303,6 +388,7 @@ function render() {
     button.disabled = go.disabled;
     button.setAttribute('aria-pressed', String(button.dataset.kind === kind));
   });
+  renderPanels();
 }
 
 choices.forEach(button => button.addEventListener('click', () => {
@@ -311,6 +397,7 @@ choices.forEach(button => button.addEventListener('click', () => {
   kind = button.dataset.kind;
   celebration = false;
   phase = 'ready';
+  if (dest[kind] === progress[kind]) dest[kind] = (progress[kind] + 1) % routes[kind].stops.length;
   render();
 
 }));
@@ -318,32 +405,67 @@ choices.forEach(button => button.addEventListener('click', () => {
 go.addEventListener('click', () => {
   if (phase === 'moving') return;
   celebration = false;
+  tripDuration = speeds[speed];
   if (kind === 'train') {
-    const variants = trainVariants.filter(variant => variant !== trainVariant);
+    const variants = trainVariants.filter(variant => variant !== trainVariant && (variant.id !== 'yellow' || yellowUnlocked));
     trainVariant = variants[Math.floor(Math.random() * variants.length)];
   }
   phase = 'moving';
   render();
   const departureKind = kind;
+  const dur = tripDuration;
+  if (kind === 'train') {
+    crossingTimer = setTimeout(() => {
+      scene.classList.add('crossing-on');
+      playSound(crossingBell);
+      setTimeout(() => scene.classList.remove('crossing-on'), 2100);
+    }, dur * 150);
+  }
+  if (kind !== 'police') {
+    tunnelOn = setTimeout(() => scene.classList.add('in-tunnel'), dur * 380);
+    tunnelOff = setTimeout(() => scene.classList.remove('in-tunnel'), dur * 680);
+  }
   arrival = setTimeout(() => {
-    progress[kind] = (progress[kind] + 1) % routes[kind].stops.length;
-    celebration = progress[kind] === routes[kind].stops.length - 1;
+    clearTimeout(tunnelOn);
+    clearTimeout(tunnelOff);
+    clearTimeout(crossingTimer);
+    scene.classList.remove('in-tunnel', 'crossing-on');
+    const target = dest[kind];
+    progress[kind] = target;
+    const wasStamped = stamps[kind][target];
+    stamps[kind][target] = true;
+    saveStamps();
+    const cardComplete = stamps[kind].every(Boolean);
+    celebration = target === routes[kind].stops.length - 1 || (cardComplete && !wasStamped);
+    dest[kind] = (target + 1) % routes[kind].stops.length;
     phase = 'arrived';
     render();
     stopTravelSound();
-    if (celebration) {
+    let unlockedNow = false;
+    if (kind === 'train' && cardComplete && !yellowUnlocked) {
+      yellowUnlocked = true;
+      unlockedNow = true;
+      try { localStorage.setItem('norimono-yellow', '1'); } catch {}
+    }
+    if (celebration || unlockedNow) {
       celebrate();
       playSound(fanfare);
-    } else if (kind !== 'train') {
-      playSound(arrivalSound);
+    } else {
+      playSound(doorChime);
+      if (kind !== 'train') playSound(arrivalSound);
     }
+    if (unlockedNow) message.textContent = lang === 'en' ? '🎉 Doctor Yellow is unlocked!' : '🎉 ドクターイエローが つかえるように なったよ！';
+    else if (cardComplete && !wasStamped) message.textContent = lang === 'en' ? '🎉 You collected all the stamps!' : '🎉 スタンプが そろったよ！';
   }, tripDuration * 1000);
   const trip = arrival;
   try {
     prepareAudio()?.then(() => {
       if (phase !== 'moving' || arrival !== trip) return;
       if (departureKind === 'police') playSound(departureSounds.police);
-      else playTravelSound(departureKind);
+      else {
+        playSound(departureMelody);
+        playTravelSound(departureKind);
+      }
     }).catch(() => {});
   } catch {
     // Driving still works if the browser cannot initialize audio.
@@ -361,6 +483,11 @@ function applyLang() {
   document.querySelector('#volume-label').textContent = L[lang].volume;
   document.querySelector('.sound').setAttribute('aria-label', L[lang].sound);
   langButton.textContent = lang === 'en' ? 'にほんご' : 'English';
+  document.querySelector('#dest-label').textContent = T[lang].dest;
+  document.querySelector('#stamps-label').textContent = T[lang].stamps;
+  document.querySelector('#speed-label').textContent = T[lang].speed;
+  horn.textContent = '📯 ' + T[lang].horn;
+  document.querySelectorAll('#speeds [data-speed]').forEach(b => { b.querySelector('.speed-name').textContent = T[lang][b.dataset.speed]; });
   updateVolume();
   render();
 }
