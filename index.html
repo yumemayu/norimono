@@ -100,8 +100,8 @@
 .train-yellow .windows{left:5%;top:29%;width:61%;height:24%;background:repeating-linear-gradient(90deg,#26485c 0 10%,transparent 10% 15%)}
 .train-yellow .door{top:19%;height:69%;width:10%}
 
-.choices { grid-template-columns: repeat(auto-fit, minmax(83px, 1fr)); }
-.choices button { min-width: 0; }
+.choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.choices button { min-width: 0; min-height: 96px; padding: 8px 5px; }
 .bus-mint .vehicle { background: #b4e8d2; box-shadow: inset 0 -13px #348675; }
 .bus-berry .vehicle { background: #f5bfd8; box-shadow: inset 0 -13px #b3507f; }
 .police .vehicle::before {
@@ -153,18 +153,33 @@
 @keyframes work-pop{from{transform:translate(-24px,15px) scale(.5)}to{transform:translate(15px,-12px) scale(1)}}
 #work-action:not([hidden]){width:100%;min-height:48px;margin:0 0 12px;border:2px solid #176f9d;border-radius:14px;background:#e4f4ff;color:#19354a}
 @media(prefers-reduced-motion:reduce){.vehicle::before{transition:none!important}}
+
+.choices .vehicle-preview { height: 49px; margin-bottom: 3px; }
+.vehicle-preview img { width: min(100%, 92px); height: 49px; object-fit: contain; }
+.vehicle-art[hidden] { display: none; }
+:is(.plane,.police) .vehicle {
+  width: min(76%, 480px);
+  height: auto;
+  background: none;
+  border: 0;
+  box-shadow: none;
+}
+:is(.plane,.police) .vehicle > :not(.vehicle-art),
+:is(.plane,.police) .vehicle::before,
+:is(.plane,.police) .vehicle::after { display: none; }
+.vehicle-art { display: block; width: 100%; max-height: clamp(88px, 30vw, 196px); object-fit: contain; }
 </style>
 <main>
 <div class="topbar"><h1 id="title">のりもの しゅっぱつ！</h1><button type="button" id="lang">English</button></div>
 <div class="choices" aria-label="のりものを えらぶ">
 <button type="button" data-kind="train" aria-pressed="true"><span class="vehicle-preview" aria-hidden="true"><i class="mini-train"></i></span><span class="vehicle-name">しんかんせん</span></button>
 <button type="button" data-kind="bus" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><i class="mini-bus"></i></span><span class="vehicle-name">バス</span></button>
-<button type="button" id="work-vehicles" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><i class="mini-police"></i></span><span id="work-label">はたらく のりもの 🎲</span></button>
-<button type="button" data-kind="plane" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true">✈️</span><span class="vehicle-name">ひこうき</span></button>
+<button type="button" id="work-vehicles" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/police.webp" alt=""></span><span id="work-label">はたらく のりもの 🎲</span></button>
+<button type="button" data-kind="plane" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/plane.webp" alt=""></span><span class="vehicle-name">ひこうき</span></button>
 </div>
 <div id="scene" class="scene train train-blue" aria-hidden="true">
 <div class="cloud"></div><div class="land"></div><div class="decor" id="decor"></div><div class="road"></div><div id="stop" class="stop"></div><span id="work-effect" aria-hidden="true"></span>
-<div class="vehicle"><div class="windows"></div><div class="door"></div><i class="wheel"></i><i class="wheel"></i></div>
+<div class="vehicle"><img class="vehicle-art" alt="" hidden><div class="windows"></div><div class="door"></div><i class="wheel"></i><i class="wheel"></i></div>
 <div class="tunnel"></div><div class="crossing" aria-hidden="true"><i></i><i></i></div>
 </div>
 <p class="message" id="message" role="status"></p>
@@ -242,6 +257,8 @@ const scenery = {
   'あおい おうち': { sky: '#bde7ff', ground: '#a9d78f', deco: ['📦', '🌳', '☁️'] },
 };
 const scene = document.querySelector('#scene');
+const vehicleArt = scene.querySelector('.vehicle-art');
+const vehicleArtPaths = { plane: 'assets/plane.webp', police: 'assets/police.webp' };
 const decor = document.querySelector('#decor');
 let celebration = false;
 const stopLabel = document.querySelector('#stop');
@@ -478,6 +495,9 @@ function render() {
   const route = routes[kind];
   const stop = route.stops[progress[kind]];
   const trainStyle = kind === 'train' ? 'train-' + (trainVariant?.id || 'blue') : '';
+  const artPath = vehicleArtPaths[kind];
+  vehicleArt.hidden = !artPath;
+  if (artPath && vehicleArt.getAttribute('src') !== artPath) vehicleArt.src = artPath;
   scene.className = ['scene', kind, phase, trainStyle, kind === 'bus' ? 'bus-' + busColor : ''].filter(Boolean).join(' ');
   const action = workActions[kind];
   workAction.hidden = phase !== 'arrived' || !action;
