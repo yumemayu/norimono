@@ -124,8 +124,8 @@ let kind = 'train';
 let phase = 'ready';
 const trainVariants = [
   { id: 'blue', name: 'あおい しんかんせん' },
-  { id: 'red', name: 'こまち' },
-  { id: 'green', name: 'はやぶさ' },
+  { id: 'red', name: 'あかい しんかんせん' },
+  { id: 'green', name: 'みどりの しんかんせん' },
 ];
 let trainVariant;
 let arrival;
@@ -155,7 +155,48 @@ let audio;
 let master;
 let muted = false;
 let travelSound;
-const tripDuration = 2.6;
+const tripDuration = 7;
+let announcement;
+let announcementTimer;
+const speech = window.speechSynthesis;
+
+function stopAnnouncement() {
+  clearTimeout(announcementTimer);
+  if (announcement) speech?.cancel();
+  announcement = undefined;
+}
+
+const arrivalVoices = {
+  train: {
+    rate: .88, pitch: 1.1,
+    say: (stop, isFinal) => isFinal
+      ? 'しゅうてん、' + stop.replace(' えき', '駅') + 'です。ご乗車、ありがとうございました。'
+      : 'ご乗車ありがとうございます。' + stop.replace(' えき', '駅') + 'です。',
+  },
+  bus: {
+    rate: .95, pitch: .87,
+    say: (stop, isFinal) => (isFinal ? 'しゅうてん、' : '') + stop + 'です。お忘れ物のないように。',
+  },
+  police: {
+    rate: 1.03, pitch: 1.28,
+    say: (stop, isFinal) => 'パトカー、' + stop + 'に 到着しました！' + (isFinal ? 'おつかれさま！' : ''),
+  },
+};
+
+function announceArrival(vehicle, stop, isFinal = false) {
+  if (!speech || !window.SpeechSynthesisUtterance || muted || Number(volume.value) === 0) return;
+  const style = arrivalVoices[vehicle];
+  const line = new SpeechSynthesisUtterance(style.say(stop, isFinal));
+  line.lang = 'ja-JP';
+  const voices = speech.getVoices().filter(voice => voice.lang.startsWith('ja'));
+  const voiceIndex = Object.keys(arrivalVoices).indexOf(vehicle);
+  if (voices.length) line.voice = voices[voiceIndex % voices.length];
+  line.rate = style.rate;
+  line.pitch = style.pitch;
+  line.volume = Number(volume.value) / 100;
+  announcement = line;
+  speech.speak(line);
+}
 function stopTravelSound() {
   if (!travelSound) return;
   travelSound.disconnect();
@@ -214,6 +255,7 @@ function updateVolume() {
   volumeValue.textContent = volume.value + '%';
   mute.textContent = muted ? '🔇 おとオフ' : '🔊 おとオン';
   mute.setAttribute('aria-pressed', String(muted));
+  if (muted || Number(volume.value) === 0) stopAnnouncement();
   if (master) master.gain.setTargetAtTime(muted ? 0 : Number(volume.value) / 100 * .3, audio.currentTime, .015);
 }
 
@@ -287,15 +329,23 @@ function render() {
 choices.forEach(button => button.addEventListener('click', () => {
   if (phase === 'moving' || kind === button.dataset.kind) return;
   stopTravelSound();
+  stopAnnouncement();
   kind = button.dataset.kind;
   celebration = false;
   phase = 'ready';
   render();
-
+  if (speech && window.SpeechSynthesisUtterance && !muted && Number(volume.value) > 0) {
+    const line = new SpeechSynthesisUtterance(routes[kind].name + '！');
+    line.lang = 'ja-JP';
+    line.volume = Number(volume.value) / 100;
+    announcement = line;
+    speech.speak(line);
+  }
 }));
 
 go.addEventListener('click', () => {
   if (phase === 'moving') return;
+  stopAnnouncement();
   celebration = false;
   if (kind === 'train') {
     const variants = trainVariants.filter(variant => variant !== trainVariant);
@@ -310,11 +360,15 @@ go.addEventListener('click', () => {
     phase = 'arrived';
     render();
     stopTravelSound();
+    const arrivedKind = kind;
+    const arrivedStop = routes[kind].stops[progress[kind]];
     if (celebration) {
       celebrate();
       playSound(fanfare);
-    } else if (kind !== 'train') {
-      playSound(arrivalSound);
+      announcementTimer = setTimeout(() => announceArrival(arrivedKind, arrivedStop, true), 500);
+    } else {
+      if (kind !== 'train') playSound(arrivalSound);
+      announceArrival(arrivedKind, arrivedStop);
     }
   }, tripDuration * 1000);
   const trip = arrival;
