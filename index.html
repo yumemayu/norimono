@@ -133,8 +133,15 @@ let arrival;
 const mute = document.querySelector('#mute');
 const volume = document.querySelector('#volume');
 const volumeValue = document.querySelector('#volume-value');
-const departureSounds = {
-  police: [[420, 760, 0, .32], [760, 420, .32, .32]],
+const departureSirens = [
+  [[420, 760, 0, .32], [760, 420, .32, .32]],
+  [[500, 890, 0, .27], [890, 500, .27, .36]],
+  [[650, 460, 0, .28], [460, 730, .28, .31]],
+];
+const secondsToStop = {
+  train: [14, 10, 12, 15, 11, 13, 15],
+  bus: [12, 10, 14, 11, 15],
+  police: [14, 11, 13],
 };
 const arrivalSound = [[660, 660, 0, .14], [523, 523, .17, .20]];
 const fanfare = [[523, 523, 0, .16], [659, 659, .16, .16], [784, 784, .32, .16], [1047, 1047, .48, .36]];
@@ -155,7 +162,6 @@ let audio;
 let master;
 let muted = false;
 let travelSound;
-const tripDuration = 7;
 let announcement;
 let announcementTimer;
 const speech = window.speechSynthesis;
@@ -203,7 +209,7 @@ function stopTravelSound() {
   travelSound = undefined;
 }
 
-function playTravelSound(vehicle) {
+function playTravelSound(vehicle, tripDuration) {
   stopTravelSound();
   const bus = vehicle === 'bus';
   const now = audio.currentTime;
@@ -316,7 +322,7 @@ function render() {
   if (phase === 'moving') {
     message.textContent = (kind === 'train' ? trainVariant.name : route.name) + 'が はしってるよ！';
   } else if (phase === 'arrived') {
-    message.textContent = celebration ? '🎉 ' + stop + 'に とうちゃく！おつかれさま！' : stop + 'に とうちゃく！' + (kind === 'police' ? '' : ' ドアが あいたよ');
+    message.textContent = celebration ? '🎉 ' + stop + 'に とうちゃく！おつかれさま！' : stop + 'に とうちゃく！おつかれさま！' + (kind === 'police' ? '' : ' ドアが あいたよ');
   } else {
     message.textContent = stop + 'から しゅっぱつ！';
   }
@@ -354,8 +360,11 @@ go.addEventListener('click', () => {
   phase = 'moving';
   render();
   const departureKind = kind;
+  const nextStop = (progress[kind] + 1) % routes[kind].stops.length;
+  const tripDuration = secondsToStop[kind][nextStop];
+  const siren = departureSirens[Math.floor(Math.random() * departureSirens.length)];
   arrival = setTimeout(() => {
-    progress[kind] = (progress[kind] + 1) % routes[kind].stops.length;
+    progress[kind] = nextStop;
     celebration = progress[kind] === routes[kind].stops.length - 1;
     phase = 'arrived';
     render();
@@ -375,8 +384,8 @@ go.addEventListener('click', () => {
   try {
     prepareAudio()?.then(() => {
       if (phase !== 'moving' || arrival !== trip) return;
-      if (departureKind === 'police') playSound(departureSounds.police);
-      else playTravelSound(departureKind);
+      playSound(siren);
+      if (departureKind !== 'police') playTravelSound(departureKind, tripDuration);
     }).catch(() => {});
   } catch {
     // Driving still works if the browser cannot initialize audio.
