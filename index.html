@@ -39,13 +39,27 @@
 .train-green .vehicle{width:min(84%,490px);border-radius:14px 95% 22px 14px / 14px 90% 15px 15px;background:linear-gradient(#139e89 0 67%,#ee6195 67% 75%,#f6f9f7 75%);}
 .train-green .door{background:#daf5ee}
 .train-green.arrived .door{background:#243e50}
+.choices .vehicle-preview{height:40px;display:grid;place-items:center}
+.vehicle-preview i{display:block;position:relative;width:57px;height:22px;border:2px solid #233f57;background:#fff}
+.mini-train{border-radius:5px 95% 6px 5px;box-shadow:inset 0 -5px #167cba}
+.mini-bus{border-radius:5px;background:linear-gradient(#bbe6f4 0 43%,#ffd568 43%)!important}
+.mini-police{border-radius:18px 19px 5px 5px;box-shadow:inset 0 -6px #24374b}
+.mini-police::before{content:"";position:absolute;width:13px;height:5px;border-radius:4px;background:#e03949;left:20px;top:-5px}
+.mini-bus::after,.mini-police::after{content:"";position:absolute;left:7px;bottom:-6px;width:8px;height:8px;background:#233447;border-radius:50%;box-shadow:31px 0 #233447}
+.arrived ~ .go{animation:ready-pulse .65s 2 alternate}
+@keyframes ready-pulse{to{box-shadow:0 5px #084733,0 0 0 6px #a9d78f}}
+@media(orientation:landscape) and (min-width:700px){
+  main{max-width:1000px;display:grid;grid-template-columns:minmax(240px,1fr) minmax(360px,1.6fr);gap:12px 20px;align-content:start}
+  main > *{grid-column:1}
+  main > .scene{grid-column:2;grid-row:1 / span 5;height:clamp(220px,74dvh,420px)}
+}
 </style>
 <main>
 <h1>のりもの しゅっぱつ！</h1>
 <div class="choices" aria-label="のりものを えらぶ">
-<button type="button" data-kind="train" aria-pressed="true"><span aria-hidden="true">🚄</span>しんかんせん</button>
-<button type="button" data-kind="bus" aria-pressed="false"><span aria-hidden="true">🚌</span>バス</button>
-<button type="button" data-kind="police" aria-pressed="false"><span aria-hidden="true">🚓</span>パトカー</button>
+<button type="button" data-kind="train" aria-pressed="true"><span class="vehicle-preview" aria-hidden="true"><i class="mini-train"></i></span>しんかんせん</button>
+<button type="button" data-kind="bus" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><i class="mini-bus"></i></span>バス</button>
+<button type="button" data-kind="police" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><i class="mini-police"></i></span>パトカー</button>
 </div>
 <div id="scene" class="scene train train-blue" aria-hidden="true">
 <div class="cloud"></div><div class="land"></div><div class="road"></div><div id="stop" class="stop"></div>
@@ -250,6 +264,13 @@ choices.forEach(button => button.addEventListener('click', () => {
   kind = button.dataset.kind;
   phase = 'ready';
   render();
+  if (speech && window.SpeechSynthesisUtterance && !muted && Number(volume.value) > 0) {
+    const line = new SpeechSynthesisUtterance(routes[kind].name + '！');
+    line.lang = 'ja-JP';
+    line.volume = Number(volume.value) / 100;
+    announcement = line;
+    speech.speak(line);
+  }
 }));
 
 go.addEventListener('click', () => {
