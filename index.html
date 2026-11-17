@@ -262,20 +262,27 @@ main > nav.hiiro-links { width: 100%; }
   main > .scene { min-height: 205px; }
 }
 /* Illustrated vehicles share the scene's existing motion and wheel baseline. */
-.scene:is(.train,.fire,.ambulance,.ladder,.garbage) .vehicle {
+.scene:is(.train,.fire,.ambulance,.ladder,.garbage,.excavator) .vehicle {
   width: min(78%, 485px);
   height: auto;
   background: none;
   border: 0;
   box-shadow: none;
 }
-.scene:is(.train,.fire,.ambulance,.ladder,.garbage) .vehicle > :not(.vehicle-art),
-.scene:is(.train,.fire,.ambulance,.ladder,.garbage) .vehicle::before,
-.scene:is(.train,.fire,.ambulance,.ladder,.garbage) .vehicle::after { display: none; }
-.scene:is(.train,.fire,.ambulance,.ladder,.garbage) .vehicle-art { max-height: clamp(75px, 30dvh, 192px); }
+.scene:is(.train,.fire,.ambulance,.ladder,.garbage,.excavator) .vehicle > :not(.vehicle-art),
+.scene:is(.train,.fire,.ambulance,.ladder,.garbage,.excavator) .vehicle::before,
+.scene:is(.train,.fire,.ambulance,.ladder,.garbage,.excavator) .vehicle::after { display: none; }
+.scene:is(.train,.fire,.ambulance,.ladder,.garbage,.excavator) .vehicle-art { max-height: clamp(75px, 30dvh, 192px); }
 .scene:is(.fire,.ladder).work-active #work-effect {
   display: block;
   animation: work-pop .65s ease-out both;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .excavator.work-active .vehicle-art {
+    transform-origin: 68% 90%;
+    animation: scoop .65s ease-in-out;
+  }
+  @keyframes scoop { 50% { transform: rotate(5deg); } }
 }
 </style>
 <link rel="stylesheet" href="./assets/train-game-links.css">
@@ -390,6 +397,7 @@ const vehicleArtPaths = {
   ambulance: 'assets/go-ambulance.webp',
   ladder: 'assets/go-ladder-truck.webp',
   garbage: 'assets/go-garbage-truck.webp',
+  excavator: 'assets/go-excavator.webp',
 };
 const decor = document.querySelector('#decor');
 let celebration = false;
