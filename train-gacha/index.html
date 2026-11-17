@@ -32,7 +32,7 @@ button:focus-visible{outline:4px solid #2260a7;outline-offset:4px}
 .car{position:relative;width:min(100%,var(--car-width,470px));flex-shrink:1;min-width:0}
 .car img{display:block;width:100%;height:auto}
 #train-button[data-double="true"] .car{width:calc(50% - 2px)}
-#train-button[data-coupling="shinkansen"] #train{transform:scaleX(-1)}
+
 .car[hidden],.door[hidden],#steam[hidden]{display:none}
 .door{position:absolute;top:30%;width:16%;height:48%;overflow:hidden;border:2px solid #122746;border-radius:10%;background:#25374b}
 .door::before,.door::after{content:"";position:absolute;top:0;bottom:0;width:50%;background:#94ca14;border:1px solid #122746;transform:translateX(var(--slide))}
@@ -47,10 +47,10 @@ button:focus-visible{outline:4px solid #2260a7;outline-offset:4px}
   @keyframes puff{from{transform:scale(.65);opacity:.9}to{transform:translate(14px,-25px) scale(1.2);opacity:0}}
 }
  .header-actions{display:flex;gap:8px;align-items:center}
-#lang,.game-links a{min-height:44px;padding:8px 12px;border:2px solid #a3c9bb;background:#f9fdf9;color:#213c3b;border-radius:14px;font:inherit}
+#lang,.game-links a{position:relative;width:100%;min-height:98px;padding:14px 16px 24px;border:3px solid #244e46;border-radius:20px;background:linear-gradient(#bfe6f7 0 62%,#a8d89a 62% 100%);color:#213c3b;box-shadow:0 5px 0 #a3c9bb;overflow:hidden;font:inherit}
 #lang{cursor:pointer}
-.game-links{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:24px}
-.game-links a{display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+.game-links{display:block;margin-top:52px}
+.game-links a{display:flex;align-items:center;justify-content:center;gap:12px;text-decoration:none}.game-links a::after{content:"";position:absolute;left:0;right:0;bottom:7px;height:9px;background:linear-gradient(#526d62 0 3px,transparent 3px 6px,#526d62 6px 9px),repeating-linear-gradient(90deg,#ba906e 0 10px,#e5d7bd 10px 26px)}.game-links a:active{transform:translateY(3px);box-shadow:0 2px 0 #a3c9bb}.banner-icon{font-size:2.3rem;line-height:1}.banner-title{font-size:clamp(1.35rem,5.4vw,1.9rem);font-weight:700;letter-spacing:.02em}
 .game-links a:focus-visible{outline:4px solid #2260a7;outline-offset:4px}
 @media(max-width:360px){header{flex-wrap:wrap}}
 </style>
@@ -76,7 +76,7 @@ button:focus-visible{outline:4px solid #2260a7;outline-offset:4px}
 </section>
 <button id="next" type="button"><span aria-hidden="true">▶</span> <span id="next-label">つぎのでんしゃ</span></button>
 <nav class="game-links" aria-label="ほかのでんしゃゲーム">
-  <a href="https://yumemayu.github.io/norimono/"><span aria-hidden="true">🚃</span> <span data-en="Let’s Ride!">のりもの しゅっぱつ！</span></a>
+  <a href="https://yumemayu.github.io/norimono/"><span class="banner-icon" aria-hidden="true">🚃</span> <span class="banner-title" data-en="Let’s Ride!">のりもの しゅっぱつ！</span></a>
 </nav>
 </main>
 <script>
