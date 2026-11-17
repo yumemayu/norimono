@@ -30,6 +30,24 @@ h1{font-size:clamp(17px,4vw,30px);margin:0}button,a{font:inherit;color:inherit}b
 #celebrate{position:absolute;inset:0;background:#fff2e3ee;display:grid;place-content:center;gap:14px}#celebrate[hidden]{display:none}#celebrate strong{font-size:clamp(29px,8vw,64px);color:#904022}.closed-box{background:linear-gradient(#acf1cc,#6fb18f);border:7px solid #8dc7a7;border-radius:29px;padding:10px;display:flex;align-items:center;width:min(65vw,430px);aspect-ratio:1.7;box-shadow:0 7px #548c71}.closed-box{animation:close .36s ease-out both}@keyframes close{from{transform:scale(.92) rotateX(35deg);opacity:.45}to{transform:none;opacity:1}}.closed-box img{width:33%;height:100%;object-fit:contain}#again{justify-self:center}#ghost{position:fixed;z-index:4;pointer-events:none;width:clamp(85px,22vw,195px);height:110px;transform:translate(-50%,-50%)}#ghost.food{width:90px;height:90px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}@media(max-width:460px){main{padding:9px}.slot.ready{box-shadow:inset 0 0 0 2px #fbde62}#language{padding:8px 10px}}
 .feedback{margin:16px 0 4px}.feedback a{display:inline-block;padding:12px;text-underline-offset:3px}
+
+/* Keep play and primary touch controls side by side on landscape tablets. */
+@media (orientation: landscape) and (min-width: 740px) and (min-height: 360px) {
+main { max-width: 1280px; padding: 14px 18px 22px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(150px, 23%); gap: 8px 14px; align-items: start; }
+main > :is(header, #hint, nav, footer) { grid-column: 1 / -1; }
+#hint { margin: 0; }
+#language { min-height: 48px; }
+#board { width: 100%; max-width: calc(clamp(220px, 71dvh, 550px) * 1170 / 670); justify-self: center; }
+#tray { grid-template-columns: minmax(0,1fr); width: 100%; margin: 0; align-self: center; }
+.piece { min-height: 58px; }
+.piece img { height: clamp(38px, 10dvh, 92px); }
+#board:has(#celebrate:not([hidden])) { grid-column: 1 / -1; }
+.closed-box { width: min(48vw, 37dvh, 400px); }
+#celebrate { gap: 6px; }
+#celebrate strong { font-size: clamp(24px, 7dvh, 54px); }
+#again { min-height: 48px; }
+main > nav.hiiro-links { width: 100%; }
+}
 </style>
 <link rel="stylesheet" href="../assets/train-game-links.css">
 <main>
