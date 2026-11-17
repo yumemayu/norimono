@@ -263,6 +263,7 @@
 <nav class="hiiro-links" aria-label="ほかのでんしゃゲーム">
   <a class="gacha" href="./train-gacha/"><span class="banner-icon" aria-hidden="true">🎁</span><span id="gacha-link-label">でんしゃガチャ</span></a>
   <a class="bento" href="./train-bento/"><span class="banner-icon" aria-hidden="true">🍱</span><span id="bento-link-label">でんしゃのおべんとうばこ</span></a>
+  <a class="pairs" href="./train-pairs/"><span class="banner-icon" aria-hidden="true">🚆</span><span id="pairs-link-label">でんしゃペア</span></a>
 </nav>
 <footer class="feedback"><a id="feedback-link" href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer">ご要望を送る</a></footer>
 </main>
@@ -712,6 +713,7 @@ function startTrip() {
 function applyLang() {
   document.querySelector('#feedback-link').textContent = lang === 'en' ? 'Send feedback' : 'ご要望を送る';
   document.querySelector('.hiiro-links').setAttribute('aria-label', lang === 'en' ? 'More train games' : 'ほかのでんしゃゲーム');
+  document.querySelector('#pairs-link-label').textContent = lang === 'en' ? 'Train Pairs' : 'でんしゃペア';
   document.querySelector('#bento-link-label').textContent = lang === 'en' ? 'Train Bento Box' : 'でんしゃのおべんとうばこ';
   document.querySelector('#gacha-link-label').textContent = lang === 'en' ? 'Train Gacha' : 'でんしゃガチャ';
   document.querySelector('#air-label').textContent = lang === 'en' ? 'Flying vehicles' : 'そらとぶ のりもの';
