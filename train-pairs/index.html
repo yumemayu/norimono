@@ -9,6 +9,21 @@
 .track{position:relative;overflow:hidden;min-height:68px;height:clamp(68px,15vw,125px);margin:14px 0 8px;border-radius:16px;background:linear-gradient(#d9efff 0 70%,#c5e5ae 70%)}.track::after{content:"";position:absolute;left:0;right:0;bottom:12%;height:10px;background:linear-gradient(#536c5f 0 2px,transparent 2px 8px,#536c5f 8px),repeating-linear-gradient(90deg,#9b775d 0 8px,transparent 8px 24px)}
 .convoy{position:absolute;bottom:12%;height:78%;width:clamp(125px,43vw,300px);display:flex;z-index:1;animation:roll 1.1s ease-in-out both}.convoy img{width:50%;object-fit:contain;object-position:center bottom}.convoy img+img{margin-left:-4px}@keyframes roll{from{left:-46%}to{left:53%}}
 #actions{display:flex;justify-content:center;gap:8px;margin:10px 0}#actions[hidden]{display:none}footer{text-align:center;margin-top:18px}@media(prefers-reduced-motion:reduce){.convoy{animation:none;left:30%}}
+
+/* Keep play and primary touch controls side by side on landscape tablets. */
+@media (orientation: landscape) and (min-width: 740px) and (min-height: 360px) {
+main { max-width: 1280px; padding: 14px 18px 22px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(195px, 30%); gap: 10px 16px; align-items: start; }
+main > :is(header, #hint, nav, footer) { grid-column: 1 / -1; }
+#hint { margin: 0; }
+#board { grid-column: 1; grid-row: 3 / 5; width: 100%; max-width: 780px; }
+.card { aspect-ratio: auto; height: clamp(100px, 32dvh, 235px); }
+.card img { max-height: 100%; }
+#track { grid-column: 2; grid-row: 3; margin: 0; height: clamp(78px, 23dvh, 165px); }
+.convoy { width: min(61%, 300px); }
+#actions { grid-column: 2; grid-row: 4; align-self: start; flex-wrap: wrap; margin: 0; }
+#actions button { flex: 1 1 135px; }
+main > nav.hiiro-links { width: 100%; }
+}
 </style>
 <link rel="stylesheet" href="../assets/train-game-links.css">
 <main>
