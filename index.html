@@ -413,6 +413,7 @@ const scene = document.querySelector('#scene');
 const vehicleArt = scene.querySelector('.vehicle-art');
 const vehicleArtPaths = {
   plane: 'assets/plane.webp',
+  helicopter: 'assets/go-helicopter.webp',
   police: 'assets/police.webp',
   fire: 'assets/go-fire-engine.webp',
   ambulance: 'assets/go-ambulance.webp',
@@ -471,7 +472,6 @@ const trainVariants = [
 ];
 const artVariants = {
   bus: ['bus-gold', 'bus-mint', 'bus-berry'],
-  helicopter: ['helicopter', 'helicopter-mint'],
   delivery: ['delivery', 'delivery-blue'],
 };
 const currentArt = Object.fromEntries(Object.entries(artVariants).map(([vehicle, variants]) => [vehicle, variants[0]]));
