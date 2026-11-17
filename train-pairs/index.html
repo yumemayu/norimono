@@ -31,7 +31,7 @@ const board = $('#board');
 let lang = 'ja';
 try { if (localStorage.getItem('norimono-lang') === 'en') lang = 'en'; } catch {}
 const words = (ja,en) => lang === 'ja' ? ja : en;
-let memory = false, cards, selected, locked, timer, audio;
+let memory = true, cards, selected, locked, timer, audio;
 let previousPair;
 function picture(train) {
   const img = new Image();
@@ -87,9 +87,10 @@ function render() {
   $('nav').setAttribute('aria-label', words('ほかのでんしゃゲーム','More train games'));
   document.querySelectorAll('[data-en]').forEach(node => { node.textContent = node.dataset[lang]; });
   $('#hint').textContent = completed ? words('✨ ぜんぶ つながった！','✨ All paired!') : locked ? words('もういちど','Try again') : memory ? words('めくって さがそう','Flip two cards') : words('おなじ でんしゃを みつけよう','Find the matching trains');
-  $('#actions').hidden = !completed;
+  $('#actions').hidden = false;
+  $('#again').hidden = !completed;
   $('#again').textContent = words('もういっかい','Play again');
-  $('#mode').textContent = memory ? words('えあわせに もどる','Back to matching') : words('めくってみる','Try flipping cards');
+  $('#mode').textContent = memory ? words('えあわせで あそぶ','Play picture matching') : words('めくってみる','Try flipping cards');
   cards.forEach(({train,matched},index) => {
     const button = board.children[index];
     const active = selected.includes(index);
