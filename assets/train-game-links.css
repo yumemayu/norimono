@@ -43,3 +43,8 @@
 .hiiro-links .gacha { --banner-color: #e4def9; }
 .hiiro-links .bento { --banner-color: #ffe3c5; }
 .hiiro-links .banner-icon { font-size: 29px; line-height: 1; }
+
+.hiiro-links .pairs { --banner-color: #f9dae7; }
+@media (min-width: 600px) {
+  .hiiro-links:has(> a:nth-child(3)) { grid-template-columns: repeat(3,minmax(0,1fr)); }
+}
