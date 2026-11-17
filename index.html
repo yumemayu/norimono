@@ -275,7 +275,7 @@ main > nav.hiiro-links { width: 100%; }
 .scene:is(.train,.fire,.ambulance,.ladder) .vehicle > :not(.vehicle-art),
 .scene:is(.train,.fire,.ambulance,.ladder) .vehicle::before,
 .scene:is(.train,.fire,.ambulance,.ladder) .vehicle::after { display: none; }
-.scene:is(.train,.fire,.ambulance,.ladder) .vehicle-art { max-height: min(44cqh, 192px); }
+.scene:is(.train,.fire,.ambulance,.ladder) .vehicle-art { max-height: clamp(75px, 30dvh, 192px); }
 .scene:is(.fire,.ladder).work-active #work-effect {
   display: block;
   animation: work-pop .65s ease-out both;
