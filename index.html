@@ -264,6 +264,22 @@ main > nav.hiiro-links { width: 100%; }
   .choices button :is(.vehicle-name, #work-label, #air-label) { font-size: 13px; }
   main > .scene { min-height: 205px; }
 }
+/* Illustrated vehicles share the scene's existing motion and wheel baseline. */
+.scene:is(.train,.fire,.ambulance,.ladder) .vehicle {
+  width: min(78%, 485px);
+  height: auto;
+  background: none;
+  border: 0;
+  box-shadow: none;
+}
+.scene:is(.train,.fire,.ambulance,.ladder) .vehicle > :not(.vehicle-art),
+.scene:is(.train,.fire,.ambulance,.ladder) .vehicle::before,
+.scene:is(.train,.fire,.ambulance,.ladder) .vehicle::after { display: none; }
+.scene:is(.train,.fire,.ambulance,.ladder) .vehicle-art { max-height: min(44cqh, 192px); }
+.scene:is(.fire,.ladder).work-active #work-effect {
+  display: block;
+  animation: work-pop .65s ease-out both;
+}
 </style>
 <link rel="stylesheet" href="./assets/train-game-links.css">
 <main>
@@ -277,9 +293,9 @@ main > nav.hiiro-links { width: 100%; }
 <p class="message" id="message" role="status"></p>
 <button type="button" id="work-action" hidden></button>
 <div class="choices" aria-label="のりものを えらぶ">
-<button type="button" data-kind="train" aria-pressed="true"><span class="vehicle-preview" aria-hidden="true"><img src="assets/shinkansen.svg" alt=""></span><span class="vehicle-name">しんかんせん</span></button>
+<button type="button" data-kind="train" aria-pressed="true"><span class="vehicle-preview" aria-hidden="true"><img src="assets/go-shinkansen-blue.webp" alt=""></span><span class="vehicle-name">しんかんせん</span></button>
 <button type="button" data-kind="bus" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/bus-gold.webp" alt=""></span><span class="vehicle-name">バス</span></button>
-<button type="button" id="work-vehicles" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/police.webp" alt=""></span><span id="work-label">はたらく のりもの</span></button>
+<button type="button" id="work-vehicles" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/go-fire-engine.webp" alt=""></span><span id="work-label">はたらく のりもの</span></button>
 <button type="button" id="air-vehicles" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/plane.webp" alt=""><img src="assets/helicopter.webp" alt=""></span><span id="air-label">そらとぶ のりもの</span></button>
 </div>
 <p class="random-note" id="random-note">いきさきは ランダム！どこに つくかは おたのしみ</p>
@@ -306,11 +322,12 @@ const routes = {
   helicopter: { name: 'ヘリコプター', stops: ['まちの ヘリポート', 'やまの ヘリポート', 'うみべの ヘリポート'] },
   plane: { name: 'ひこうき', stops: ['にじ くうこう', 'うみ くうこう', 'やま くうこう'] },
   fire: { name: 'しょうぼうしゃ', stops: ['まちの しょうぼうしょ', 'ひがし しょうぼうしょ'] },
+  ladder: { name: 'はしごしゃ', stops: ['まちの しょうぼうしょ', 'ひがし しょうぼうしょ'] },
   garbage: { name: 'ごみしゅうしゅうしゃ', stops: ['まちの ごみステーション', 'こうえんの ごみステーション'] },
   excavator: { name: 'ショベルカー', stops: ['まちの こうじげんば', 'やまの こうじげんば'] },
   delivery: { name: 'たくはいトラック', stops: ['あかい おうち', 'あおい おうち'] },
 };
-const enNames = { helicopter: 'Helicopter', plane: 'Airplane', train: 'Shinkansen', bus: 'Bus', police: 'Police Car', fire: 'Fire Engine', garbage: 'Garbage Truck', excavator: 'Excavator', delivery: 'Delivery Truck', ambulance: 'Ambulance' };
+const enNames = { helicopter: 'Helicopter', plane: 'Airplane', train: 'Shinkansen', bus: 'Bus', police: 'Police Car', fire: 'Fire Engine', ladder: 'Ladder Truck', garbage: 'Garbage Truck', excavator: 'Excavator', delivery: 'Delivery Truck', ambulance: 'Ambulance' };
 const enStops = {
   train: ['Flower Station', 'Rainbow Station', 'Star Station', 'Sea Station', 'Forest Station', 'Snow Station', 'Moon Station'],
   bus: ['Park', 'Bakery', 'Zoo', 'Library', 'Harbor'],
@@ -319,6 +336,7 @@ const enStops = {
   helicopter: ['City Heliport', 'Mountain Heliport', 'Seaside Heliport'],
   plane: ['Rainbow Airport', 'Sea Airport', 'Mountain Airport'],
   fire: ['Town Fire Station', 'East Fire Station'],
+  ladder: ['Town Fire Station', 'East Fire Station'],
   garbage: ['Town Collection Point', 'Park Collection Point'],
   excavator: ['Town Construction Site', 'Mountain Construction Site'],
   delivery: ['Red House', 'Blue House'],
@@ -368,7 +386,13 @@ const skyDetails = new Set(['cloud', 'rainbow', 'star', 'spark', 'snow', 'moon',
 const shoreDetails = new Set(['boat', 'waves', 'pier']);
 const scene = document.querySelector('#scene');
 const vehicleArt = scene.querySelector('.vehicle-art');
-const vehicleArtPaths = { plane: 'assets/plane.webp', police: 'assets/police.webp' };
+const vehicleArtPaths = {
+  plane: 'assets/plane.webp',
+  police: 'assets/police.webp',
+  fire: 'assets/go-fire-engine.webp',
+  ambulance: 'assets/go-ambulance.webp',
+  ladder: 'assets/go-ladder-truck.webp',
+};
 const decor = document.querySelector('#decor');
 let celebration = false;
 const stopLabel = document.querySelector('#stop');
@@ -378,7 +402,8 @@ const goLabel = document.querySelector('#go-label');
 const choices = document.querySelectorAll('[data-kind]');
 const workVehicles = document.querySelector('#work-vehicles');
 const workActions = {
-  fire: { ja: 'はしごを のばす', en: 'Raise ladder', icon: '🪜' },
+  fire: { ja: 'みずを だす', en: 'Spray water', icon: '💦' },
+  ladder: { ja: 'はしごを のばす', en: 'Raise ladder', icon: '🪜' },
   garbage: { ja: 'ごみを あつめる', en: 'Collect trash', icon: '🗑️' },
   excavator: { ja: 'つちを すくう', en: 'Scoop soil', icon: '🟤' },
   delivery: { ja: 'にもつを とどける', en: 'Deliver package', icon: '📦' },
@@ -605,7 +630,9 @@ function render() {
   const route = routes[kind];
   const stop = route.stops[progress[kind]];
   const trainStyle = kind === 'train' ? 'train-' + (trainVariant?.id || 'blue') : '';
-  const artPath = currentArt[kind] ? 'assets/' + currentArt[kind] + '.webp' : vehicleArtPaths[kind];
+  const artPath = kind === 'train'
+    ? 'assets/go-shinkansen-' + (trainVariant?.id || 'blue') + '.webp'
+    : currentArt[kind] ? 'assets/' + currentArt[kind] + '.webp' : vehicleArtPaths[kind];
   vehicleArt.hidden = !artPath;
   if (artPath && vehicleArt.getAttribute('src') !== artPath) vehicleArt.src = artPath;
   scene.className = ['scene', kind, phase, trainStyle].filter(Boolean).join(' ');
