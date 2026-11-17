@@ -264,6 +264,7 @@
 </div>
 <nav class="game-links" aria-label="ほかの でんしゃゲーム">
 <a href="https://yumemayu.github.io/norimono/train-gacha/"><span aria-hidden="true">🎁</span> <span id="gacha-link-label">でんしゃガチャ</span></a>
+<a href="train-bento/"><span aria-hidden="true">🍱</span> <span id="bento-link-label">でんしゃのおべんとうばこ</span></a>
 </nav>
 <footer class="feedback"><a id="feedback-link" href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer">ご要望を送る</a></footer>
 </main>
@@ -369,22 +370,20 @@ const airKinds = ['plane', 'helicopter'];
 let airSelected = false;
 let workSelected = false;
 airVehicles.addEventListener('click', () => {
-  if (phase === 'moving' || airSelected) return;
+  if (airSelected) return;
+  const resume = interruptTrip();
   airSelected = true;
   workSelected = false;
   kind = airKinds[0];
-  celebration = false;
-  phase = 'ready';
-  render();
+  finishSelection(resume);
 });
 workVehicles.addEventListener('click', () => {
-  if (phase === 'moving' || workSelected) return;
+  if (workSelected) return;
+  const resume = interruptTrip();
   workSelected = true;
   airSelected = false;
   kind = workKinds[0];
-  celebration = false;
-  phase = 'ready';
-  render();
+  finishSelection(resume);
 });
 const progress = Object.fromEntries(Object.keys(routes).map(vehicle => [vehicle, 0]));
 let kind = 'train';
@@ -602,8 +601,6 @@ function render() {
     : (lang === 'en' ? enNames[kind] : route.name);
   stopLabel.textContent = stopText;
   go.disabled = phase === 'moving';
-  workVehicles.disabled = go.disabled;
-  airVehicles.disabled = go.disabled;
   airVehicles.setAttribute('aria-pressed', String(airSelected));
   workVehicles.setAttribute('aria-pressed', String(workSelected));
   const flying = kind === 'plane' || kind === 'helicopter';
@@ -621,25 +618,38 @@ function render() {
       : lang === 'en' ? 'Leaving from ' + stopText + '!' : stopText + 'から しゅっぱつ！';
   }
   choices.forEach(button => {
-    button.disabled = go.disabled;
     button.setAttribute('aria-pressed', String(button.dataset.kind === kind));
   });
   renderPanels();
 }
 
-choices.forEach(button => button.addEventListener('click', () => {
-  if (phase === 'moving' || kind === button.dataset.kind) return;
+function interruptTrip() {
+  const moving = phase === 'moving';
+  clearTimeout(arrival);
+  arrival = undefined;
   stopTravelSound();
+  return moving;
+}
+
+function finishSelection(resume) {
+  celebration = false;
+  phase = 'ready';
+  if (resume) startTrip();
+  else render();
+}
+
+choices.forEach(button => button.addEventListener('click', () => {
+  if (kind === button.dataset.kind && !workSelected && !airSelected) return;
+  const resume = interruptTrip();
   kind = button.dataset.kind;
   workSelected = false;
   airSelected = false;
-  celebration = false;
-  phase = 'ready';
-  render();
-
+  finishSelection(resume);
 }));
 
-go.addEventListener('click', () => {
+go.addEventListener('click', startTrip);
+
+function startTrip() {
   if (phase === 'moving') return;
   celebration = false;
   tripDuration = speeds[speed];
@@ -661,6 +671,7 @@ go.addEventListener('click', () => {
   let tripTarget = progress[departureKind];
   while (tripTarget === progress[departureKind]) tripTarget = Math.floor(Math.random() * tripRoute.stops.length);
   arrival = setTimeout(() => {
+    arrival = undefined;
     kind = departureKind;
     const target = tripTarget;
     progress[departureKind] = target;
@@ -698,10 +709,11 @@ go.addEventListener('click', () => {
   } catch {
     // Driving still works if the browser cannot initialize audio.
   }
-});
+}
 
 function applyLang() {
   document.querySelector('#feedback-link').textContent = lang === 'en' ? 'Send feedback' : 'ご要望を送る';
+  document.querySelector('#bento-link-label').textContent = lang === 'en' ? 'Train Bento Box' : 'でんしゃのおべんとうばこ';
   document.querySelector('#gacha-link-label').textContent = lang === 'en' ? 'Train Gacha' : 'でんしゃガチャ';
   document.querySelector('#air-label').textContent = lang === 'en' ? 'Flying vehicles' : 'そらとぶ のりもの';
   document.querySelector('#work-label').textContent = lang === 'en' ? 'Work vehicles' : 'はたらく のりもの';
