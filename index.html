@@ -232,12 +232,10 @@
 #air-vehicles .vehicle-preview img{width:min(47%,72px)}
 
 .feedback { margin-top: 24px; text-align: center; }
-.game-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 24px; }
-.game-links a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 14px; border: 2px solid #a3c9bb; background: #f9fdf9; color: #213c3b; border-radius: 14px; text-decoration: none; font: inherit; }
-.game-links a:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 .feedback a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 6px 16px; color: inherit; text-underline-offset: 3px; }
 .feedback a:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 6px; }
 </style>
+<link rel="stylesheet" href="./assets/train-game-links.css">
 <main>
 <div class="topbar"><h1 id="title">のりもの しゅっぱつ！</h1><button type="button" id="lang">English</button></div>
 <div id="scene" class="scene train train-blue" aria-hidden="true">
@@ -262,9 +260,9 @@
 <label for="volume"><span id="volume-label">おんりょう</span> <input id="volume" type="range" min="0" max="100" value="40"></label>
 <output id="volume-value" for="volume">40%</output>
 </div>
-<nav class="game-links" aria-label="ほかの でんしゃゲーム">
-<a href="https://yumemayu.github.io/norimono/train-gacha/"><span aria-hidden="true">🎁</span> <span id="gacha-link-label">でんしゃガチャ</span></a>
-<a href="train-bento/"><span aria-hidden="true">🍱</span> <span id="bento-link-label">でんしゃのおべんとうばこ</span></a>
+<nav class="hiiro-links" aria-label="ほかのでんしゃゲーム">
+  <a class="gacha" href="./train-gacha/"><span class="banner-icon" aria-hidden="true">🎁</span><span id="gacha-link-label">でんしゃガチャ</span></a>
+  <a class="bento" href="./train-bento/"><span class="banner-icon" aria-hidden="true">🍱</span><span id="bento-link-label">でんしゃのおべんとうばこ</span></a>
 </nav>
 <footer class="feedback"><a id="feedback-link" href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer">ご要望を送る</a></footer>
 </main>
@@ -713,6 +711,7 @@ function startTrip() {
 
 function applyLang() {
   document.querySelector('#feedback-link').textContent = lang === 'en' ? 'Send feedback' : 'ご要望を送る';
+  document.querySelector('.hiiro-links').setAttribute('aria-label', lang === 'en' ? 'More train games' : 'ほかのでんしゃゲーム');
   document.querySelector('#bento-link-label').textContent = lang === 'en' ? 'Train Bento Box' : 'でんしゃのおべんとうばこ';
   document.querySelector('#gacha-link-label').textContent = lang === 'en' ? 'Train Gacha' : 'でんしゃガチャ';
   document.querySelector('#air-label').textContent = lang === 'en' ? 'Flying vehicles' : 'そらとぶ のりもの';
