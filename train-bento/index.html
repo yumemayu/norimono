@@ -45,6 +45,7 @@ h1{font-size:clamp(17px,4vw,30px);margin:0}button,a{font:inherit;color:inherit}b
 <nav class="hiiro-links" aria-label="ほかのでんしゃゲーム">
   <a class="ride" href="../"><span class="banner-icon" aria-hidden="true">🚃</span><span id="ride">のりもの しゅっぱつ！</span></a>
   <a class="gacha" href="../train-gacha/"><span class="banner-icon" aria-hidden="true">🎁</span><span id="gacha">でんしゃガチャ</span></a>
+  <a class="pairs" href="../train-pairs/"><span class="banner-icon" aria-hidden="true">🚆</span><span id="pairs">でんしゃペア</span></a>
 </nav>
 <footer class="feedback"><a id="feedback" href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer">ご要望を送る</a></footer>
 </main>
@@ -113,6 +114,7 @@ function render() {
   $('#language').textContent = words('English','日本語');
   $('#feedback').textContent = words('ご要望を送る','Send feedback');
   $('.hiiro-links').setAttribute('aria-label',words('ほかのでんしゃゲーム','More train games'));
+  $('#pairs').textContent = words('でんしゃペア','Train Pairs');
   $('#ride').textContent = words('のりもの しゅっぱつ！','Let’s Ride!');
   $('#gacha').textContent = words('でんしゃガチャ','Train Gacha');
   $('#success').textContent = words('✦ できた！ ✦','✦ All packed! ✦');
