@@ -60,7 +60,7 @@ main > nav.hiiro-links { width: 100%; }
 <div id="celebrate" hidden><strong id="success"></strong><div class="closed-box"></div><button id="again" type="button"></button></div>
 </div>
 <div id="tray"></div>
-<nav class="hiiro-links" aria-label="ほかのでんしゃゲーム">
+<nav class="hiiro-links" aria-label="ほかのでんしゃゲーム"><a class="book" style="--banner-color:#d4eee1" href="../vehicle-book/"><span class="banner-icon" aria-hidden="true">📖</span><span id="atlas-banner-label">のりものずかん</span></a>
   <a class="ride" href="../"><span class="banner-icon" aria-hidden="true">🚃</span><span id="ride">のりもの しゅっぱつ！</span></a>
   <a class="gacha" href="../train-gacha/"><span class="banner-icon" aria-hidden="true">🎁</span><span id="gacha">でんしゃガチャ</span></a>
   <a class="pairs" href="../train-pairs/"><span class="banner-icon" aria-hidden="true">🚆</span><span id="pairs">でんしゃペア</span></a>
@@ -241,4 +241,4 @@ window.addEventListener('pointerup',endDrag);
 window.addEventListener('pointercancel',endDrag);
 start();
 </script>
-</html>
+<script>(()=>{const update=()=>document.querySelector('#atlas-banner-label').textContent=document.documentElement.lang==='en'?'Vehicle Book':'のりものずかん';new MutationObserver(update).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});update();})();</script></html>
