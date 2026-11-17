@@ -205,7 +205,7 @@
 .fire.work-active .vehicle::before{transform:rotate(-32deg)}
 .excavator.work-active .vehicle::before{transform:rotate(17deg)}
 #work-effect{display:none;position:absolute;bottom:43%;left:70%;font-size:clamp(24px,6vw,48px);z-index:2}
-:is(.garbage,.excavator,.delivery).work-active #work-effect{
+:is(.garbage,.excavator,.delivery,.dump,.mixer).work-active #work-effect{
   display:block;animation:work-pop .65s ease-out both
 }
 .garbage.work-active #work-effect{animation-direction:reverse}
@@ -262,17 +262,17 @@ main > nav.hiiro-links { width: 100%; }
   main > .scene { min-height: 205px; }
 }
 /* Illustrated vehicles share the scene's existing motion and wheel baseline. */
-.scene:is(.train,.fire,.ambulance,.ladder,.garbage,.excavator) .vehicle {
+.scene:is(.train,.fire,.ambulance,.ladder,.garbage,.excavator,.dump,.mixer) .vehicle {
   width: min(78%, 485px);
   height: auto;
   background: none;
   border: 0;
   box-shadow: none;
 }
-.scene:is(.train,.fire,.ambulance,.ladder,.garbage,.excavator) .vehicle > :not(.vehicle-art),
-.scene:is(.train,.fire,.ambulance,.ladder,.garbage,.excavator) .vehicle::before,
-.scene:is(.train,.fire,.ambulance,.ladder,.garbage,.excavator) .vehicle::after { display: none; }
-.scene:is(.train,.fire,.ambulance,.ladder,.garbage,.excavator) .vehicle-art { max-height: clamp(75px, 30dvh, 192px); }
+.scene:is(.train,.fire,.ambulance,.ladder,.garbage,.excavator,.dump,.mixer) .vehicle > :not(.vehicle-art),
+.scene:is(.train,.fire,.ambulance,.ladder,.garbage,.excavator,.dump,.mixer) .vehicle::before,
+.scene:is(.train,.fire,.ambulance,.ladder,.garbage,.excavator,.dump,.mixer) .vehicle::after { display: none; }
+.scene:is(.train,.fire,.ambulance,.ladder,.garbage,.excavator,.dump,.mixer) .vehicle-art { max-height: clamp(75px, 30dvh, 192px); }
 .scene:is(.fire,.ladder).work-active #work-effect {
   display: block;
   animation: work-pop .65s ease-out both;
@@ -284,14 +284,28 @@ main > nav.hiiro-links { width: 100%; }
   }
   @keyframes scoop { 50% { transform: rotate(5deg); } }
 }
+#scene-tap { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; background: transparent; z-index: 4; border-radius: inherit; }
+#scene-tap:focus-visible { outline: 3px solid #122c82; outline-offset: -5px; }
+#scene-tap.work-ready { box-shadow: inset 0 0 0 4px #ffdf62; }
+#work-picker { width: min(96vw, 680px); max-height: 90dvh; color: #19354a; border: 2px solid #bedce4; border-radius: 24px; background: #fffaf0; padding: 12px; }
+#work-picker::backdrop { background: #17365980; }
+.work-picker-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 9px; }
+.work-picker-header h2 { font-size: clamp(16px, 3vw, 23px); margin: 0; }
+#close-work-picker { border: 0; background: #dff1fb; min-width: 44px; min-height: 44px; border-radius: 14px; font-size: 22px; }
+#work-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+#work-options button { display: grid; place-items: center; align-content: center; gap: 3px; min-height: 74px; border-radius: 12px; border: 2px solid #dce9e6; background: white; color: #19354a; font-size: clamp(11px, 2.1vw, 16px); padding: 4px; }
+#work-options img, .random-icon { width: 100%; height: 42px; object-fit: contain; }
+.random-icon { font-size: 25px; line-height: 42px; text-align: center; }
+@media (orientation: landscape) and (min-width: 620px) { #work-options { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 </style>
 <link rel="stylesheet" href="./assets/train-game-links.css">
 <main>
 <div class="topbar"><h1 id="title">のりもの しゅっぱつ！</h1><button type="button" id="lang">English</button></div>
-<div id="scene" class="scene train train-blue" aria-hidden="true">
+<div id="scene" class="scene train train-blue">
 <div class="air-landscape" aria-hidden="true"></div><div class="cloud"></div><div class="land"></div><div class="decor" id="decor" aria-hidden="true"></div><div class="road"></div><div id="stop" class="stop"></div><span id="work-effect" aria-hidden="true"></span>
 <div class="vehicle"><img class="vehicle-art" alt="" hidden><div class="windows"></div><div class="door"></div><i class="wheel"></i><i class="wheel"></i></div>
 <div class="tunnel" aria-hidden="true"></div>
+<button type="button" id="scene-tap" aria-label="のりものを タップ"></button>
 </div>
 <div class="go-row"><button type="button" class="go" id="go"><span class="go-icon" aria-hidden="true">→</span><span id="go-label">しゅっぱつ！</span></button><button type="button" class="horn" id="horn" aria-label="ラッパ">📯</button></div>
 <p class="message" id="message" role="status"></p>
@@ -299,9 +313,13 @@ main > nav.hiiro-links { width: 100%; }
 <div class="choices" aria-label="のりものを えらぶ">
 <button type="button" data-kind="train" aria-pressed="true"><span class="vehicle-preview" aria-hidden="true"><img src="assets/go-shinkansen-blue.webp" alt=""></span><span class="vehicle-name">しんかんせん</span></button>
 <button type="button" data-kind="bus" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/bus-gold.webp" alt=""></span><span class="vehicle-name">バス</span></button>
-<button type="button" id="work-vehicles" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/go-fire-engine.webp" alt=""></span><span id="work-label">はたらく のりもの</span></button>
+<button type="button" id="work-vehicles" aria-haspopup="dialog" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/go-fire-engine.webp" alt=""></span><span id="work-label">はたらく のりもの</span></button>
 <button type="button" id="air-vehicles" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/plane.webp" alt=""></span><span id="air-label">そらとぶ のりもの</span></button>
 </div>
+<dialog id="work-picker" aria-labelledby="work-picker-title">
+  <div class="work-picker-header"><h2 id="work-picker-title">すきな のりものを えらぼう</h2><button id="close-work-picker" type="button" aria-label="とじる">×</button></div>
+  <div id="work-options"></div>
+</dialog>
 <p class="random-note" id="random-note">いきさきは ランダム！どこに つくかは おたのしみ</p>
 <div class="panel"><h2 id="stamps-label">スタンプ</h2><div class="stamps" id="stamps"></div></div>
 <div class="panel"><h2 id="speed-label">はやさ</h2><div class="speeds" id="speeds"><button type="button" data-speed="slow" aria-pressed="false">🐢 <span class="speed-name">ゆっくり</span></button><button type="button" data-speed="normal" aria-pressed="true">🚃 <span class="speed-name">ふつう</span></button><button type="button" data-speed="fast" aria-pressed="false">🚀 <span class="speed-name">はやい</span></button></div></div>
@@ -329,9 +347,11 @@ const routes = {
   ladder: { name: 'はしごしゃ', stops: ['まちの しょうぼうしょ', 'ひがし しょうぼうしょ'] },
   garbage: { name: 'ごみしゅうしゅうしゃ', stops: ['まちの ごみステーション', 'こうえんの ごみステーション'] },
   excavator: { name: 'ショベルカー', stops: ['まちの こうじげんば', 'やまの こうじげんば'] },
+  dump: { name: 'ダンプカー', stops: ['まちの こうじげんば', 'やまの こうじげんば'] },
+  mixer: { name: 'ミキサーしゃ', stops: ['まちの こうじげんば', 'やまの こうじげんば'] },
   delivery: { name: 'たくはいトラック', stops: ['あかい おうち', 'あおい おうち'] },
 };
-const enNames = { helicopter: 'Helicopter', plane: 'Airplane', train: 'Shinkansen', bus: 'Bus', police: 'Police Car', fire: 'Fire Engine', ladder: 'Ladder Truck', garbage: 'Garbage Truck', excavator: 'Excavator', delivery: 'Delivery Truck', ambulance: 'Ambulance' };
+const enNames = { helicopter: 'Helicopter', plane: 'Airplane', train: 'Shinkansen', bus: 'Bus', police: 'Police Car', fire: 'Fire Engine', ladder: 'Ladder Truck', garbage: 'Garbage Truck', excavator: 'Excavator', dump: 'Dump Truck', mixer: 'Mixer Truck', delivery: 'Delivery Truck', ambulance: 'Ambulance' };
 const enStops = {
   train: ['Flower Station', 'Rainbow Station', 'Star Station', 'Sea Station', 'Forest Station', 'Snow Station', 'Moon Station'],
   bus: ['Park', 'Bakery', 'Zoo', 'Library', 'Harbor'],
@@ -343,6 +363,8 @@ const enStops = {
   ladder: ['Town Fire Station', 'East Fire Station'],
   garbage: ['Town Collection Point', 'Park Collection Point'],
   excavator: ['Town Construction Site', 'Mountain Construction Site'],
+  dump: ['Town Construction Site', 'Mountain Construction Site'],
+  mixer: ['Town Construction Site', 'Mountain Construction Site'],
   delivery: ['Red House', 'Blue House'],
 };
 const L = {
@@ -398,6 +420,8 @@ const vehicleArtPaths = {
   ladder: 'assets/go-ladder-truck.webp',
   garbage: 'assets/go-garbage-truck.webp',
   excavator: 'assets/go-excavator.webp',
+  dump: 'assets/go-dump.webp',
+  mixer: 'assets/go-mixer.webp',
 };
 const decor = document.querySelector('#decor');
 let celebration = false;
@@ -412,19 +436,29 @@ const workActions = {
   ladder: { ja: 'はしごを のばす', en: 'Raise ladder', icon: '🪜' },
   garbage: { ja: 'ごみを あつめる', en: 'Collect trash', icon: '🗑️' },
   excavator: { ja: 'つちを すくう', en: 'Scoop soil', icon: '🟤' },
+  dump: { ja: 'つちを おろす', en: 'Unload soil', icon: '🪨' },
+  mixer: { ja: 'ぐるぐる まわす', en: 'Mix concrete', icon: '🌀' },
   delivery: { ja: 'にもつを とどける', en: 'Deliver package', icon: '📦' },
 };
 const workKinds = ['police', 'ambulance', ...Object.keys(workActions)];
 const workAction = document.querySelector('#work-action');
 const workEffect = document.querySelector('#work-effect');
-workAction.addEventListener('click', () => {
+const sceneTap = document.querySelector('#scene-tap');
+let lastTapSound = -Infinity;
+function tapVehicle() {
   const action = workActions[kind];
-  if (phase !== 'arrived' || !action) return;
+  if (performance.now() - lastTapSound > 150) {
+    lastTapSound = performance.now();
+    prepareAudio()?.then(() => playSound([[440, 580, 0, .12, 'triangle']])).catch(() => {});
+  }
+  if (!action) return;
   workEffect.textContent = action.icon;
   scene.classList.remove('work-active');
   void scene.offsetWidth;
   scene.classList.add('work-active');
-});
+}
+workAction.addEventListener('click', tapVehicle);
+sceneTap.addEventListener('click', tapVehicle);
 const airVehicles = document.querySelector('#air-vehicles');
 const airKinds = ['plane', 'helicopter'];
 const airLandscape = scene.querySelector('.air-landscape');
@@ -439,13 +473,41 @@ airVehicles.addEventListener('click', () => {
   kind = airKinds[0];
   finishSelection(resume);
 });
-workVehicles.addEventListener('click', () => {
-  if (workSelected) return;
-  const resume = interruptTrip();
-  workSelected = true;
+const workPicker = document.querySelector('#work-picker');
+const workOptions = document.querySelector('#work-options');
+function chooseWorkVehicle(vehicle) {
+  interruptTrip();
+  workSelected = vehicle;
   airSelected = false;
-  kind = workKinds[0];
-  finishSelection(resume);
+  kind = vehicle === 'random' ? workKinds[0] : vehicle;
+  workPicker.close();
+  finishSelection(true);
+}
+workVehicles.addEventListener('click', () => {
+  workPicker.showModal();
+});
+document.querySelector('#close-work-picker').addEventListener('click', () => workPicker.close());
+const workTiles = ['excavator', 'fire', 'ambulance', 'police', 'garbage', 'dump', 'mixer', 'ladder', 'delivery', 'random'].map(vehicle => {
+  const tile = document.createElement('button');
+  tile.type = 'button';
+  const preview = vehicleArtPaths[vehicle] || (vehicle === 'delivery' ? 'assets/delivery.webp' : '');
+  if (preview) {
+    const img = document.createElement('img');
+    img.src = preview;
+    img.alt = '';
+    tile.append(img);
+  } else {
+    const icon = document.createElement('span');
+    icon.className = 'random-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    icon.textContent = '🎲';
+    tile.append(icon);
+  }
+  const label = document.createElement('span');
+  tile.append(label);
+  tile.addEventListener('click', () => chooseWorkVehicle(vehicle));
+  workOptions.append(tile);
+  return { vehicle, label };
 });
 const progress = Object.fromEntries(Object.keys(routes).map(vehicle => [vehicle, 0]));
 let kind = 'train';
@@ -666,7 +728,9 @@ function render() {
   stopLabel.textContent = stopText;
   go.disabled = phase === 'moving';
   airVehicles.setAttribute('aria-pressed', String(airSelected));
-  workVehicles.setAttribute('aria-pressed', String(workSelected));
+  workVehicles.setAttribute('aria-pressed', String(Boolean(workSelected)));
+  sceneTap.setAttribute('aria-label', action ? action[lang] : (lang === 'en' ? 'Tap the vehicle' : 'のりものを タップ'));
+  sceneTap.classList.toggle('work-ready', phase === 'arrived' && Boolean(action));
   const flying = kind === 'plane' || kind === 'helicopter';
   const movement = flying ? L[lang].flying : L[lang].going;
   goLabel.textContent = go.disabled ? movement : L[lang].go;
@@ -718,7 +782,7 @@ function startTrip() {
   celebration = false;
   tripDuration = speeds[speed];
   scene.style.setProperty('--trip-time', tripDuration + 's');
-  if (workSelected) kind = workKinds[Math.floor(Math.random() * workKinds.length)];
+  if (workSelected === 'random') kind = workKinds[Math.floor(Math.random() * workKinds.length)];
   if (airSelected) {
     kind = airKinds[Math.floor(Math.random() * airKinds.length)];
     const nextRoutes = airRoutes.filter(route => route !== airLandscape.dataset.route);
@@ -780,6 +844,11 @@ function startTrip() {
 }
 
 function applyLang() {
+  document.querySelector('#work-picker-title').textContent = lang === 'en' ? 'Choose a vehicle' : 'すきな のりものを えらぼう';
+  document.querySelector('#close-work-picker').setAttribute('aria-label', lang === 'en' ? 'Close' : 'とじる');
+  workTiles.forEach(({ vehicle, label }) => {
+    label.textContent = vehicle === 'random' ? (lang === 'en' ? 'Surprise me' : 'おまかせ') : (lang === 'en' ? enNames[vehicle] : routes[vehicle].name);
+  });
   document.querySelector('#feedback-link').textContent = lang === 'en' ? 'Send feedback' : 'ご要望を送る';
   document.querySelector('.hiiro-links').setAttribute('aria-label', lang === 'en' ? 'More train games' : 'ほかのでんしゃゲーム');
   document.querySelector('#pairs-link-label').textContent = lang === 'en' ? 'Train Pairs' : 'でんしゃペア';
