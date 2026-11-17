@@ -232,6 +232,9 @@
 #air-vehicles .vehicle-preview img{width:min(47%,72px)}
 
 .feedback { margin-top: 24px; text-align: center; }
+.game-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 24px; }
+.game-links a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 14px; border: 2px solid #a3c9bb; background: #f9fdf9; color: #213c3b; border-radius: 14px; text-decoration: none; font: inherit; }
+.game-links a:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 .feedback a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 6px 16px; color: inherit; text-underline-offset: 3px; }
 .feedback a:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 6px; }
 </style>
@@ -259,6 +262,9 @@
 <label for="volume"><span id="volume-label">おんりょう</span> <input id="volume" type="range" min="0" max="100" value="40"></label>
 <output id="volume-value" for="volume">40%</output>
 </div>
+<nav class="game-links" aria-label="ほかの でんしゃゲーム">
+<a href="https://yumemayu.github.io/norimono/train-gacha/"><span aria-hidden="true">🎁</span> <span id="gacha-link-label">でんしゃガチャ</span></a>
+</nav>
 <footer class="feedback"><a id="feedback-link" href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer">ご要望を送る</a></footer>
 </main>
 <script>
@@ -696,6 +702,7 @@ go.addEventListener('click', () => {
 
 function applyLang() {
   document.querySelector('#feedback-link').textContent = lang === 'en' ? 'Send feedback' : 'ご要望を送る';
+  document.querySelector('#gacha-link-label').textContent = lang === 'en' ? 'Train Gacha' : 'でんしゃガチャ';
   document.querySelector('#air-label').textContent = lang === 'en' ? 'Flying vehicles' : 'そらとぶ のりもの';
   document.querySelector('#work-label').textContent = lang === 'en' ? 'Work vehicles' : 'はたらく のりもの';
   document.documentElement.lang = lang;
