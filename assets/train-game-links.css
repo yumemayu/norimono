@@ -1,0 +1,45 @@
+.hiiro-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 24px auto 12px;
+  max-width: 780px;
+}
+.hiiro-links a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 105px;
+  padding: 10px 8px 23px;
+  border: 2px solid #416b5b;
+  border-radius: 18px;
+  background: linear-gradient(var(--banner-color) 0 72%, #dfedc9 72%);
+  box-shadow: 0 4px 0 #adc6ac;
+  color: #213c3b;
+  text-decoration: none;
+  text-align: center;
+  overflow: hidden;
+  font-weight: 800;
+  font-size: clamp(13px, 3.2vw, 19px);
+  line-height: 1.3;
+  touch-action: manipulation;
+}
+.hiiro-links a::after {
+  content: "";
+  position: absolute;
+  bottom: 6px;
+  left: 0;
+  right: 0;
+  height: 7px;
+  background: linear-gradient(#789184 0 2px, transparent 2px 5px, #789184 5px),
+    repeating-linear-gradient(90deg, transparent 0 9px, #af8e73 9px 13px);
+}
+.hiiro-links a:focus-visible { outline: 3px solid #1762a3; outline-offset: 3px; }
+.hiiro-links a:active { transform: translateY(2px); }
+.hiiro-links .ride { --banner-color: #c7eafa; }
+.hiiro-links .gacha { --banner-color: #e4def9; }
+.hiiro-links .bento { --banner-color: #ffe3c5; }
+.hiiro-links .banner-icon { font-size: 29px; line-height: 1; }
