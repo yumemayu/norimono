@@ -150,6 +150,8 @@
 .air-landscape::before {
   background: url('assets/go-air-panorama.webp') 0 100% / 250% 126% no-repeat;
 }
+.air-landscape[data-route="snow"]::before { background-image: url('assets/go-air-snow.webp'); }
+.air-landscape[data-route="sunset"]::before { background-image: url('assets/go-air-sunset.webp'); }
 .helicopter .air-landscape::before { background-size: 290% 140%; }
 .air-landscape::after {
   background:
@@ -225,8 +227,6 @@
 :is(.plane,.police,.delivery,.helicopter,.bus) .vehicle::before,
 :is(.plane,.police,.delivery,.helicopter,.bus) .vehicle::after { display: none; }
 .vehicle-art { display: block; width: 100%; max-height: clamp(88px, 30vw, 196px); object-fit: contain; }
-#air-vehicles .vehicle-preview{display:flex;justify-content:center;gap:4px}
-#air-vehicles .vehicle-preview img{width:min(47%,72px)}
 
 .feedback { margin-top: 24px; text-align: center; }
 .feedback a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 6px 16px; color: inherit; text-underline-offset: 3px; }
@@ -293,7 +293,7 @@ main > nav.hiiro-links { width: 100%; }
 <button type="button" data-kind="train" aria-pressed="true"><span class="vehicle-preview" aria-hidden="true"><img src="assets/go-shinkansen-blue.webp" alt=""></span><span class="vehicle-name">しんかんせん</span></button>
 <button type="button" data-kind="bus" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/bus-gold.webp" alt=""></span><span class="vehicle-name">バス</span></button>
 <button type="button" id="work-vehicles" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/go-fire-engine.webp" alt=""></span><span id="work-label">はたらく のりもの</span></button>
-<button type="button" id="air-vehicles" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/plane.webp" alt=""><img src="assets/helicopter.webp" alt=""></span><span id="air-label">そらとぶ のりもの</span></button>
+<button type="button" id="air-vehicles" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/plane.webp" alt=""></span><span id="air-label">そらとぶ のりもの</span></button>
 </div>
 <p class="random-note" id="random-note">いきさきは ランダム！どこに つくかは おたのしみ</p>
 <div class="panel"><h2 id="stamps-label">スタンプ</h2><div class="stamps" id="stamps"></div></div>
@@ -419,6 +419,8 @@ workAction.addEventListener('click', () => {
 });
 const airVehicles = document.querySelector('#air-vehicles');
 const airKinds = ['plane', 'helicopter'];
+const airLandscape = scene.querySelector('.air-landscape');
+const airRoutes = ['coast', 'snow', 'sunset'];
 let airSelected = false;
 let workSelected = false;
 airVehicles.addEventListener('click', () => {
@@ -709,7 +711,11 @@ function startTrip() {
   tripDuration = speeds[speed];
   scene.style.setProperty('--trip-time', tripDuration + 's');
   if (workSelected) kind = workKinds[Math.floor(Math.random() * workKinds.length)];
-  if (airSelected) kind = airKinds[Math.floor(Math.random() * airKinds.length)];
+  if (airSelected) {
+    kind = airKinds[Math.floor(Math.random() * airKinds.length)];
+    const nextRoutes = airRoutes.filter(route => route !== airLandscape.dataset.route);
+    airLandscape.dataset.route = nextRoutes[Math.floor(Math.random() * nextRoutes.length)];
+  }
   if (kind === 'train') {
     const variants = trainVariants.filter(variant => variant !== trainVariant && (variant.id !== 'yellow' || yellowUnlocked));
     trainVariant = variants[Math.floor(Math.random() * variants.length)];
