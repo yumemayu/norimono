@@ -299,6 +299,11 @@ main > nav.hiiro-links { width: 100%; }
 @media (orientation: landscape) and (min-width: 620px) { #work-options { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 .scene:is(.plane,.helicopter) .vehicle { bottom: 34%; z-index: 2; }
 .scene .stop { visibility: visible; z-index: 3; top: 12px; right: 12px; max-width: calc(100% - 24px); font-size: clamp(14px, 2vw, 20px); }
+
+/* One large primary control, reachable even before arrival. */
+.go-row{align-items:stretch}.go-row .go{min-height:138px;font-size:clamp(38px,6vw,64px);border:4px solid #fff8cf;box-shadow:0 7px #084733}.go-icon{width:64px;font-size:40px}.go-row .horn{width:76px}.go:active{transform:translateY(4px);box-shadow:0 3px #084733}
+.hiiro-links .book{--banner-color:#d4eee1}
+@media (orientation:landscape) and (min-width:740px){main > .scene{grid-row:2 / 6;min-height:clamp(290px,58dvh,530px)}main > .go-row{grid-row:2 / 4;flex-wrap:wrap;align-self:stretch}.go-row .go{flex-basis:100%;min-height:clamp(150px,30dvh,240px)}.go-row .horn{min-height:64px;margin-left:auto}main > .message{grid-row:4}main > #work-action{grid-row:5}}
 </style>
 <link rel="stylesheet" href="./assets/train-game-links.css">
 <main>
@@ -312,16 +317,7 @@ main > nav.hiiro-links { width: 100%; }
 <div class="go-row"><button type="button" class="go" id="go"><span class="go-icon" aria-hidden="true">→</span><span id="go-label">しゅっぱつ！</span></button><button type="button" class="horn" id="horn" aria-label="ラッパ">📯</button></div>
 <p class="message" id="message" role="status"></p>
 <button type="button" id="work-action" hidden></button>
-<div class="choices" aria-label="のりものを えらぶ">
-<button type="button" data-kind="train" aria-pressed="true"><span class="vehicle-preview" aria-hidden="true"><img src="assets/go-shinkansen-blue.webp" alt=""></span><span class="vehicle-name">しんかんせん</span></button>
-<button type="button" data-kind="bus" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/bus-gold.webp" alt=""></span><span class="vehicle-name">バス</span></button>
-<button type="button" id="work-vehicles" aria-haspopup="dialog" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/go-fire-engine.webp" alt=""></span><span id="work-label">はたらく のりもの</span></button>
-<button type="button" id="air-vehicles" aria-pressed="false"><span class="vehicle-preview" aria-hidden="true"><img src="assets/plane.webp" alt=""></span><span id="air-label">そらとぶ のりもの</span></button>
-</div>
-<dialog id="work-picker" aria-labelledby="work-picker-title">
-  <div class="work-picker-header"><h2 id="work-picker-title">すきな のりものを えらぼう</h2><button id="close-work-picker" type="button" aria-label="とじる">×</button></div>
-  <div id="work-options"></div>
-</dialog>
+
 <p class="random-note" id="random-note">いきさきは ランダム！どこに つくかは おたのしみ</p>
 <div class="panel"><h2 id="stamps-label">スタンプ</h2><div class="stamps" id="stamps"></div></div>
 <div class="panel"><h2 id="speed-label">はやさ</h2><div class="speeds" id="speeds"><button type="button" data-speed="slow" aria-pressed="false">🐢 <span class="speed-name">ゆっくり</span></button><button type="button" data-speed="normal" aria-pressed="true">🚃 <span class="speed-name">ふつう</span></button><button type="button" data-speed="fast" aria-pressed="false">🚀 <span class="speed-name">はやい</span></button></div></div>
@@ -331,6 +327,7 @@ main > nav.hiiro-links { width: 100%; }
 <output id="volume-value" for="volume">40%</output>
 </div>
 <nav class="hiiro-links" aria-label="ほかのでんしゃゲーム">
+<a class="book" href="./vehicle-book/"><span class="banner-icon" aria-hidden="true">📖</span><span id="book-link-label">のりものずかん</span></a>
   <a class="gacha" href="./train-gacha/"><span class="banner-icon" aria-hidden="true">🎁</span><span id="gacha-link-label">でんしゃガチャ</span></a>
   <a class="bento" href="./train-bento/"><span class="banner-icon" aria-hidden="true">🍱</span><span id="bento-link-label">でんしゃのおべんとうばこ</span></a>
   <a class="pairs" href="./train-pairs/"><span class="banner-icon" aria-hidden="true">🚆</span><span id="pairs-link-label">でんしゃペア</span></a>
@@ -370,7 +367,7 @@ const enStops = {
   delivery: ['Red House', 'Blue House'],
 };
 const L = {
-  ja: { title: 'のりもの しゅっぱつ！', choose: 'のりものを えらぶ', volume: 'おんりょう', sound: 'おとの せってい', on: '🔊 おとオン', off: '🔇 おとオフ', go: 'しゅっぱつ！', going: 'はしってるよ', flying: 'とんでるよ' },
+  ja: { title: 'のりもの しゅっぱつ！', choose: 'のりものを えらぶ', volume: 'おんりょう', sound: 'おとの せってい', on: '🔊 おとオン', off: '🔇 おとオフ', go: 'ゴー！', going: 'はしってるよ', flying: 'とんでるよ' },
   en: { title: 'Vehicles, Go!', choose: 'Choose a vehicle', volume: 'Volume', sound: 'Sound settings', on: '🔊 Sound on', off: '🔇 Sound off', go: 'Go!', going: 'On the way…', flying: 'Flying…' },
 };
 let lang = 'ja';
@@ -432,7 +429,7 @@ const message = document.querySelector('#message');
 const go = document.querySelector('#go');
 const goLabel = document.querySelector('#go-label');
 const choices = document.querySelectorAll('[data-kind]');
-const workVehicles = document.querySelector('#work-vehicles');
+
 const workActions = {
   fire: { ja: 'みずを だす', en: 'Spray water', icon: '💦' },
   ladder: { ja: 'はしごを のばす', en: 'Raise ladder', icon: '🪜' },
@@ -461,56 +458,8 @@ function tapVehicle() {
 }
 workAction.addEventListener('click', tapVehicle);
 sceneTap.addEventListener('click', tapVehicle);
-const airVehicles = document.querySelector('#air-vehicles');
-const airKinds = ['plane', 'helicopter'];
 const airLandscape = scene.querySelector('.air-landscape');
 const airRoutes = ['coast', 'snow', 'sunset'];
-let airSelected = false;
-let workSelected = false;
-airVehicles.addEventListener('click', () => {
-  if (airSelected) return;
-  const resume = interruptTrip();
-  airSelected = true;
-  workSelected = false;
-  kind = airKinds[0];
-  finishSelection(resume);
-});
-const workPicker = document.querySelector('#work-picker');
-const workOptions = document.querySelector('#work-options');
-function chooseWorkVehicle(vehicle) {
-  interruptTrip();
-  workSelected = vehicle;
-  airSelected = false;
-  kind = vehicle === 'random' ? workKinds[0] : vehicle;
-  workPicker.close();
-  finishSelection(true);
-}
-workVehicles.addEventListener('click', () => {
-  workPicker.showModal();
-});
-document.querySelector('#close-work-picker').addEventListener('click', () => workPicker.close());
-const workTiles = ['excavator', 'fire', 'ambulance', 'police', 'garbage', 'dump', 'mixer', 'ladder', 'delivery', 'random'].map(vehicle => {
-  const tile = document.createElement('button');
-  tile.type = 'button';
-  const preview = vehicleArtPaths[vehicle] || (vehicle === 'delivery' ? 'assets/delivery.webp' : '');
-  if (preview) {
-    const img = document.createElement('img');
-    img.src = preview;
-    img.alt = '';
-    tile.append(img);
-  } else {
-    const icon = document.createElement('span');
-    icon.className = 'random-icon';
-    icon.setAttribute('aria-hidden', 'true');
-    icon.textContent = '🎲';
-    tile.append(icon);
-  }
-  const label = document.createElement('span');
-  tile.append(label);
-  tile.addEventListener('click', () => chooseWorkVehicle(vehicle));
-  workOptions.append(tile);
-  return { vehicle, label };
-});
 const progress = Object.fromEntries(Object.keys(routes).map(vehicle => [vehicle, 0]));
 let kind = 'train';
 let phase = 'ready';
@@ -572,8 +521,8 @@ for (const k of Object.keys(routes)) {
 }
 function saveStamps() { try { localStorage.setItem('norimono-stamps', JSON.stringify(stamps)); } catch {} }
 const T = {
-  ja: { random: 'いきさきは ランダム！どこに つくかは おたのしみ', stamps: 'スタンプ', speed: 'はやさ', horn: 'ラッパ', slow: 'ゆっくり', normal: 'ふつう', fast: 'はやい' },
-  en: { random: 'The destination is a surprise!', stamps: 'Stamps', speed: 'Speed', horn: 'Horn', slow: 'Slow', normal: 'Normal', fast: 'Fast' },
+  ja: { random: 'はしっている ときも ゴーで つぎの のりもの！', stamps: 'スタンプ', speed: 'はやさ', horn: 'ラッパ', slow: 'ゆっくり', normal: 'ふつう', fast: 'はやい' },
+  en: { random: 'Press Go anytime for another vehicle!', stamps: 'Stamps', speed: 'Speed', horn: 'Horn', slow: 'Slow', normal: 'Normal', fast: 'Fast' },
 };
 const horn = document.querySelector('#horn');
 horn.addEventListener('click', () => {
@@ -728,14 +677,12 @@ function render() {
     ? (trainVariant ? (lang === 'en' ? trainVariant.en : trainVariant.name) : (lang === 'en' ? enNames.train : route.name))
     : (lang === 'en' ? enNames[kind] : route.name);
   stopLabel.textContent = stopText;
-  go.disabled = phase === 'moving';
-  airVehicles.setAttribute('aria-pressed', String(airSelected));
-  workVehicles.setAttribute('aria-pressed', String(Boolean(workSelected)));
+  go.disabled = false;
   sceneTap.setAttribute('aria-label', action ? action[lang] : (lang === 'en' ? 'Tap the vehicle' : 'のりものを タップ'));
   sceneTap.classList.toggle('work-ready', phase === 'arrived' && Boolean(action));
   const flying = kind === 'plane' || kind === 'helicopter';
   const movement = flying ? L[lang].flying : L[lang].going;
-  goLabel.textContent = go.disabled ? movement : L[lang].go;
+  goLabel.textContent = L[lang].go;
   if (phase === 'moving') {
     message.textContent = lang === 'en' ? vehicleName + (flying ? ' is flying!' : ' is on its way!') : vehicleName + 'が ' + movement + '！';
   } else if (phase === 'arrived') {
@@ -743,9 +690,7 @@ function render() {
       ? (lang === 'en' ? '🎉 You made it to ' + stopText + '! Great ride!' : '🎉 ' + stopText + 'に とうちゃく！おつかれさま！')
       : (lang === 'en' ? 'Arrived at ' + stopText + '! Great ride!' + (kind === 'police' || flying || action ? '' : ' The doors opened.') : stopText + 'に とうちゃく！おつかれさま！' + (kind === 'police' || flying || action ? '' : ' ドアが あいたよ'));
   } else {
-    message.textContent = workSelected || airSelected
-      ? (lang === 'en' ? 'Which work vehicle will go?' : 'どの のりものが でるかな？')
-      : lang === 'en' ? 'Leaving from ' + stopText + '!' : stopText + 'から しゅっぱつ！';
+    message.textContent = lang === 'en' ? 'Press Go! Which vehicle will appear?' : 'ゴーを おすと なにが でるかな？';
   }
   choices.forEach(button => {
     button.setAttribute('aria-pressed', String(button.dataset.kind === kind));
@@ -768,25 +713,16 @@ function finishSelection(resume) {
   else render();
 }
 
-choices.forEach(button => button.addEventListener('click', () => {
-  if (kind === button.dataset.kind && !workSelected && !airSelected) return;
-  const resume = interruptTrip();
-  kind = button.dataset.kind;
-  workSelected = false;
-  airSelected = false;
-  finishSelection(resume);
-}));
-
 go.addEventListener('click', startTrip);
 
 function startTrip() {
-  if (phase === 'moving') return;
+  interruptTrip();
+  const candidates = Object.keys(routes).filter(vehicle => vehicle !== kind);
+  kind = candidates[Math.floor(Math.random() * candidates.length)];
   celebration = false;
   tripDuration = speeds[speed];
   scene.style.setProperty('--trip-time', tripDuration + 's');
-  if (workSelected === 'random') kind = workKinds[Math.floor(Math.random() * workKinds.length)];
-  if (airSelected) {
-    kind = airKinds[Math.floor(Math.random() * airKinds.length)];
+  if (kind === 'plane' || kind === 'helicopter') {
     const nextRoutes = airRoutes.filter(route => route !== airLandscape.dataset.route);
     airLandscape.dataset.route = nextRoutes[Math.floor(Math.random() * nextRoutes.length)];
   }
@@ -846,22 +782,16 @@ function startTrip() {
 }
 
 function applyLang() {
-  document.querySelector('#work-picker-title').textContent = lang === 'en' ? 'Choose a vehicle' : 'すきな のりものを えらぼう';
-  document.querySelector('#close-work-picker').setAttribute('aria-label', lang === 'en' ? 'Close' : 'とじる');
-  workTiles.forEach(({ vehicle, label }) => {
-    label.textContent = vehicle === 'random' ? (lang === 'en' ? 'Surprise me' : 'おまかせ') : (lang === 'en' ? enNames[vehicle] : routes[vehicle].name);
-  });
+  document.querySelector('#book-link-label').textContent = lang === 'en' ? 'Vehicle Book' : 'のりものずかん';
   document.querySelector('#feedback-link').textContent = lang === 'en' ? 'Send feedback' : 'ご要望を送る';
   document.querySelector('.hiiro-links').setAttribute('aria-label', lang === 'en' ? 'More train games' : 'ほかのでんしゃゲーム');
   document.querySelector('#pairs-link-label').textContent = lang === 'en' ? 'Train Pairs' : 'でんしゃペア';
   document.querySelector('#bento-link-label').textContent = lang === 'en' ? 'Train Bento Box' : 'でんしゃのおべんとうばこ';
   document.querySelector('#gacha-link-label').textContent = lang === 'en' ? 'Train Gacha' : 'でんしゃガチャ';
-  document.querySelector('#air-label').textContent = lang === 'en' ? 'Flying vehicles' : 'そらとぶ のりもの';
-  document.querySelector('#work-label').textContent = lang === 'en' ? 'Work vehicles' : 'はたらく のりもの';
   document.documentElement.lang = lang;
   document.title = L[lang].title;
   document.querySelector('#title').textContent = L[lang].title;
-  document.querySelector('.choices').setAttribute('aria-label', L[lang].choose);
+
   choices.forEach(button => {
     button.querySelector('.vehicle-name').textContent = lang === 'en' ? enNames[button.dataset.kind] : routes[button.dataset.kind].name;
   });
@@ -903,3 +833,4 @@ playArea?.addEventListener('pointerdown', event => {
 });
 </script>
 </html>
+
