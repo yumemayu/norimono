@@ -47,13 +47,11 @@ button:focus-visible{outline:4px solid #2260a7;outline-offset:4px}
   @keyframes puff{from{transform:scale(.65);opacity:.9}to{transform:translate(14px,-25px) scale(1.2);opacity:0}}
 }
  .header-actions{display:flex;gap:8px;align-items:center}
-#lang,.game-links a{position:relative;width:100%;min-height:98px;padding:14px 16px 24px;border:3px solid #244e46;border-radius:20px;background:linear-gradient(#bfe6f7 0 62%,#a8d89a 62% 100%);color:#213c3b;box-shadow:0 5px 0 #a3c9bb;overflow:hidden;font:inherit}
+#lang{position:relative;width:100%;min-height:98px;padding:14px 16px 24px;border:3px solid #244e46;border-radius:20px;background:linear-gradient(#bfe6f7 0 62%,#a8d89a 62% 100%);color:#213c3b;box-shadow:0 5px 0 #a3c9bb;overflow:hidden;font:inherit}
 #lang{cursor:pointer}
-.game-links{display:block;margin-top:52px}
-.game-links a{display:flex;align-items:center;justify-content:center;gap:12px;text-decoration:none}.game-links a::after{content:"";position:absolute;left:0;right:0;bottom:7px;height:9px;background:linear-gradient(#526d62 0 3px,transparent 3px 6px,#526d62 6px 9px),repeating-linear-gradient(90deg,#ba906e 0 10px,#e5d7bd 10px 26px)}.game-links a:active{transform:translateY(3px);box-shadow:0 2px 0 #a3c9bb}.banner-icon{font-size:2.3rem;line-height:1}.banner-title{font-size:clamp(1.35rem,5.4vw,1.9rem);font-weight:700;letter-spacing:.02em}
-.game-links a:focus-visible{outline:4px solid #2260a7;outline-offset:4px}
 @media(max-width:360px){header{flex-wrap:wrap}}
 </style>
+<link rel="stylesheet" href="../assets/train-game-links.css">
 <main>
 <header><h1 id="title">でんしゃガチャ</h1><div class="header-actions"><button id="lang" type="button" lang="en">English</button><button id="sound" type="button" aria-label="おと" aria-pressed="true">🔊</button></div></header>
 <section class="stage" aria-label="でんしゃのホーム">
@@ -75,8 +73,9 @@ button:focus-visible{outline:4px solid #2260a7;outline-offset:4px}
   <p id="name" aria-live="polite"></p>
 </section>
 <button id="next" type="button"><span aria-hidden="true">▶</span> <span id="next-label">つぎのでんしゃ</span></button>
-<nav class="game-links" aria-label="ほかのでんしゃゲーム">
-  <a href="https://yumemayu.github.io/norimono/"><span class="banner-icon" aria-hidden="true">🚃</span> <span class="banner-title" data-en="Let’s Ride!">のりもの しゅっぱつ！</span></a>
+<nav class="hiiro-links" aria-label="ほかのでんしゃゲーム">
+  <a class="ride" href="../"><span class="banner-icon" aria-hidden="true">🚃</span><span data-en="Let’s Ride!">のりもの しゅっぱつ！</span></a>
+  <a class="bento" href="../train-bento/"><span class="banner-icon" aria-hidden="true">🍱</span><span data-en="Train Bento Box">でんしゃのおべんとうばこ</span></a>
 </nav>
 </main>
 <script>
@@ -85,7 +84,7 @@ const langButton = document.querySelector('#lang');
 const title = document.querySelector('#title');
 const nextLabel = document.querySelector('#next-label');
 const stage = document.querySelector('.stage');
-const gamesNav = document.querySelector('.game-links');
+const gamesNav = document.querySelector('.hiiro-links');
 const trainNamesEn = ['Green commuter train', 'Blue bullet train', 'Red bullet train',
   'Green bullet train', 'Yellow bullet train', 'Streetcar', 'Steam locomotive'];
 let lang = 'ja';
