@@ -1,0 +1,2 @@
+// Feedback never queues audio or blocks another tap.
+(()=>{let active,timer;document.addEventListener('pointerdown',event=>{const button=event.target.closest('button');if(!button||button.disabled||event.button!==0)return;active?.classList.remove('hiiro-tapped');clearTimeout(timer);active=button;button.classList.add('hiiro-tapped');timer=setTimeout(()=>button.classList.remove('hiiro-tapped'),280);},true);})();

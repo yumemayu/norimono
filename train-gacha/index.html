@@ -69,8 +69,9 @@ main > nav.hiiro-links { width: 100%; }
   #train-button .car img { max-height: 39dvh; object-fit: contain; }
   #name { margin: 7px; font-size: 1.05rem; }
 }
-</style>
+#train-button{touch-action:manipulation;min-height:170px}#next{background:#c8e8c8} .train-area{cursor:pointer}</style>
 <link rel="stylesheet" href="../assets/train-game-links.css">
+<link rel="stylesheet" href="../assets/toddler-controls.css?v=1"><script src="../assets/toddler-controls.js?v=1" defer></script>
 <main>
 <header><h1 id="title">でんしゃガチャ</h1><div class="header-actions"><button id="lang" type="button" lang="en">English</button><button id="sound" type="button" aria-label="おと" aria-pressed="true">🔊</button></div></header>
 <section class="stage" aria-label="でんしゃのホーム">
@@ -219,17 +220,21 @@ function finishArrival() {
   trainButton.removeAttribute('aria-disabled');
 }
 
+let arrivalVersion=0,arrivalTimer,crossingTimer,arrivalAnimation;
 const bringNextTrain = () => {
-  if (arriving) return;
+  const trip = ++arrivalVersion;
+  clearTimeout(arrivalTimer);
+  clearTimeout(crossingTimer);
+  arrivalAnimation?.cancel();
   arriving = true;
-  next.setAttribute('aria-disabled','true');
-  trainButton.setAttribute('aria-disabled','true');
+
   resetEffects();
   crossing.dataset.closed = 'true';
   crossing.dataset.light = 'left';
   playNotes([690, 690], .4);
-  setTimeout(() => { crossing.dataset.light = 'right'; }, 400);
-  setTimeout(() => {
+  crossingTimer = setTimeout(() => { if(trip === arrivalVersion) crossing.dataset.light = 'right'; }, 160);
+  arrivalTimer = setTimeout(() => {
+    if (trip !== arrivalVersion) return;
     crossing.dataset.light = 'left';
     const previous = index;
     index = (index + 1 + Math.floor(Math.random() * (trains.length - 1))) % trains.length;
@@ -247,23 +252,24 @@ const bringNextTrain = () => {
       finishArrival();
       return;
     }
-    const arrival = trainButton.animate(
+    const arrival = arrivalAnimation = trainButton.animate(
       [{transform:'translateX(-115%)'},{transform:'translateX(0)'}],
       {duration:620,easing:'cubic-bezier(.18,.8,.25,1)'}
     );
-    arrival.finished.then(finishArrival, finishArrival);
-  }, 800);
+    const finish=()=>{if(trip===arrivalVersion)finishArrival();};
+    arrival.finished.then(finish,finish);
+  }, 280);
 };
 next.addEventListener('click', bringNextTrain);
 // Babies play by banging the whole screen, so any tap that is not on
 // a control or a link brings the next train too.
 document.addEventListener('click', (event) => {
-  if (event.target.closest('#next, #sound, #lang, a')) return;
+  if (!event.target.closest('.stage') || event.target.closest('#train-button')) return;
   bringNextTrain();
 });
 
 trainButton.addEventListener('click', () => {
-  if (arriving) return;
+  if (arriving) { bringNextTrain(); return; }
   if (index === 0) {
     const open = doors[0].hidden;
     doors.forEach(door => { door.hidden = !open; });
@@ -288,3 +294,4 @@ sound.addEventListener('click', () => {
 showTrain();
 renderLanguage();
 </script>
+

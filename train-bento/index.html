@@ -48,8 +48,15 @@ main > :is(header, #hint, nav, footer) { grid-column: 1 / -1; }
 #again { min-height: 48px; }
 main > nav.hiiro-links { width: 100%; }
 }
+
+.piece{min-height:130px!important;padding:12px!important;font-size:clamp(17px,2.2vw,24px);position:relative}.piece img{height:clamp(76px,13dvh,125px)!important}.piece,.slot{touch-action:none}
+.piece::after{content:'';position:absolute;inset:-6px;pointer-events:auto}#ghost{transform:translate(-50%,-85%)!important;filter:drop-shadow(0 5px 4px #49351d40)}
+#lid:not(:disabled){box-shadow:inset 0 0 0 6px #ffdf61;background:#fff69e55}
+@media(orientation:landscape) and (min-width:740px){#tray{gap:16px}.piece{min-height:130px!important}}
+@media(max-width:550px){.piece{min-height:112px!important;padding:8px!important;font-size:16px}.piece img{height:70px!important}}
 </style>
 <link rel="stylesheet" href="../assets/train-game-links.css">
+<link rel="stylesheet" href="../assets/toddler-controls.css?v=1"><script src="../assets/toddler-controls.js?v=1" defer></script>
 <main>
 <header><h1 id="title"></h1><button id="language" type="button"></button></header>
 <p id="hint" role="status"></p>
@@ -167,7 +174,7 @@ function pack(index) {
   sound(isFood ? [690, 880] : [290, 410], .046, .11);
   selected = null;
   render();
-  if (!isFood && placed.every(Boolean)) $('#lid').focus();
+  if (!isFood && placed.every(Boolean)) $('#lid').focus({preventScroll:true});
 }
 function beginDrag(event,train) {
   if (!event.isPrimary || event.button !== 0 || !train) return;
@@ -227,11 +234,15 @@ function endDrag(event) {
     drag.ghost.remove();
     suppressClick = drag.source;
     if (event.type === 'pointerup') {
-      const index = slots.findIndex(slot => {
-        const bounds = slot.getBoundingClientRect();
-        return event.clientX >= bounds.left-7 && event.clientX <= bounds.right+7 &&
-          event.clientY >= bounds.top-7 && event.clientY <= bounds.bottom+7 && fits(selected,slots.indexOf(slot));
-      });
+      // Rank nearby compatible slots so generous targets never prefer the wrong neighbour.
+      const margin = Math.min(48, Math.max(28, window.innerWidth * .035));
+      const targets = slots.map((slot,index) => {
+        const r=slot.getBoundingClientRect();
+        const dx=Math.max(r.left-event.clientX,0,event.clientX-r.right);
+        const dy=Math.max(r.top-event.clientY,0,event.clientY-r.bottom);
+        return {index,distance:Math.hypot(dx,dy),center:Math.hypot(event.clientX-(r.left+r.right)/2,event.clientY-(r.top+r.bottom)/2)};
+      }).filter(t=>fits(selected,t.index)&&t.distance<=margin).sort((a,b)=>a.distance-b.distance||a.center-b.center);
+      const index = targets[0]?.index ?? -1;
       if (index >= 0) pack(index);
     }
   }
@@ -242,3 +253,4 @@ window.addEventListener('pointercancel',endDrag);
 start();
 </script>
 <script>(()=>{const update=()=>document.querySelector('#atlas-banner-label').textContent=document.documentElement.lang==='en'?'Vehicle Book':'のりものずかん';new MutationObserver(update).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});update();})();</script></html>
+
