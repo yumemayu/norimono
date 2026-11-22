@@ -17,10 +17,6 @@
   const soundGroup=document.querySelector('.sound');
   if(soundGroup)body.append(soundGroup);
   else { const sound=document.querySelector('#sound');if(sound)body.append(sound); }
-  const speed=document.querySelector('#speed-label')?.parentElement;
-  if(speed)body.append(speed);
-  const mode=document.querySelector('#mode');
-  if(mode)body.append(mode);
   const update=()=>{
     const en=document.documentElement.lang==='en';
     summary.textContent=en?'⚙ Grown-up settings':'⚙ おとなの せってい';
