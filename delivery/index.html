@@ -37,13 +37,31 @@
 .vehicles button.try-again{animation:wiggle .34s ease-out}
 @keyframes wiggle{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 @media(prefers-reduced-motion:reduce){.journey.arrived .sparkle,.vehicles button.try-again{animation:none}}
+
+.route-world{position:absolute;inset:0 auto 0 0;width:155%;background:linear-gradient(#bce7ff,#fff3dc 66%,#b8d994 66%);overflow:hidden}
+.journey[data-route="truck"] .route-world{background:linear-gradient(#bce7ff,#fff3dc 68%,#96a3a0 68% 92%,#bfdc9e 92%)}
+.journey[data-route="heli"] .route-world{background:linear-gradient(#bde7ff,#eafafa 65%,#83cfe6 65%,#a6e5e9)}
+.journey[data-route="plane"] .route-world{background:linear-gradient(#b7d7fa,#ffebdc 69%,#8796a3 69% 94%,#bcdbad 94%)}
+.route-world::after{content:"";position:absolute;left:0;right:0;bottom:16%;height:3px;background:repeating-linear-gradient(90deg,#fffae3 0 21px,transparent 21px 39px);z-index:-1}
+.route-world{isolation:isolate}
+.journey[data-route="heli"] .route-world::after{bottom:9%;height:17%;opacity:.5;background:radial-gradient(ellipse at center,#fff 0 27%,transparent 29%) 0 0/76px 8px repeat}
+.scenery{inset:0;opacity:1;letter-spacing:normal;pointer-events:none;z-index:-1}
+.scenery span{position:absolute;left:var(--x);font-size:clamp(21px,5vw,42px);line-height:1;white-space:nowrap}
+.scenery .sky{top:var(--y);font-size:clamp(20px,4.5vw,35px)}
+.scenery .land{bottom:27%}
+.destination-art{right:4%;bottom:24%}
+.handoff{right:8%;bottom:27%}
+.courier{width:18.7%}
+.sound-toggle{padding:6px 12px;font-size:14px;margin-top:8px}
 </style>
 <main>
 <h1>のりもの おとどけ便</h1>
+<button class="sound-toggle" id="sound" type="button" aria-pressed="true">🔊 おと</button>
 <section class="parcel">
 <p id="message" role="status"></p>
 <div class="journey" id="journey">
-  <span class="scenery" aria-hidden="true">☁ ☁</span>
+  <div class="route-world" id="route-world">
+  <div class="scenery" id="scenery" aria-hidden="true"></div>
   <span class="destination-art" id="destination-art" aria-hidden="true"></span>
   <button type="button" class="depot" id="depot">
     <span class="parcel-icon" id="parcel-icon" aria-hidden="true"></span>
@@ -52,6 +70,7 @@
   <div class="courier" id="courier" hidden aria-hidden="true"><img id="courier-art" alt=""><span class="cargo" id="cargo"></span></div>
   <span class="handoff" id="handoff" hidden aria-hidden="true"></span>
   <span class="sparkle" id="sparkle" aria-hidden="true"></span>
+  </div>
 </div>
 </section>
 <div class="vehicles" id="vehicles"><button type="button" data-vehicle="truck"><img alt="" src="../assets/delivery.webp">トラック</button>
@@ -80,6 +99,59 @@ const progress = document.getElementById('progress');
 const next = document.getElementById('next');
 const buttons = document.querySelectorAll('[data-vehicle]');
 const journey = document.getElementById('journey');
+const world = document.getElementById('route-world');
+const scenery = document.getElementById('scenery');
+const soundButton = document.getElementById('sound');
+const landmarks = {
+  truck: [[14,'🌳🌷'],[32,'🏡'],[50,'🌼🌳'],[69,'🏠'],[84,'🌷']],
+  heli: [[13,'🌴'],[35,'⛵'],[54,'🐬'],[72,'⛵'],[85,'🌴']],
+  plane: [[14,'🌳'],[34,'⛰️'],[49,'🎈'],[69,'⛰️'],[82,'🗼']]
+};
+let cameraAnimation;
+let audioContext;
+
+function tone(notes) {
+  if (soundButton.getAttribute('aria-pressed') !== 'true') return;
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContext) return;
+  audioContext ??= new AudioContext();
+  if (audioContext.state === 'suspended') audioContext.resume().catch(() => {});
+  const start = audioContext.currentTime;
+  for (const [frequency, delay, duration] of notes) {
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    const time = start + delay;
+    oscillator.frequency.value = frequency;
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+    gain.gain.setValueAtTime(.001,time);
+    gain.gain.exponentialRampToValueAtTime(.075,time + .025);
+    gain.gain.exponentialRampToValueAtTime(.001,time + duration);
+    oscillator.start(time);
+    oscillator.stop(time + duration);
+  }
+}
+
+soundButton.onclick = () => {
+  const enabled = soundButton.getAttribute('aria-pressed') !== 'true';
+  soundButton.setAttribute('aria-pressed', String(enabled));
+  soundButton.textContent = enabled ? '🔊 おと' : '🔇 おと';
+  if (enabled) tone([[523,0,.14]]);
+  else audioContext?.suspend().catch(() => {});
+};
+
+function drawScenery(vehicle) {
+  scenery.replaceChildren();
+  for (const [x, art, y] of [[8,'☀️',11],[28,'☁️',10],[47,'☁️',18],[63,'☁️',8],[80,'☁️',17],...landmarks[vehicle]]) {
+    const item = document.createElement('span');
+    item.className = y ? 'sky' : 'land';
+    item.style.setProperty('--x', x + '%');
+    item.style.setProperty('--y', y + '%');
+    item.textContent = art;
+    scenery.append(item);
+  }
+}
+
 const courier = document.getElementById('courier');
 const depot = document.getElementById('depot');
 const parcelIcon = document.getElementById('parcel-icon');
@@ -105,6 +177,8 @@ function showJob() {
   const job = jobs[index];
   delivered = false;
   travelAnimation?.cancel();
+  cameraAnimation?.cancel();
+  world.style.transform = '';
   courier.style.transform = '';
   courier.hidden = true;
   depot.hidden = false;
@@ -113,6 +187,7 @@ function showJob() {
   handoff.hidden = true;
   vehicles.classList.remove('cargo-picked');
   journey.dataset.route = job.vehicle;
+  drawScenery(job.vehicle);
   destinationArt.textContent = job.arrival;
   journey.classList.remove('arrived','complete');
   buttons.forEach(button => button.classList.remove('try-again'));
@@ -144,6 +219,7 @@ async function choose(button) {
     return;
   }
   delivered = true;
+  tone([[392,0,.14],[523,.09,.18]]);
   vehicles.classList.remove('cargo-picked');
   buttons.forEach(option => { option.disabled = true; });
   message.textContent = job.name + 'を のせよう！';
@@ -154,13 +230,21 @@ async function choose(button) {
   cargo.textContent = job.icon;
   await moveParcel(cargo, pickup, 520);
   message.textContent = button.textContent.trim() + 'で しゅっぱつ！';
-  const distance = Math.max(0, journey.clientWidth * .9 - courier.offsetWidth);
+  const scrollDistance = world.offsetWidth - journey.clientWidth;
+  const distance = Math.max(0, world.offsetWidth * .93 - courier.offsetWidth);
+  const duration = 3850;
+  const pan = flightPaths[vehicle].map(({x}) => ({transform:`translateX(${-scrollDistance * x}px)`}));
+  const departure = vehicle === 'truck' ? 196 : vehicle === 'heli' ? 294 : 392;
+  tone([[departure,0,.22],[departure * 1.5,.16,.3]]);
   const frames = flightPaths[vehicle].map(({x,y}) => ({transform: `translate(${distance * x}px,${y}px)`}));
   if (motion.matches) {
     courier.style.transform = frames.at(-1).transform;
+    world.style.transform = pan.at(-1).transform;
   } else {
-    travelAnimation = courier.animate(frames, {duration:2050,easing:'ease-in-out',fill:'forwards'});
-    await travelAnimation.finished;
+    const timing = {duration,easing:'ease-in-out',fill:'forwards'};
+    cameraAnimation = world.animate(pan,timing);
+    travelAnimation = courier.animate(frames,timing);
+    await Promise.all([travelAnimation.finished,cameraAnimation.finished]);
   }
   const dropoff = cargo.getBoundingClientRect();
   cargo.textContent = '';
@@ -169,6 +253,7 @@ async function choose(button) {
   await moveParcel(handoff, dropoff, 500);
   index += 1;
   const complete = index === jobs.length;
+  tone(complete ? [[523,0,.2],[659,.14,.2],[784,.28,.2],[1047,.42,.35]] : [[659,0,.18],[880,.13,.28]]);
   sparkle.textContent = complete ? '🎉' : '✨';
   journey.classList.add('arrived');
   journey.classList.toggle('complete', complete);
