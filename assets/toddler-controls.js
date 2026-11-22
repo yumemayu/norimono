@@ -60,7 +60,6 @@ const norimonoAudio = (() => {
     const en=document.documentElement.lang==='en';
     if (volumeCaption) volumeCaption.textContent = en ? 'Volume' : 'おんりょう';
     summary.textContent=en?'⚙ Grown-up settings':'⚙ おとなの せってい';
-    nav.setAttribute('aria-label',en?'More vehicle games':'ほかの のりものゲーム');
   };
   new MutationObserver(update).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
   update();

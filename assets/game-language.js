@@ -107,6 +107,8 @@
   }
 
   function scan(node) {
+    const element = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+    if (element?.closest('.hiiro-links')) return;
     if (node.nodeType === Node.TEXT_NODE) {
       if (node.parentElement?.closest('script, style, #game-language')) return;
       localize(node, () => node.data, value => { node.data = value; });
@@ -124,6 +126,7 @@
       if (record.type === 'childList') {
         for (const node of record.addedNodes) scan(node);
       } else if (record.type === 'attributes') {
+        if (record.target.closest('.hiiro-links')) continue;
         const attribute = record.target.getAttributeNode(record.attributeName);
         if (attribute) localize(attribute, () => attribute.value, value => { attribute.value = value; });
       } else {

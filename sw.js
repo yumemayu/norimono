@@ -1,7 +1,7 @@
 const scope = new URL(self.registration.scope);
 const prefix = 'offline:' + scope.pathname + ':';
 const live = prefix + 'visited';
-const pack = prefix + 'games-grown-up-settings-v1';
+const pack = prefix + 'games-shared-footer-v1';
 const marker = new URL('offline-ready', scope).href;
 const files = [
   "assets/bus-berry.webp",
@@ -35,6 +35,7 @@ const files = [
   "assets/toddler-controls.css",
   "assets/toddler-controls.js",
   "assets/train-game-links.css",
+  "assets/train-game-links.js",
   "delivery/index.html",
   "icons/icon-180.png",
   "icons/icon-192.png",
