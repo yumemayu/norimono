@@ -248,7 +248,6 @@ main > #work-action { grid-row: 5; min-height: 48px; }
 .choices .vehicle-preview { height: 34px; }
 .choices .vehicle-preview img { max-height: 34px; }
 main > .random-note { margin: 8px 0 0; }
-main > nav.hiiro-links { width: 100%; }
 }
 @media (orientation: landscape) and (740px <= width) and (360px <= height <= 520px) {
   main { gap: 7px 12px; padding: 10px 14px 16px; }
@@ -302,11 +301,11 @@ main > nav.hiiro-links { width: 100%; }
 
 /* One large primary control, reachable even before arrival. */
 .go-row{align-items:stretch}.go-row .go{min-height:138px;font-size:clamp(38px,6vw,64px);border:4px solid #fff8cf;box-shadow:0 7px #084733}.go-icon{width:64px;font-size:40px}.go-row .horn{width:76px}.go:active{transform:translateY(4px);box-shadow:0 3px #084733}
-.hiiro-links .book{--banner-color:#d4eee1}
+
 @media (orientation:landscape) and (min-width:740px){main > .scene{grid-row:2 / 6;min-height:clamp(290px,58dvh,530px)}main > .go-row{grid-row:2 / 4;flex-wrap:wrap;align-self:stretch}.go-row .go{flex-basis:100%;min-height:clamp(150px,30dvh,240px)}.go-row .horn{min-height:64px;margin-left:auto}main > .message{grid-row:4}main > #work-action{grid-row:5}}
 </style>
-<link rel="stylesheet" href="./assets/train-game-links.css">
-<link rel="stylesheet" href="./assets/toddler-controls.css?v=3"><script src="./assets/toddler-controls.js?v=3" defer></script>
+<link rel="stylesheet" href="./assets/train-game-links.css?v=2">
+<link rel="stylesheet" href="./assets/toddler-controls.css?v=5"><script src="./assets/toddler-controls.js?v=5" defer></script>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icons/icon-180.png">
 <script defer src="./offline.js"></script>
@@ -344,7 +343,7 @@ main > nav.hiiro-links { width: 100%; }
 html:lang(ja) .pwa-en, html:not(:lang(ja)) .pwa-ja { display: none; }
 </style>
 <style>main > .norimono-heading { grid-row: 1; }</style>
-<link rel="stylesheet" href="./assets/norimono-layout.css">
+<link rel="stylesheet" href="./assets/norimono-layout.css?v=2">
 <main class="norimono norimono-departure">
 <div class="norimono-heading">
 <div class="topbar"><h1 id="title">のりもの しゅっぱつ！</h1><button type="button" id="lang">English</button></div>
@@ -376,15 +375,8 @@ html:lang(ja) .pwa-en, html:not(:lang(ja)) .pwa-ja { display: none; }
 <label for="volume"><span id="volume-label">おんりょう</span> <input id="volume" type="range" min="0" max="100" value="40"></label>
 <output id="volume-value" for="volume">40%</output>
 </div>
-<nav class="hiiro-links" aria-label="ほかのでんしゃゲーム">
-<a class="book" href="./vehicle-book/"><span class="banner-icon" aria-hidden="true">📖</span><span id="book-link-label">のりものずかん</span></a>
-  <a class="gacha" href="./train-gacha/"><span class="banner-icon" aria-hidden="true">🎁</span><span id="gacha-link-label">でんしゃガチャ</span></a>
-  <a class="bento" href="./train-bento/"><span class="banner-icon" aria-hidden="true">🍱</span><span id="bento-link-label">でんしゃのおべんとうばこ</span></a>
-  <a class="pairs" href="./train-pairs/"><span class="banner-icon" aria-hidden="true">🚆</span><span id="pairs-link-label">でんしゃペア</span></a>
-  <a class="bento" href="./delivery/"><span class="banner-icon" aria-hidden="true">📦</span><span id="delivery-link-label">のりもの おとどけ便</span></a>
-  <a class="book" href="./train-switch/"><span class="banner-icon" aria-hidden="true">🚦</span><span id="switch-link-label">しんごう、どっち？</span></a>
-  <a class="book" href="./town/"><span class="banner-icon" aria-hidden="true">🏘️</span><span id="town-link-label">のりもの まちさんぽ</span></a>
-</nav>
+<script src="./assets/train-game-links.js" defer></script>
+<nav class="hiiro-links" aria-label="ほかの のりものゲーム"></nav>
 <footer class="feedback"><a id="feedback-link" href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer">ご要望を送る</a></footer>
 </main>
 <script>
@@ -832,15 +824,7 @@ function startTrip() {
 }
 
 function applyLang() {
-  document.querySelector('#delivery-link-label').textContent = lang === 'en' ? 'Vehicle Delivery' : 'のりもの おとどけ便';
-  document.querySelector('#switch-link-label').textContent = lang === 'en' ? 'Switch the Tracks!' : 'しんごう、どっち？';
-  document.querySelector('#town-link-label').textContent = lang === 'en' ? 'Vehicle Town Stroll' : 'のりもの まちさんぽ';
-  document.querySelector('#book-link-label').textContent = lang === 'en' ? 'Vehicle Book' : 'のりものずかん';
   document.querySelector('#feedback-link').textContent = lang === 'en' ? 'Send feedback' : 'ご要望を送る';
-  document.querySelector('.hiiro-links').setAttribute('aria-label', lang === 'en' ? 'More train games' : 'ほかのでんしゃゲーム');
-  document.querySelector('#pairs-link-label').textContent = lang === 'en' ? 'Train Pairs' : 'でんしゃペア';
-  document.querySelector('#bento-link-label').textContent = lang === 'en' ? 'Train Bento Box' : 'でんしゃのおべんとうばこ';
-  document.querySelector('#gacha-link-label').textContent = lang === 'en' ? 'Train Gacha' : 'でんしゃガチャ';
   document.documentElement.lang = lang;
   document.title = L[lang].title;
   document.querySelector('#title').textContent = L[lang].title;
