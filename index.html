@@ -328,8 +328,8 @@ main > nav.hiiro-links { width: 100%; }
 <output id="volume-value" for="volume">40%</output>
 </div>
 <nav class="hiiro-links" aria-label="ほかのでんしゃゲーム">
-  <a class="bento" href="./delivery/"><span class="banner-icon" aria-hidden="true">📦</span><span lang="ja">のりもの おとどけ便</span></a>
-  <a class="book" href="./train-switch/"><span class="banner-icon" aria-hidden="true">🚦</span><span lang="ja">しんごう、どっち？</span></a>
+  <a class="bento" href="./delivery/"><span class="banner-icon" aria-hidden="true">📦</span><span id="delivery-link-label">のりもの おとどけ便</span></a>
+  <a class="book" href="./train-switch/"><span class="banner-icon" aria-hidden="true">🚦</span><span id="switch-link-label">しんごう、どっち？</span></a>
 <a class="book" href="./town/"><span class="banner-icon" aria-hidden="true">🏘️</span><span id="town-link-label">のりもの まちさんぽ</span></a>
 <a class="book" href="./vehicle-book/"><span class="banner-icon" aria-hidden="true">📖</span><span id="book-link-label">のりものずかん</span></a>
   <a class="gacha" href="./train-gacha/"><span class="banner-icon" aria-hidden="true">🎁</span><span id="gacha-link-label">でんしゃガチャ</span></a>
@@ -786,6 +786,8 @@ function startTrip() {
 }
 
 function applyLang() {
+  document.querySelector('#delivery-link-label').textContent = lang === 'en' ? 'Vehicle Delivery' : 'のりもの おとどけ便';
+  document.querySelector('#switch-link-label').textContent = lang === 'en' ? 'Switch the Tracks!' : 'しんごう、どっち？';
   document.querySelector('#town-link-label').textContent = lang === 'en' ? 'Vehicle Town Stroll' : 'のりもの まちさんぽ';
   document.querySelector('#book-link-label').textContent = lang === 'en' ? 'Vehicle Book' : 'のりものずかん';
   document.querySelector('#feedback-link').textContent = lang === 'en' ? 'Send feedback' : 'ご要望を送る';

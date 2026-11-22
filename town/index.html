@@ -9,9 +9,14 @@ main.bigger{position:fixed;inset:0;z-index:1;max-width:none;background:#faf2dc;d
 main.bigger svg{flex:1;min-height:0;height:100%;width:100%;margin-bottom:0}
 main.bigger #status{flex:none}
 .riverside-art{filter:saturate(.83) contrast(.93) brightness(1.035)}
+#game-language{min-height:44px;padding:0 12px;border:2px solid #e9dfcd;border-radius:12px;background:#fff;color:#28433e;font:700 14px system-ui;white-space:nowrap}
+.game-heading{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.game-heading h1{margin-block:0}
+.town-games{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;color:#463b33}
 </style>
-<main><header><h1>のりもの まちさんぽ</h1><div class="actions"><button id="bigger" aria-pressed="false">Bigger</button><button id="sound" aria-pressed="false">おと オフ</button></div></header>
+<main><header><h1>のりもの まちさんぽ</h1><button id="game-language" type="button" lang="en">English</button><div class="actions"><button id="bigger" aria-pressed="false">おおきく</button><button id="sound" aria-pressed="false">おと オフ</button></div></header>
 <nav aria-label="まちをえらぶ"></nav>
+<a class="town-games" href="../">🏠 のりもの一覧</a>
 <svg id="map" viewBox="0 0 900 600" aria-label="くるまがはしるまち"><g id="land"></g><g id="roads"></g><g id="places"></g><g id="traffic"></g></svg>
 <p id="status" aria-live="polite">くるまを タップしてね</p></main>
 <script>
@@ -121,7 +126,7 @@ map.addEventListener('click',event=>{
 function setBigger(on){
   main.classList.toggle('bigger',on);
   bigger.setAttribute('aria-pressed',on);
-  bigger.textContent=on?'もとの大きさ':'Bigger';
+  bigger.textContent=on?'もとの大きさ':'おおきく';
 }
 bigger.onclick=()=>setBigger(bigger.getAttribute('aria-pressed')!=='true');
 document.addEventListener('keydown',event=>{
@@ -601,4 +606,5 @@ function frame(now){
 }
 selectTown(towns.length-1);requestAnimationFrame(frame);
 </script>
+<script src="../assets/game-language.js"></script>
 </html>

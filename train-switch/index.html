@@ -35,9 +35,13 @@
 .quick-games a{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:44px;padding:6px 12px;border:2px solid #fff;border-radius:20px;background:#e6efde;color:#28433e;font-size:14px;text-decoration:none;box-shadow:0 2px 0 #dbd0ba}
 .quick-games .quick-next{background:#ffe59a}
 .quick-games a:focus-visible{outline:3px solid #963f76;outline-offset:2px}
+#game-language{min-height:44px;padding:0 12px;border:2px solid #e9dfcd;border-radius:12px;background:#fff;color:#28433e;font:700 14px system-ui;white-space:nowrap}
+.game-heading{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.game-heading h1{margin-block:0}
+.town-games{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;color:#463b33}
 </style>
 <main>
-<h1>しんごう、どっち？</h1>
+<header class="game-heading"><h1>しんごう、どっち？</h1><button id="game-language" type="button" lang="en">English</button></header>
 <nav class="quick-games" aria-label="ゲームをきりかえる">
   <a href="../">🏠 のりもの一覧</a>
   <a class="quick-next" href="../delivery/"><span aria-hidden="true">📦</span> のりもの おとどけ便 <span aria-hidden="true">›</span></a>
@@ -236,3 +240,4 @@ byId('go').onclick = depart;
 draw();
 ready();
 </script>
+<script src="../assets/game-language.js"></script>
