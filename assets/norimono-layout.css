@@ -1,0 +1,115 @@
+/* See DESIGN_SYSTEM.md for the layout and control conventions. */
+.norimono [hidden] { display: none !important; }
+
+.norimono :is(.primary-action, #next.primary-action, #again.primary-action, #mode.primary-action) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 72px;
+  padding: 12px;
+  border: 4px solid #fff8cf;
+  border-radius: 24px;
+  background: #126c50;
+  box-shadow: 0 7px #084733;
+  color: #fff;
+  font-size: clamp(21px, 3.4vw, 40px);
+  font-weight: 900;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  touch-action: manipulation;
+}
+.norimono :is(.primary-action, #next.primary-action, #again.primary-action, #mode.primary-action):active {
+  transform: translateY(4px);
+  box-shadow: 0 3px #084733;
+}
+.norimono :is(.primary-action, #next.primary-action, #again.primary-action, #mode.primary-action):focus-visible {
+  outline: 3px solid #122c82;
+  outline-offset: 3px;
+}
+
+.norimono .hiiro-links {
+  width: 100%;
+  max-width: none;
+}
+.norimono-delivery .journey {
+  height: clamp(245px, 46dvh, 420px);
+}
+.norimono-town.bigger > .hiiro-links, .norimono-town.bigger > footer { display: none; }
+.norimono-town > .town-choices button { flex: 1 1 125px; }
+.norimono-pairs #actions button { width: 100%; }
+
+@media (orientation: landscape) and (min-width: 740px) and (min-height: 360px) {
+  .norimono:not(.bigger) {
+    --play: clamp(245px, 73dvh, 760px);
+    width: 100%;
+    max-width: none;
+    padding: 12px 14px 18px;
+  }
+  .norimono > header { margin-top: 0; margin-bottom: 8px; }
+  .norimono > .hiiro-links, .norimono > footer { grid-column: 1 / -1; }
+  .norimono > .hiiro-links:has(> a) {
+    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  }
+  .norimono > .hiiro-links a {
+    min-height: 48px;
+    padding: 6px 10px;
+    flex-direction: row;
+    background: var(--banner-color, #dfedc9);
+    font-size: 15px;
+  }
+  .norimono > .hiiro-links a::after { display: none; }
+  .norimono > .hiiro-links .banner-icon { font-size: 20px; }
+  .norimono-departure { grid-template-columns: minmax(0,1fr) minmax(220px,25%); grid-template-rows: auto auto auto auto auto; gap: 8px 14px; }
+  .norimono-departure > .scene { height: var(--play); min-height: 0; }
+  .norimono-departure > .go-row { align-self: center; }
+  .norimono-departure .go-row .go { min-height: 33dvh; }
+  .norimono-departure .go-row .horn { width: 100%; }
+  .norimono-departure .go-row .go { font-size: clamp(23px,3.4vw,48px); }
+  .norimono-departure .go-icon { width: clamp(30px,4vw,46px); font-size: 28px; }
+  .norimono-delivery .play { display: grid; grid-template-columns: minmax(0,1fr) minmax(220px,25%); gap: 14px; align-items: stretch; }
+  .norimono-delivery .parcel { margin: 0; padding: 0; border: 0; min-width: 0; }
+  .norimono-delivery .journey { height: var(--play); margin: 0; border-radius: 22px; }
+  .norimono-delivery .action-panel { display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+  .norimono-delivery #message, .norimono-delivery #progress { margin: 0; min-height: 0; }
+  .norimono-delivery .vehicles { grid-template-columns: 1fr; gap: 10px; }
+  .norimono-delivery .vehicles button { min-height: clamp(65px,14dvh,117px); font-size: 21px; }
+  .norimono-delivery .vehicles button img { height: clamp(34px,9dvh,74px); }
+  .norimono-delivery #next { width: 100%; min-height: 78px; margin: 0; }
+  .norimono-delivery .destination-art { font-size: clamp(42px,7vw,84px); }
+  .norimono-delivery .depot { min-height: 88px; font-size: 20px; }
+  .norimono-delivery .courier { height: clamp(75px,15dvh,130px); }
+  .norimono-delivery .game-heading #sound { margin: 0; }
+  .norimono-delivery .game-heading #game-language { margin-left: auto; }
+  .norimono-switch .play { display: grid; grid-template-columns: minmax(0,1fr) minmax(220px,25%); gap: 14px; align-items: center; min-height: var(--play); }
+  .norimono-switch .board { margin: 0; }
+  .norimono-switch .controls { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .norimono-switch .controls button { width: 100%; min-height: clamp(68px,13dvh,110px); font-size: 22px; }
+  .norimono-switch .controls #go { grid-column: 1; margin: 0; }
+  .norimono-switch #message, .norimono-switch #progress { margin: 0; }
+  .norimono-town { display: grid; grid-template-columns: minmax(0,1fr) minmax(210px,22%); gap: 8px 14px; align-items: center; }
+  .norimono-town > header, .norimono-town > #status { grid-column: 1 / -1; }
+  .norimono-town:not(.bigger) > #map { grid-area: 2 / 1; max-height: var(--play); margin: 0; }
+  .norimono-town:not(.bigger) > nav.town-choices { grid-area: 2 / 2; display: grid; }
+  .norimono-town > nav.town-choices button { min-height: clamp(54px, 11dvh, 90px); font-size: 20px; }
+  .norimono-gacha { grid-template-columns: minmax(0,1fr) minmax(220px,25%); gap: 8px 14px; }
+  .norimono-gacha .stage { min-height: var(--play); display: flex; flex-direction: column; justify-content: center; }
+  .norimono-gacha .train-area { min-height: clamp(180px,49dvh,490px); }
+  .norimono.norimono-gacha #next.primary-action { min-height: 30dvh; font-size: clamp(19px,2.35vw,30px); }
+  .norimono-bento { grid-template-columns: minmax(0,1fr) minmax(220px,25%); gap: 8px 14px; }
+  .norimono-bento #board { max-width: 100%; align-self: center; }
+  .norimono-bento #tray { align-self: center; width: 100%; max-width: none; gap: 8px; }
+  .norimono-bento #tray .piece { min-height: clamp(65px,13dvh,107px)!important; }
+  .norimono-bento #tray .piece img { height: 55px!important; }
+  .norimono-pairs { grid-template-columns: minmax(0,1fr) minmax(220px,25%); gap: 8px 14px; }
+  .norimono-pairs #board { max-width: none; }
+  .norimono-pairs .card { height: clamp(130px,30dvh,300px); }
+  .norimono-pairs #track { align-self: center; height: clamp(140px,27dvh,240px); }
+  .norimono-pairs #actions :is(#again, #mode).primary-action { min-height: 84px; font-size: clamp(18px,2.2vw,30px); }
+  .norimono-book #browse { display: grid; grid-template-columns: minmax(0,1fr) minmax(170px,20%); align-items: center; gap: 8px 14px; }
+  .norimono-book #hint { grid-column: 1/-1; }
+  .norimono-book .cards { min-height: calc(var(--play) - 35px); grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+  .norimono-book .cards .card { min-height: 0; }
+  .norimono-book .cards .card img { height: clamp(72px,13dvh,124px); }
+  .norimono-book #browse .pager { display: grid; justify-content: stretch; justify-items: stretch; gap: 14px; margin: 0; }
+  .norimono-book #browse .pager .arrow { width: 100%; min-height: 88px; }
+}

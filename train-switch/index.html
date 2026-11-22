@@ -31,23 +31,16 @@
 .banner-icon{font-size:20px;flex:none}
 .feedback a{display:inline-block;padding:12px;color:#47645f;font-size:13px;text-underline-offset:3px}
 .hiiro-links a:focus-visible,.feedback a:focus-visible{outline:3px solid #963f76;outline-offset:3px}
-.quick-games{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:8px 0 10px}
-.quick-games a{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:44px;padding:6px 12px;border:2px solid #fff;border-radius:20px;background:#e6efde;color:#28433e;font-size:14px;text-decoration:none;box-shadow:0 2px 0 #dbd0ba}
-.quick-games .quick-next{background:#ffe59a}
-.quick-games a:focus-visible{outline:3px solid #963f76;outline-offset:2px}
 #game-language{min-height:44px;padding:0 12px;border:2px solid #e9dfcd;border-radius:12px;background:#fff;color:#28433e;font:700 14px system-ui;white-space:nowrap}
 .game-heading{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
 .game-heading h1{margin-block:0}
 .town-games{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;color:#463b33}
 </style>
-<main>
+<link rel="stylesheet" href="../assets/norimono-layout.css">
+<main class="norimono norimono-switch">
 <header class="game-heading"><h1>しんごう、どっち？</h1><button id="game-language" type="button" lang="en">English</button></header>
-<nav class="quick-games" aria-label="ゲームをきりかえる">
-  <a href="../">🏠 のりもの一覧</a>
-  <a class="quick-next" href="../delivery/"><span aria-hidden="true">📦</span> のりもの おとどけ便 <span aria-hidden="true">›</span></a>
-</nav>
-<p id="message" role="status"></p>
-<div class="board">
+
+<div class="play"><div class="board">
 <canvas id="tracks" width="1280" height="730" aria-hidden="true"></canvas>
 <button class="station yellow" id="yellow-station" type="button"><span class="symbol" aria-hidden="true">☀</span>きいろの えき</button>
 <button class="station blue" id="blue-station" type="button"><span class="symbol" aria-hidden="true">☁</span>あおの えき</button>
@@ -55,13 +48,13 @@
 <button class="lever" id="lever" aria-label="分かれ道を切り替える">↖</button>
 <div id="effects" aria-hidden="true"></div>
 </div>
-<div class="controls">
+<div class="controls"><p id="message" role="status"></p>
 <button class="destination yellow" id="left" aria-pressed="true"><span class="symbol" aria-hidden="true">☀</span>きいろ <span aria-hidden="true">←</span></button>
 <button class="destination blue" id="right" aria-pressed="false"><span class="symbol" aria-hidden="true">☁</span>あお <span aria-hidden="true">→</span></button>
 <button id="go">しゅっぱつ</button>
-</div>
-<p id="progress"></p>
+<p id="progress"></p></div></div>
 <nav class="hiiro-links" aria-label="ほかの のりものゲーム">
+  <a style="--banner-color:#ffedb6" href="../delivery/"><span aria-hidden="true">📦</span> のりもの おとどけ便</a>
   <a href="https://yumemayu.github.io/norimono/" style="--banner-color:#ffedb6"><span class="banner-icon" aria-hidden="true">🚃</span><span>のりもの しゅっぱつ！</span></a>
   <a href="https://yumemayu.github.io/norimono/vehicle-book/" style="--banner-color:#d4eee1"><span class="banner-icon" aria-hidden="true">📖</span><span>のりものずかん</span></a>
   <a href="https://yumemayu.github.io/norimono/train-gacha/" style="--banner-color:#f7dce8"><span class="banner-icon" aria-hidden="true">🎁</span><span>でんしゃガチャ</span></a>

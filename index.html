@@ -306,7 +306,7 @@ main > nav.hiiro-links { width: 100%; }
 @media (orientation:landscape) and (min-width:740px){main > .scene{grid-row:2 / 6;min-height:clamp(290px,58dvh,530px)}main > .go-row{grid-row:2 / 4;flex-wrap:wrap;align-self:stretch}.go-row .go{flex-basis:100%;min-height:clamp(150px,30dvh,240px)}.go-row .horn{min-height:64px;margin-left:auto}main > .message{grid-row:4}main > #work-action{grid-row:5}}
 </style>
 <link rel="stylesheet" href="./assets/train-game-links.css">
-<link rel="stylesheet" href="./assets/toddler-controls.css?v=3"><script src="./assets/toddler-controls.js?v=2" defer></script>
+<link rel="stylesheet" href="./assets/toddler-controls.css?v=3"><script src="./assets/toddler-controls.js?v=3" defer></script>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icons/icon-180.png">
 <script defer src="./offline.js"></script>
@@ -344,7 +344,8 @@ main > nav.hiiro-links { width: 100%; }
 html:lang(ja) .pwa-en, html:not(:lang(ja)) .pwa-ja { display: none; }
 </style>
 <style>main > .norimono-heading { grid-row: 1; }</style>
-<main>
+<link rel="stylesheet" href="./assets/norimono-layout.css">
+<main class="norimono norimono-departure">
 <div class="norimono-heading">
 <div class="topbar"><h1 id="title">のりもの しゅっぱつ！</h1><button type="button" id="lang">English</button></div>
 <details class="pwa-tools">
@@ -364,12 +365,11 @@ html:lang(ja) .pwa-en, html:not(:lang(ja)) .pwa-ja { display: none; }
 <div class="tunnel" aria-hidden="true"></div>
 <button type="button" id="scene-tap" aria-label="のりものを タップ"></button>
 </div>
-<div class="go-row"><button type="button" class="go" id="go"><span class="go-icon" aria-hidden="true">→</span><span id="go-label">しゅっぱつ！</span></button><button type="button" class="horn" id="horn" aria-label="ラッパ">📯</button></div>
+<div class="go-row"><button type="button" class="go primary-action" id="go"><span class="go-icon" aria-hidden="true">→</span><span id="go-label">しゅっぱつ！</span></button><button type="button" class="horn" id="horn" aria-label="ラッパ">📯</button></div>
 <p class="message" id="message" role="status"></p>
 <button type="button" id="work-action" hidden></button>
 
 <p class="random-note" id="random-note">いきさきは ランダム！どこに つくかは おたのしみ</p>
-<div class="panel"><h2 id="stamps-label">スタンプ</h2><div class="stamps" id="stamps"></div></div>
 <div class="panel"><h2 id="speed-label">はやさ</h2><div class="speeds" id="speeds"><button type="button" data-speed="slow" aria-pressed="false">🐢 <span class="speed-name">ゆっくり</span></button><button type="button" data-speed="normal" aria-pressed="true">🚃 <span class="speed-name">ふつう</span></button><button type="button" data-speed="fast" aria-pressed="false">🚀 <span class="speed-name">はやい</span></button></div></div>
 <div class="sound" aria-label="おとの せってい">
 <button type="button" id="mute" aria-label="おとを けす" aria-pressed="false">🔊 おとオン</button>
@@ -574,8 +574,8 @@ for (const k of Object.keys(routes)) {
 }
 function saveStamps() { try { localStorage.setItem('norimono-stamps', JSON.stringify(stamps)); } catch {} }
 const T = {
-  ja: { random: 'はしっている ときも ゴーで つぎの のりもの！', stamps: 'スタンプ', speed: 'はやさ', horn: 'ラッパ', slow: 'ゆっくり', normal: 'ふつう', fast: 'はやい' },
-  en: { random: 'Press Go anytime for another vehicle!', stamps: 'Stamps', speed: 'Speed', horn: 'Horn', slow: 'Slow', normal: 'Normal', fast: 'Fast' },
+  ja: { random: 'はしっている ときも ゴーで つぎの のりもの！', speed: 'はやさ', horn: 'ラッパ', slow: 'ゆっくり', normal: 'ふつう', fast: 'はやい' },
+  en: { random: 'Press Go anytime for another vehicle!', speed: 'Speed', horn: 'Horn', slow: 'Slow', normal: 'Normal', fast: 'Fast' },
 };
 const horn = document.querySelector('#horn');
 horn.addEventListener('click', () => {
@@ -594,8 +594,6 @@ document.querySelector('#speeds').addEventListener('click', e => {
   render();
 });
 function renderPanels() {
-  document.querySelector('#stamps').innerHTML = stamps[kind].map(done =>
-    '<span class="stamp' + (done ? ' done' : '') + '">' + (done ? '⭐' : '') + '</span>').join('');
   document.querySelectorAll('#speeds [data-speed]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.speed === speed)));
 }
 function stopTravelSound() {
@@ -820,7 +818,6 @@ function startTrip() {
       if (departureKind !== 'train') playSound(arrivalSound);
     }
     if (unlockedNow) message.textContent += ' ' + (lang === 'en' ? '🎉 Yellow Shinkansen is unlocked!' : '🎉 きいろい しんかんせんが つかえるように なったよ！');
-    else if (cardComplete && !wasStamped) message.textContent += ' ' + (lang === 'en' ? '🎉 You collected all the stamps!' : '🎉 スタンプが そろったよ！');
   }, tripDuration * 1000);
   const trip = arrival;
   try {
@@ -855,7 +852,6 @@ function applyLang() {
   document.querySelector('.sound').setAttribute('aria-label', L[lang].sound);
   langButton.textContent = lang === 'en' ? 'にほんご' : 'English';
   document.querySelector('#random-note').textContent = T[lang].random;
-  document.querySelector('#stamps-label').textContent = T[lang].stamps;
   document.querySelector('#speed-label').textContent = T[lang].speed;
   document.querySelectorAll('#speeds [data-speed]').forEach(b => { b.querySelector('.speed-name').textContent = T[lang][b.dataset.speed]; });
   updateVolume();

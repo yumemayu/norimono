@@ -72,7 +72,8 @@ main > nav.hiiro-links { width: 100%; }
 #train-button{touch-action:manipulation;min-height:170px}#next{background:#c8e8c8} .train-area{cursor:pointer}</style>
 <link rel="stylesheet" href="../assets/train-game-links.css">
 <link rel="stylesheet" href="../assets/toddler-controls.css?v=3"><script src="../assets/toddler-controls.js?v=2" defer></script>
-<main>
+<link rel="stylesheet" href="../assets/norimono-layout.css">
+<main class="norimono norimono-gacha">
 <header><h1 id="title">でんしゃガチャ</h1><div class="header-actions"><button id="lang" type="button" lang="en">English</button><button id="sound" type="button" aria-label="おと" aria-pressed="true">🔊</button></div></header>
 <section class="stage" aria-label="でんしゃのホーム">
   <div class="train-area">
@@ -92,7 +93,7 @@ main > nav.hiiro-links { width: 100%; }
   <div class="rail" aria-hidden="true"></div>
   <p id="name" aria-live="polite"></p>
 </section>
-<button id="next" type="button"><span aria-hidden="true">▶</span> <span id="next-label">つぎのでんしゃ</span></button>
+<button id="next" class="primary-action" type="button"><span aria-hidden="true">▶</span> <span id="next-label">つぎのでんしゃ</span></button>
 <nav class="hiiro-links" aria-label="ほかのでんしゃゲーム"><a class="book" style="--banner-color:#d4eee1" href="../vehicle-book/"><span class="banner-icon" aria-hidden="true">📖</span><span id="atlas-banner-label">のりものずかん</span></a>
   <a class="ride" href="../"><span class="banner-icon" aria-hidden="true">🚃</span><span data-en="Let’s Ride!">のりもの しゅっぱつ！</span></a>
   <a class="bento" href="../train-bento/"><span class="banner-icon" aria-hidden="true">🍱</span><span data-en="Train Bento Box">でんしゃのおべんとうばこ</span></a>

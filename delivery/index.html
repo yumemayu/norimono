@@ -53,24 +53,17 @@
 .handoff{right:8%;bottom:27%}
 .courier{width:18.7%}
 .sound-toggle{padding:6px 12px;font-size:14px;margin-top:8px}
-.quick-games{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:8px 0 10px}
-.quick-games a{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:44px;padding:6px 12px;border:2px solid #fff;border-radius:20px;background:#e6efde;color:#28433e;font-size:14px;text-decoration:none;box-shadow:0 2px 0 #dbd0ba}
-.quick-games .quick-next{background:#ffe59a}
-.quick-games a:focus-visible{outline:3px solid #963f76;outline-offset:2px}
 #game-language{min-height:44px;padding:0 12px;border:2px solid #e9dfcd;border-radius:12px;background:#fff;color:#28433e;font:700 14px system-ui;white-space:nowrap}
 .game-heading{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
 .game-heading h1{margin-block:0}
 .town-games{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;color:#463b33}
 </style>
-<main>
-<header class="game-heading"><h1>のりもの おとどけ便</h1><button id="game-language" type="button" lang="en">English</button></header>
-<nav class="quick-games" aria-label="ゲームをきりかえる">
-  <a href="../">🏠 のりもの一覧</a>
-  <a class="quick-next" href="../train-switch/"><span aria-hidden="true">🚦</span> しんごう、どっち？ <span aria-hidden="true">›</span></a>
-</nav>
-<button class="sound-toggle" id="sound" type="button" aria-pressed="true">🔊 おと</button>
-<section class="parcel">
-<p id="message" role="status"></p>
+<link rel="stylesheet" href="../assets/norimono-layout.css">
+<main class="norimono norimono-delivery">
+<header class="game-heading"><h1>のりもの おとどけ便</h1><button id="game-language" type="button" lang="en">English</button><button class="sound-toggle" id="sound" type="button" aria-pressed="true">🔊 おと</button></header>
+
+<div class="play"><section class="parcel">
+
 <div class="journey" id="journey">
   <div class="route-world" id="route-world">
   <div class="scenery" id="scenery" aria-hidden="true"></div>
@@ -85,12 +78,13 @@
   </div>
 </div>
 </section>
-<div class="vehicles" id="vehicles"><button type="button" data-vehicle="truck"><img alt="" src="../assets/delivery.webp">トラック</button>
+<aside class="action-panel"><p id="message" role="status"></p><div class="vehicles" id="vehicles"><button type="button" data-vehicle="truck"><img alt="" src="../assets/delivery.webp">トラック</button>
 <button type="button" data-vehicle="heli"><img alt="" src="../assets/helicopter.webp">ヘリコプター</button>
 <button type="button" data-vehicle="plane"><img alt="" src="../assets/plane.webp">ひこうき</button></div>
 <button id="next" hidden>つぎの おとどけ</button>
-<p id="progress"></p>
+<p id="progress"></p></aside></div>
 <nav class="hiiro-links" aria-label="ほかの のりものゲーム">
+  <a style="--banner-color:#ffedb6" href="../train-switch/"><span aria-hidden="true">🚦</span> しんごう、どっち？</a>
   <a href="https://yumemayu.github.io/norimono/" style="--banner-color:#ffedb6"><span class="banner-icon" aria-hidden="true">🚃</span><span>のりもの しゅっぱつ！</span></a>
   <a href="https://yumemayu.github.io/norimono/vehicle-book/" style="--banner-color:#d4eee1"><span class="banner-icon" aria-hidden="true">📖</span><span>のりものずかん</span></a>
   <a href="https://yumemayu.github.io/norimono/train-gacha/" style="--banner-color:#f7dce8"><span class="banner-icon" aria-hidden="true">🎁</span><span>でんしゃガチャ</span></a>
