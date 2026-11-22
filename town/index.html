@@ -15,8 +15,9 @@ main.bigger #status{flex:none}
 .town-games{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;color:#463b33}
 </style>
 <link rel="stylesheet" href="../assets/train-game-links.css">
-<link rel="stylesheet" href="../assets/norimono-layout.css">
-<main class="norimono norimono-town"><header><h1>のりもの まちさんぽ</h1><button id="game-language" type="button" lang="en">English</button><div class="actions"><button id="bigger" aria-pressed="false">おおきく</button><button id="sound" aria-pressed="false">おと オフ</button></div></header>
+<link rel="stylesheet" href="../assets/norimono-layout.css?v=2">
+<script src="../assets/toddler-controls.js?v=4" defer></script>
+<main data-game-audio class="norimono norimono-town"><header><h1>のりもの まちさんぽ</h1><button id="game-language" type="button" lang="en">English</button><div class="actions"><button id="bigger" aria-pressed="false">おおきく</button><button id="sound" aria-pressed="false">おと オフ</button></div></header>
 <svg id="map" viewBox="0 0 900 600" aria-label="くるまがはしるまち"><g id="land"></g><g id="roads"></g><g id="places"></g><g id="traffic"></g></svg>
 <nav class="town-choices" aria-label="まちをえらぶ"></nav>
 <p id="status" aria-live="polite">くるまを タップしてね</p><nav class="hiiro-links" aria-label="ほかの のりものゲーム"><a class="ride" href="../"><span class="banner-icon" aria-hidden="true">🚃</span><span data-ja="のりもの しゅっぱつ！" data-en="Vehicles, Go!">のりもの しゅっぱつ！</span></a><a href="../delivery/" class="bento"><span class="banner-icon" aria-hidden="true">📦</span><span>のりもの おとどけ便</span></a><a href="../train-switch/" class="gacha"><span class="banner-icon" aria-hidden="true">🚦</span><span>しんごう、どっち？</span></a><a href="../train-gacha/" class="gacha"><span class="banner-icon" aria-hidden="true">🎁</span><span>でんしゃガチャ</span></a><a href="../train-bento/" class="bento"><span class="banner-icon" aria-hidden="true">🍱</span><span>でんしゃのおべんとうばこ</span></a><a href="../train-pairs/" class="pairs"><span class="banner-icon" aria-hidden="true">🚆</span><span>でんしゃペア</span></a><a href="../vehicle-book/" class="ride"><span class="banner-icon" aria-hidden="true">📖</span><span>のりものずかん</span></a></nav>
@@ -167,7 +168,7 @@ function chirp(index){
     oscillator.frequency.setValueAtTime([365,520,290,460,245][index],now);
     oscillator.frequency.linearRampToValueAtTime([480,690,410,620,330][index],now+.22);
     volume.gain.setValueAtTime(.09,now);volume.gain.exponentialRampToValueAtTime(.001,now+.24);
-    oscillator.connect(volume).connect(audioContext.destination);oscillator.start(now);oscillator.stop(now+.25);
+    oscillator.connect(volume).connect(norimonoAudio.output(audioContext));oscillator.start(now);oscillator.stop(now+.25);
   }catch{}
 }
 layer('sound').onclick=event=>{

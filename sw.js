@@ -1,7 +1,7 @@
 const scope = new URL(self.registration.scope);
 const prefix = 'offline:' + scope.pathname + ':';
 const live = prefix + 'visited';
-const pack = prefix + 'games-landscape-layout-v1';
+const pack = prefix + 'games-grown-up-settings-v1';
 const marker = new URL('offline-ready', scope).href;
 const files = [
   "assets/bus-berry.webp",

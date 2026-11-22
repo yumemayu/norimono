@@ -64,9 +64,9 @@ main > nav.hiiro-links { width: 100%; }
 @media(prefers-reduced-motion:reduce){.slot.just-packed::after{display:none}.slot.drop-hover{transform:none}}
 </style>
 <link rel="stylesheet" href="../assets/train-game-links.css">
-<link rel="stylesheet" href="../assets/toddler-controls.css?v=3"><script src="../assets/toddler-controls.js?v=2" defer></script>
-<link rel="stylesheet" href="../assets/norimono-layout.css">
-<main class="norimono norimono-bento">
+<link rel="stylesheet" href="../assets/toddler-controls.css?v=4"><script src="../assets/toddler-controls.js?v=4" defer></script>
+<link rel="stylesheet" href="../assets/norimono-layout.css?v=2">
+<main data-game-audio class="norimono norimono-bento">
 <header><h1 id="title"></h1><button id="language" type="button"></button></header>
 <p id="hint" role="status"></p>
 <div id="board">
@@ -113,7 +113,7 @@ function sound(notes, spacing = .11, duration = .22) {
       volume.gain.setValueAtTime(.001,start);
       volume.gain.exponentialRampToValueAtTime(.085,start+.018);
       volume.gain.exponentialRampToValueAtTime(.001,start+duration);
-      tone.connect(volume).connect(audio.destination);
+      tone.connect(volume).connect(norimonoAudio.output(audio));
       tone.start(start);
       tone.stop(start+duration+.01);
     });

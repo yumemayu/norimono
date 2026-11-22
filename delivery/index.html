@@ -58,8 +58,9 @@
 .game-heading h1{margin-block:0}
 .town-games{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;color:#463b33}
 </style>
-<link rel="stylesheet" href="../assets/norimono-layout.css">
-<main class="norimono norimono-delivery">
+<link rel="stylesheet" href="../assets/norimono-layout.css?v=2">
+<script src="../assets/toddler-controls.js?v=4" defer></script>
+<main data-game-audio class="norimono norimono-delivery">
 <header class="game-heading"><h1>のりもの おとどけ便</h1><button id="game-language" type="button" lang="en">English</button><button class="sound-toggle" id="sound" type="button" aria-pressed="true">🔊 おと</button></header>
 
 <div class="play"><section class="parcel">
@@ -130,7 +131,7 @@ function tone(notes) {
     const time = start + delay;
     oscillator.frequency.value = frequency;
     oscillator.connect(gain);
-    gain.connect(audioContext.destination);
+    gain.connect(norimonoAudio.output(audioContext));
     gain.gain.setValueAtTime(.001,time);
     gain.gain.exponentialRampToValueAtTime(.075,time + .025);
     gain.gain.exponentialRampToValueAtTime(.001,time + duration);

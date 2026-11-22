@@ -26,9 +26,9 @@ main > nav.hiiro-links { width: 100%; }
 }
 .board{gap:16px}.card{min-height:140px!important}#actions{gap:16px}#mode{background:#f8f5df}#again{background:#d2eed0}</style>
 <link rel="stylesheet" href="../assets/train-game-links.css">
-<link rel="stylesheet" href="../assets/toddler-controls.css?v=3"><script src="../assets/toddler-controls.js?v=3" defer></script>
-<link rel="stylesheet" href="../assets/norimono-layout.css">
-<main class="norimono norimono-pairs">
+<link rel="stylesheet" href="../assets/toddler-controls.css?v=4"><script src="../assets/toddler-controls.js?v=4" defer></script>
+<link rel="stylesheet" href="../assets/norimono-layout.css?v=2">
+<main data-game-audio class="norimono norimono-pairs">
 <header><h1 id="title"></h1><button id="lang" type="button"></button></header>
 <p id="hint" role="status"></p>
 <div id="board" class="board"></div>
@@ -70,7 +70,7 @@ function playNotes(notes, spacing = .07, duration = .20, wave = 'sine') {
       gain.gain.setValueAtTime(.001,start);
       gain.gain.exponentialRampToValueAtTime(.08,start+.02);
       gain.gain.exponentialRampToValueAtTime(.001,start+duration);
-      tone.connect(gain).connect(audio.destination);
+      tone.connect(gain).connect(norimonoAudio.output(audio));
       tone.start(start);
       tone.stop(start+duration+.01);
     });

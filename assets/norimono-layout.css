@@ -113,3 +113,16 @@
   .norimono-book #browse .pager { display: grid; justify-content: stretch; justify-items: stretch; gap: 14px; margin: 0; }
   .norimono-book #browse .pager .arrow { width: 100%; min-height: 88px; }
 }
+
+.parent-settings{grid-column:1/-1;width:100%;text-align:left;margin:28px 0 0;border:2px solid #bbccc3;border-radius:20px;background:#fffdf5;color:#234b50;overflow:hidden}
+.parent-settings summary{display:list-item;cursor:pointer;padding:18px 24px;min-height:64px;font-weight:800;font-size:20px;touch-action:manipulation}
+.parent-settings summary:focus-visible{outline:4px solid #276aa0;outline-offset:-4px}
+.parent-settings-body{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:20px;padding:18px;border-top:1px solid #d5dfd7}
+.parent-settings .sound{margin:0}.parent-settings .panel{margin:0;min-width:min(100%,320px)}
+.parent-settings :is(#lang,#language,#game-language){width:auto;min-width:100px;max-width:220px;margin:0}
+.parent-settings ~ nav.hiiro-links{margin-top:24px}
+@media(orientation:landscape) and (min-width:740px){.norimono > .parent-settings{grid-column:1/-1}}
+
+.parent-volume { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.parent-volume input { max-width: 45vw; }
+.norimono-town.bigger > .parent-settings { display: none; }
