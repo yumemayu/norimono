@@ -307,8 +307,27 @@ main > nav.hiiro-links { width: 100%; }
 </style>
 <link rel="stylesheet" href="./assets/train-game-links.css">
 <link rel="stylesheet" href="./assets/toddler-controls.css?v=3"><script src="./assets/toddler-controls.js?v=2" defer></script>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icons/icon-180.png">
+<script defer src="./offline.js"></script>
+<style>
+.pwa-tools { margin: 8px auto 12px; max-width: 760px; text-align: center; }
+.pwa-tools button { margin: 3px; min-height: 44px; padding: 6px 14px; border: 2px solid #c9dce5; border-radius: 12px; background: #fff; color: #274357; font: inherit; font-weight: 700; cursor: pointer; }
+.pwa-tools button:disabled { cursor: default; opacity: .65; }
+.pwa-tools button[hidden] { display: none; }
+.pwa-tools p { margin: 5px 0; font-size: .92rem; line-height: 1.5; }
+</style>
+<style>main > .norimono-heading { grid-row: 1; }</style>
 <main>
+<div class="norimono-heading">
 <div class="topbar"><h1 id="title">のりもの しゅっぱつ！</h1><button type="button" id="lang">English</button></div>
+<section class="pwa-tools">
+  <button type="button" id="pwa-install" aria-controls="pwa-guide" aria-expanded="false">ホーム画面に追加</button>
+  <button type="button" id="pwa-save">オフラインであそぶ準備</button>
+  <p id="pwa-guide" hidden></p>
+  <p id="pwa-status" role="status"></p>
+</section>
+</div>
 <div id="scene" class="scene train train-blue">
 <div class="air-landscape" aria-hidden="true"></div><div class="cloud"></div><div class="land"></div><div class="decor" id="decor" aria-hidden="true"></div><div class="road"></div><div id="stop" class="stop"></div><span id="work-effect" aria-hidden="true"></span>
 <div class="vehicle"><img class="vehicle-art" alt="" hidden><div class="windows"></div><div class="door"></div><i class="wheel"></i><i class="wheel"></i></div>
