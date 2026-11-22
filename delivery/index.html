@@ -57,9 +57,13 @@
 .quick-games a{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:44px;padding:6px 12px;border:2px solid #fff;border-radius:20px;background:#e6efde;color:#28433e;font-size:14px;text-decoration:none;box-shadow:0 2px 0 #dbd0ba}
 .quick-games .quick-next{background:#ffe59a}
 .quick-games a:focus-visible{outline:3px solid #963f76;outline-offset:2px}
+#game-language{min-height:44px;padding:0 12px;border:2px solid #e9dfcd;border-radius:12px;background:#fff;color:#28433e;font:700 14px system-ui;white-space:nowrap}
+.game-heading{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.game-heading h1{margin-block:0}
+.town-games{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;color:#463b33}
 </style>
 <main>
-<h1>のりもの おとどけ便</h1>
+<header class="game-heading"><h1>のりもの おとどけ便</h1><button id="game-language" type="button" lang="en">English</button></header>
 <nav class="quick-games" aria-label="ゲームをきりかえる">
   <a href="../">🏠 のりもの一覧</a>
   <a class="quick-next" href="../train-switch/"><span aria-hidden="true">🚦</span> しんごう、どっち？ <span aria-hidden="true">›</span></a>
@@ -106,6 +110,7 @@ const message = document.getElementById('message');
 const progress = document.getElementById('progress');
 const next = document.getElementById('next');
 const buttons = document.querySelectorAll('[data-vehicle]');
+const vehicleNames = new Map(Array.from(buttons, button => [button, button.textContent.trim()]));
 const journey = document.getElementById('journey');
 const world = document.getElementById('route-world');
 const scenery = document.getElementById('scenery');
@@ -237,7 +242,7 @@ async function choose(button) {
   courier.hidden = false;
   cargo.textContent = job.icon;
   await moveParcel(cargo, pickup, 520);
-  message.textContent = button.textContent.trim() + 'で しゅっぱつ！';
+  message.textContent = vehicleNames.get(button) + 'で しゅっぱつ！';
   const scrollDistance = world.offsetWidth - journey.clientWidth;
   const distance = Math.max(0, world.offsetWidth * .93 - courier.offsetWidth);
   const duration = 3850;
@@ -289,3 +294,4 @@ next.onclick = () => {
 };
 showJob();
 </script>
+<script src="../assets/game-language.js"></script>
