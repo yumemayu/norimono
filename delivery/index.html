@@ -53,9 +53,17 @@
 .handoff{right:8%;bottom:27%}
 .courier{width:18.7%}
 .sound-toggle{padding:6px 12px;font-size:14px;margin-top:8px}
+.quick-games{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:8px 0 10px}
+.quick-games a{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:44px;padding:6px 12px;border:2px solid #fff;border-radius:20px;background:#e6efde;color:#28433e;font-size:14px;text-decoration:none;box-shadow:0 2px 0 #dbd0ba}
+.quick-games .quick-next{background:#ffe59a}
+.quick-games a:focus-visible{outline:3px solid #963f76;outline-offset:2px}
 </style>
 <main>
 <h1>のりもの おとどけ便</h1>
+<nav class="quick-games" aria-label="ゲームをきりかえる">
+  <a href="../">🏠 のりもの一覧</a>
+  <a class="quick-next" href="../train-switch/"><span aria-hidden="true">🚦</span> しんごう、どっち？ <span aria-hidden="true">›</span></a>
+</nav>
 <button class="sound-toggle" id="sound" type="button" aria-pressed="true">🔊 おと</button>
 <section class="parcel">
 <p id="message" role="status"></p>
