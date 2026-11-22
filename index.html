@@ -311,22 +311,52 @@ main > nav.hiiro-links { width: 100%; }
 <link rel="apple-touch-icon" href="./icons/icon-180.png">
 <script defer src="./offline.js"></script>
 <style>
-.pwa-tools { margin: 8px auto 12px; max-width: 760px; text-align: center; }
-.pwa-tools button { margin: 3px; min-height: 44px; padding: 6px 14px; border: 2px solid #c9dce5; border-radius: 12px; background: #fff; color: #274357; font: inherit; font-weight: 700; cursor: pointer; }
+.pwa-tools {
+  --pwa-tint: #dcf3ff; --pwa-accent: #235c79; --pwa-edge: #9bd5ed;
+  position: fixed; z-index: 100; right: max(12px, env(safe-area-inset-right));
+  bottom: max(12px, env(safe-area-inset-bottom)); color: var(--pwa-accent); text-align: left;
+}
+.pwa-tools summary {
+  display: flex; align-items: center; gap: 7px; width: fit-content; min-height: 46px;
+  margin-left: auto; padding: 6px 13px; border: 2px solid var(--pwa-edge);
+  border-radius: 999px; background: var(--pwa-tint); box-shadow: 0 3px 0 var(--pwa-edge);
+  cursor: pointer; font-weight: 800; list-style: none;
+}
+.pwa-tools summary::-webkit-details-marker { display: none; }
+.pwa-tools .pwa-chevron { font-size: .8em; }
+.pwa-tools[open] .pwa-chevron { transform: rotate(180deg); }
+.pwa-tools .pwa-panel {
+  position: absolute; bottom: calc(100% + 11px); right: 0;
+  width: min(310px, calc(100vw - 30px)); max-height: min(420px, 68dvh); overflow: auto;
+  padding: 14px; border: 2px solid var(--pwa-edge); border-radius: 22px;
+  background: #fffdfb; box-shadow: 0 8px 25px #38242b25;
+}
+.pwa-tools .pwa-heading { display: block; margin: 0 0 8px; font-size: 1rem; font-weight: 850; }
+.pwa-tools button {
+  display: block; width: 100%; min-height: 44px; margin: 0 0 6px; padding: 6px 10px;
+  border: 1px solid var(--pwa-edge); border-radius: 13px; background: var(--pwa-tint);
+  color: var(--pwa-accent); font: inherit; font-weight: 750; cursor: pointer;
+}
+.pwa-tools #pwa-save { background: #fff6d9; border-color: #ead58c; color: #634b1d; }
 .pwa-tools button:disabled { cursor: default; opacity: .65; }
-.pwa-tools button[hidden] { display: none; }
-.pwa-tools p { margin: 5px 0; font-size: .92rem; line-height: 1.5; }
+.pwa-tools [hidden], .pwa-tools p:empty { display: none; }
+.pwa-tools p { margin: 7px 0 0; font-size: .9rem; line-height: 1.5; }
+html:lang(ja) .pwa-en, html:not(:lang(ja)) .pwa-ja { display: none; }
 </style>
 <style>main > .norimono-heading { grid-row: 1; }</style>
 <main>
 <div class="norimono-heading">
 <div class="topbar"><h1 id="title">のりもの しゅっぱつ！</h1><button type="button" id="lang">English</button></div>
-<section class="pwa-tools">
+<details class="pwa-tools">
+  <summary><span aria-hidden="true">🚅</span><span class="pwa-ja">おでかけモード</span><span class="pwa-en">Take it with you</span><span class="pwa-chevron" aria-hidden="true">▴</span></summary>
+  <div class="pwa-panel">
+    <strong class="pwa-heading"><span class="pwa-ja">おでかけ先でもあそぼう！</span><span class="pwa-en">Play on the go!</span></strong>
   <button type="button" id="pwa-install" aria-controls="pwa-guide" aria-expanded="false">ホーム画面に追加</button>
   <button type="button" id="pwa-save">オフラインであそぶ準備</button>
   <p id="pwa-guide" hidden></p>
   <p id="pwa-status" role="status"></p>
-</section>
+  </div>
+</details>
 </div>
 <div id="scene" class="scene train train-blue">
 <div class="air-landscape" aria-hidden="true"></div><div class="cloud"></div><div class="land"></div><div class="decor" id="decor" aria-hidden="true"></div><div class="road"></div><div id="stop" class="stop"></div><span id="work-effect" aria-hidden="true"></span>
