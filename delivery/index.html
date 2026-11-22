@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>のりもの おとどけ便</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#fff7e8;color:#28433e;font:700 17px/1.5 system-ui,sans-serif;text-align:center}main{max-width:690px;margin:auto;padding:16px 12px}h1{margin:0;font-size:clamp(26px,6vw,40px)}.parcel{background:#def1e2;border:3px solid white;border-radius:24px;margin:14px 0;padding:16px 8px}#message{min-height:3em;margin:10px 0 0}.vehicles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}button{font:inherit;cursor:pointer;color:#28433e;touch-action:manipulation;border:2px solid white;border-radius:18px;padding:8px;background:#f8e6b6;min-height:46px;box-shadow:0 3px 0 #d8c8aa}button:nth-child(2){background:#d6eee3}button:nth-child(3){background:#d9ecfa}button img{display:block;width:100%;height:clamp(54px,17vw,115px);object-fit:contain}button:focus-visible{outline:3px solid #963f76;outline-offset:3px}button:disabled{opacity:.6;cursor:default}#next{margin-top:14px;background:#285b51;color:white}@keyframes pop{50%{transform:scale(1.25)}}
+.hiiro-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;margin-top:18px;padding-top:15px;border-top:1px solid #e3d8c3}
+.hiiro-links a{display:flex;align-items:center;gap:7px;text-align:left;min-height:47px;padding:8px 10px;border-radius:14px;border:2px solid #fff;background:var(--banner-color);color:#28433e;text-decoration:none;box-shadow:0 2px 0 #e7dfcb;font-size:14px;line-height:1.3}
+.banner-icon{font-size:20px;flex:none}
+.feedback a{display:inline-block;padding:12px;color:#47645f;font-size:13px;text-underline-offset:3px}
+.hiiro-links a:focus-visible,.feedback a:focus-visible{outline:3px solid #963f76;outline-offset:3px}
+
+.parcel{position:relative;overflow:hidden;background:linear-gradient(#d9f0ff,#e8f8eb 76%)}
+.journey{position:relative;height:clamp(130px,26vw,195px);margin:8px 4px 0;overflow:hidden;border-radius:17px;background:linear-gradient(#c9ebff 0 67%,#b8d692 67%);isolation:isolate}
+.journey .courier[hidden],.depot[hidden]{display:none}
+.journey[data-route="truck"]{background:linear-gradient(#c9ebff 0 67%,#8b9694 67% 89%,#b8d692 89%)}
+.journey[data-route="heli"]{background:linear-gradient(#c9ebff 0 67%,#83cfe6 67%)}
+.journey[data-route="heli"] .destination-art{background:#b4d785;border-radius:50%;padding:0 8px 8px}
+.journey[data-route="plane"]{background:linear-gradient(#bbdfff 0 68%,#7b8e99 68% 90%,#b8d692 90%)}
+.scenery{position:absolute;left:14%;top:4%;font-size:25px;opacity:.85;letter-spacing:18px}
+.destination-art{position:absolute;right:4%;bottom:10%;font-size:42px;line-height:1}
+.depot{position:absolute;bottom:12%;left:5%;display:grid;justify-items:center;gap:4px;min-width:100px;padding:7px 12px;background:#ffe59a;border:2px solid #fff;border-radius:16px;box-shadow:0 4px 0 #a66b27;font-size:14px;line-height:1.15}
+.depot .parcel-icon{font-size:clamp(30px,7vw,48px);line-height:1}
+.depot:active{transform:translateY(2px)}
+.vehicles.cargo-picked button{outline:2px solid #886223;outline-offset:1px}
+.vehicles.cargo-picked button:focus-visible{outline:3px solid #963f76;outline-offset:3px}
+.journey.arrived .destination-art{filter:drop-shadow(0 0 12px #fff1a4);animation:pop .65s ease-out}
+.handoff{position:absolute;right:9%;bottom:14%;font-size:clamp(31px,6vw,43px);line-height:1;z-index:1}
+.journey.complete .sparkle{animation:pop .55s ease-out 2}
+@media(prefers-reduced-motion:reduce){.journey.arrived .destination-art,.journey.complete .sparkle{animation:none}}
+.courier{position:absolute;left:0;bottom:9px;width:29%;max-width:170px;height:78px;transform-origin:bottom center}
+.courier img{width:100%;height:100%;object-fit:contain}.cargo{position:absolute;top:-8px;left:35%;font-size:clamp(31px,6vw,43px);line-height:1;filter:drop-shadow(0 2px 1px #0003)}
+.sparkle{position:absolute;right:4%;top:7%;font-size:30px;opacity:0;transform:scale(.6)}
+.journey.arrived .sparkle{opacity:1;transform:none;animation:pop .55s ease-out}
+.journey.complete .sparkle{right:9%;font-size:42px}
+.vehicles button.try-again{animation:wiggle .34s ease-out}
+@keyframes wiggle{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@media(prefers-reduced-motion:reduce){.journey.arrived .sparkle,.vehicles button.try-again{animation:none}}
+</style>
+<main>
+<h1>のりもの おとどけ便</h1>
+<section class="parcel">
+<p id="message" role="status"></p>
+<div class="journey" id="journey">
+  <span class="scenery" aria-hidden="true">☁ ☁</span>
+  <span class="destination-art" id="destination-art" aria-hidden="true"></span>
+  <button type="button" class="depot" id="depot">
+    <span class="parcel-icon" id="parcel-icon" aria-hidden="true"></span>
+    <span id="parcel-name"></span>
+  </button>
+  <div class="courier" id="courier" hidden aria-hidden="true"><img id="courier-art" alt=""><span class="cargo" id="cargo"></span></div>
+  <span class="handoff" id="handoff" hidden aria-hidden="true"></span>
+  <span class="sparkle" id="sparkle" aria-hidden="true"></span>
+</div>
+</section>
+<div class="vehicles" id="vehicles"><button type="button" data-vehicle="truck"><img alt="" src="../assets/delivery.webp">トラック</button>
+<button type="button" data-vehicle="heli"><img alt="" src="../assets/helicopter.webp">ヘリコプター</button>
+<button type="button" data-vehicle="plane"><img alt="" src="../assets/plane.webp">ひこうき</button></div>
+<button id="next" hidden>つぎの おとどけ</button>
+<p id="progress"></p>
+<nav class="hiiro-links" aria-label="ほかの のりものゲーム">
+  <a href="https://yumemayu.github.io/norimono/" style="--banner-color:#ffedb6"><span class="banner-icon" aria-hidden="true">🚃</span><span>のりもの しゅっぱつ！</span></a>
+  <a href="https://yumemayu.github.io/norimono/vehicle-book/" style="--banner-color:#d4eee1"><span class="banner-icon" aria-hidden="true">📖</span><span>のりものずかん</span></a>
+  <a href="https://yumemayu.github.io/norimono/train-gacha/" style="--banner-color:#f7dce8"><span class="banner-icon" aria-hidden="true">🎁</span><span>でんしゃガチャ</span></a>
+  <a href="https://yumemayu.github.io/norimono/train-bento/" style="--banner-color:#fce2ca"><span class="banner-icon" aria-hidden="true">🍱</span><span>でんしゃのおべんとうばこ</span></a>
+  <a href="https://yumemayu.github.io/norimono/train-pairs/" style="--banner-color:#d7ecfa"><span class="banner-icon" aria-hidden="true">🚆</span><span>でんしゃペア</span></a>
+</nav>
+<footer class="feedback"><a href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer">ご要望を送る</a></footer>
+
+</main>
+<script>
+const jobs = [
+  {icon:'🥐', name:'クロワッサン', destination:'まちの パンやさん', hint:'どうろを はしって とどけよう', vehicle:'truck', arrival:'🏪', result:'パンやさんが オープン！'},
+  {icon:'💌', name:'おてがみ', destination:'しまの ともだち', hint:'ちいさな ひろばに おりよう', vehicle:'heli', arrival:'🏝️', result:'おてがみが ついたよ！'},
+  {icon:'🎁', name:'プレゼント', destination:'とおくの くうこう', hint:'ながい かっそうろに おりよう', vehicle:'plane', arrival:'🎈', result:'プレゼントが ついたよ！'}
+];
+const message = document.getElementById('message');
+const progress = document.getElementById('progress');
+const next = document.getElementById('next');
+const buttons = document.querySelectorAll('[data-vehicle]');
+const journey = document.getElementById('journey');
+const courier = document.getElementById('courier');
+const depot = document.getElementById('depot');
+const parcelIcon = document.getElementById('parcel-icon');
+const parcelName = document.getElementById('parcel-name');
+const handoff = document.getElementById('handoff');
+const vehicles = document.getElementById('vehicles');
+const courierArt = document.getElementById('courier-art');
+const cargo = document.getElementById('cargo');
+const sparkle = document.getElementById('sparkle');
+const destinationArt = document.getElementById('destination-art');
+const motion = matchMedia('(prefers-reduced-motion: reduce)');
+const flightPaths = {
+  truck: [{x:0,y:0},{x:.2,y:0},{x:.62,y:0},{x:1,y:0}],
+  heli: [{x:0,y:0},{x:.08,y:-30},{x:.85,y:-32},{x:1,y:0}],
+  plane: [{x:0,y:0},{x:.28,y:-26},{x:.7,y:-35},{x:1,y:0}]
+};
+let travelAnimation;
+
+let index = 0;
+let delivered = false;
+
+function showJob() {
+  const job = jobs[index];
+  delivered = false;
+  travelAnimation?.cancel();
+  courier.style.transform = '';
+  courier.hidden = true;
+  depot.hidden = false;
+  parcelIcon.textContent = job.icon;
+  parcelName.textContent = job.name;
+  handoff.hidden = true;
+  vehicles.classList.remove('cargo-picked');
+  journey.dataset.route = job.vehicle;
+  destinationArt.textContent = job.arrival;
+  journey.classList.remove('arrived','complete');
+  buttons.forEach(button => button.classList.remove('try-again'));
+  message.textContent = job.destination + 'へ。' + job.hint;
+  progress.textContent = 'とどいた にもつ  ' + index + ' / ' + jobs.length;
+  buttons.forEach(button => { button.disabled = false; });
+  next.hidden = true;
+}
+
+async function moveParcel(parcel, origin, duration) {
+  if (motion.matches) return;
+  const end = parcel.getBoundingClientRect();
+  const x = origin.left + origin.width / 2 - end.left - end.width / 2;
+  const y = origin.top + origin.height / 2 - end.top - end.height / 2;
+  await parcel.animate([
+    {transform: `translate(${x}px,${y}px) scale(.9)`},
+    {transform: `translate(${x / 2}px,${y / 2 - 23}px) scale(1.12)`},
+    {transform: 'translate(0,0) scale(1)'}
+  ], {duration,easing:'ease-in-out'}).finished;
+}
+
+async function choose(button) {
+  if (delivered) return;
+  const vehicle = button.dataset.vehicle;
+  const job = jobs[index];
+  if (vehicle !== job.vehicle) {
+    message.textContent = 'もういちど。' + job.hint;
+    button.classList.add('try-again');
+    return;
+  }
+  delivered = true;
+  vehicles.classList.remove('cargo-picked');
+  buttons.forEach(option => { option.disabled = true; });
+  message.textContent = job.name + 'を のせよう！';
+  const pickup = parcelIcon.getBoundingClientRect();
+  depot.hidden = true;
+  courierArt.src = button.querySelector('img').src;
+  courier.hidden = false;
+  cargo.textContent = job.icon;
+  await moveParcel(cargo, pickup, 520);
+  message.textContent = button.textContent.trim() + 'で しゅっぱつ！';
+  const distance = Math.max(0, journey.clientWidth * .9 - courier.offsetWidth);
+  const frames = flightPaths[vehicle].map(({x,y}) => ({transform: `translate(${distance * x}px,${y}px)`}));
+  if (motion.matches) {
+    courier.style.transform = frames.at(-1).transform;
+  } else {
+    travelAnimation = courier.animate(frames, {duration:2050,easing:'ease-in-out',fill:'forwards'});
+    await travelAnimation.finished;
+  }
+  const dropoff = cargo.getBoundingClientRect();
+  cargo.textContent = '';
+  handoff.textContent = job.icon;
+  handoff.hidden = false;
+  await moveParcel(handoff, dropoff, 500);
+  index += 1;
+  const complete = index === jobs.length;
+  sparkle.textContent = complete ? '🎉' : '✨';
+  journey.classList.add('arrived');
+  journey.classList.toggle('complete', complete);
+  message.textContent = complete ? '🎉 ぜんぶの にもつが とどいたよ！' : job.result;
+  progress.textContent = 'とどいた にもつ  ' + index + ' / ' + jobs.length;
+  next.textContent = complete ? 'もういちど' : 'つぎの おとどけ';
+  next.hidden = false;
+  next.focus();
+}
+
+buttons.forEach(button => {
+  button.onclick = () => choose(button);
+  button.addEventListener('animationend', () => button.classList.remove('try-again'));
+});
+depot.onclick = () => {
+  const job = jobs[index];
+  message.textContent = job.name + 'を はこぶ のりものを えらぼう。' + job.hint;
+  vehicles.classList.add('cargo-picked');
+  buttons[0].focus();
+};
+next.onclick = () => {
+  if (index === jobs.length) index = 0;
+  showJob();
+  buttons[0].focus();
+};
+showJob();
+</script>
